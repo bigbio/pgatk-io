@@ -1,5 +1,7 @@
 pgatk-io
 ===============
+[![Build Status](https://travis-ci.org/bigbio/pgatk-io.svg?branch=master)](https://travis-ci.org/bigbio/pgatk-io)
+
 # About pgatk-io
 
 The pgatk-io library is a java framework to manipulate mass spectrometry and proteomics file formats. It has an special focus on novel file formats like Apache Spark Parquet and Json file formats for proteomics.  
