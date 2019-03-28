@@ -232,26 +232,26 @@ public class TestMgfIndexedReader {
 
     @Test
     public void testGetFragmentIonToleranceUnit() {
-        Assert.assertEquals(MgfIndexedReader.FragmentToleranceUnits.DA, mgfFile.getFragmentIonToleranceUnit());
+        Assert.assertEquals(MgfUtils.FragmentToleranceUnits.DA, mgfFile.getFragmentIonToleranceUnit());
     }
 
     @Test
     public void testSetFragmentIonToleranceUnit() {
         MgfIndexedReader modifiedMgfFile = mgfFile;
-        modifiedMgfFile.setFragmentIonToleranceUnit(MgfIndexedReader.FragmentToleranceUnits.MMU);
-        Assert.assertEquals(MgfIndexedReader.FragmentToleranceUnits.MMU, modifiedMgfFile.getFragmentIonToleranceUnit());
+        modifiedMgfFile.setFragmentIonToleranceUnit(MgfUtils.FragmentToleranceUnits.MMU);
+        Assert.assertEquals(MgfUtils.FragmentToleranceUnits.MMU, modifiedMgfFile.getFragmentIonToleranceUnit());
     }
 
     @Test
     public void testGetMassType() {
-        Assert.assertEquals(MgfIndexedReader.MassType.MONOISOTOPIC, mgfFile.getMassType());
+        Assert.assertEquals(MgfUtils.MassType.MONOISOTOPIC, mgfFile.getMassType());
     }
 
     @Test
     public void testSetMassType() {
         MgfIndexedReader modifiedMgfFile = mgfFile;
-        modifiedMgfFile.setMassType(MgfIndexedReader.MassType.AVERAGE);
-        Assert.assertEquals(MgfIndexedReader.MassType.AVERAGE, modifiedMgfFile.getMassType());
+        modifiedMgfFile.setMassType(MgfUtils.MassType.AVERAGE);
+        Assert.assertEquals(MgfUtils.MassType.AVERAGE, modifiedMgfFile.getMassType());
     }
 
     @Test
@@ -328,26 +328,26 @@ public class TestMgfIndexedReader {
 
     @Test
     public void testGetReportType() {
-        Assert.assertEquals(MgfIndexedReader.ReportType.PEPTIDE, mgfFile.getReportType());
+        Assert.assertEquals(MgfUtils.ReportType.PEPTIDE, mgfFile.getReportType());
     }
 
     @Test
     public void testSetReportType() {
         MgfIndexedReader modifiedMgfFile = mgfFile;
-        modifiedMgfFile.setReportType(MgfIndexedReader.ReportType.PROTEIN);
-        Assert.assertEquals(MgfIndexedReader.ReportType.PROTEIN, modifiedMgfFile.getReportType());
+        modifiedMgfFile.setReportType(MgfUtils.ReportType.PROTEIN);
+        Assert.assertEquals(MgfUtils.ReportType.PROTEIN, modifiedMgfFile.getReportType());
     }
 
     @Test
     public void testGetSearchType() {
-        Assert.assertEquals(MgfIndexedReader.SearchType.MIS, mgfFile.getSearchType());
+        Assert.assertEquals(MgfUtils.SearchType.MIS, mgfFile.getSearchType());
     }
 
     @Test
     public void testSetSearchType() {
         MgfIndexedReader modifiedMgfFile = mgfFile;
-        modifiedMgfFile.setSearchType(MgfIndexedReader.SearchType.PMF);
-        Assert.assertEquals(MgfIndexedReader.SearchType.PMF, modifiedMgfFile.getSearchType());
+        modifiedMgfFile.setSearchType(MgfUtils.SearchType.PMF);
+        Assert.assertEquals(MgfUtils.SearchType.PMF, modifiedMgfFile.getSearchType());
     }
 
     @Test
@@ -388,14 +388,14 @@ public class TestMgfIndexedReader {
 
     @Test
     public void testGetPeptideMassToleranceUnit() {
-        Assert.assertEquals(MgfIndexedReader.PeptideToleranceUnit.PPM, mgfFile.getPeptideMassToleranceUnit());
+        Assert.assertEquals(MgfUtils.PeptideToleranceUnit.PPM, mgfFile.getPeptideMassToleranceUnit());
     }
 
     @Test
     public void testSetPeptideMassToleranceUnit() {
         MgfIndexedReader modifiedMgfFile = mgfFile;
-        modifiedMgfFile.setPeptideMassToleranceUnit(MgfIndexedReader.PeptideToleranceUnit.PERCENT);
-        Assert.assertEquals(MgfIndexedReader.PeptideToleranceUnit.PERCENT, modifiedMgfFile.getPeptideMassToleranceUnit());
+        modifiedMgfFile.setPeptideMassToleranceUnit(MgfUtils.PeptideToleranceUnit.PERCENT);
+        Assert.assertEquals(MgfUtils.PeptideToleranceUnit.PERCENT, modifiedMgfFile.getPeptideMassToleranceUnit());
     }
 
     @Test
@@ -457,25 +457,6 @@ public class TestMgfIndexedReader {
     @Test
     public void testGetMs2Query() throws Exception{
         Assert.assertNotNull(mgfFile.getMs2Query(7, false));
-    }
-
-    @Test
-    public void testGetMs2QueryIterator() throws Exception {
-        int queryCount = 0;
-        for (Ms2Query q : mgfFile.getMs2QueryIterator()) {
-            Assert.assertNotNull(q);
-            queryCount++;
-        }
-        Assert.assertEquals(10, queryCount);
-    }
-
-    @Test
-    public void testMgfFile() throws Exception {
-        Iterator<Ms2Query> it1 = mgfFile.getMs2QueryIterator();
-        Iterator<Ms2Query> it2 = mgfFile.getMs2QueryIterator();
-        while (it1.hasNext() && it2.hasNext()) {
-            Assert.assertEquals(it1.next().toString(), it2.next().toString());
-        }
     }
 
     @Test

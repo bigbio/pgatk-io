@@ -13,7 +13,6 @@ import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.regex.Matcher;
-import java.util.stream.Stream;
 
 /**
  * This implementation only allows to iterate over all the spectra in a file and retrieve the corresponding
@@ -119,12 +118,12 @@ public class MgfIterableReader implements MzIterableReader {
                      * Some files can have a lot of empty and nonsense information between Spectrums
                      */
                     if (!disableCommentSupport)
-                        line = line.replaceAll(MgfIndexedReader.mgfCommentRegex, line);
+                        line = line.replaceAll(MgfUtils.mgfCommentRegex, line);
                     if (line.length() < 1) { // ignore empty lines
                         continue;
                     }
 
-                    Matcher attributeMatcher = MgfIndexedReader.attributePattern.matcher(line); // check if it's a property
+                    Matcher attributeMatcher = MgfUtils.attributePattern.matcher(line); // check if it's a property
                     boolean matchesAttributePattern = false;
                     if (inAttributeSection) {
                         matchesAttributePattern = attributeMatcher.find();
@@ -183,11 +182,6 @@ public class MgfIterableReader implements MzIterableReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Stream<Spectrum> next(int batch) {
-        return null;
     }
 
     @Override

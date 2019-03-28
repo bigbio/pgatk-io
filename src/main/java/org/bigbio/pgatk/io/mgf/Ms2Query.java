@@ -1,6 +1,7 @@
 package org.bigbio.pgatk.io.mgf;
 
 import org.bigbio.pgatk.io.common.*;
+import org.bigbio.pgatk.io.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +28,7 @@ public class Ms2Query implements Spectrum {
   private Double tolerance;
 
   // Optional peptide tolerance unit
-  private MgfIndexedReader.PeptideToleranceUnit toleranceUnit;
+  private MgfUtils.PeptideToleranceUnit toleranceUnit;
 
   // Optional sequence qualifiers
   // See the Mascot documentation for detailed information (http://www.matrixscience.com/help/sq_help.html#SEQ)
@@ -102,7 +103,7 @@ public class Ms2Query implements Spectrum {
       // remove comments from the line
       //TODO Check if the comment are inside BEGIN/ENDS IONS because comments are not allowed between  BEGIN/ENDS IONS by the specification
       if (!disableCommentSupport)
-        line = line.replaceAll(MgfIndexedReader.mgfCommentRegex, line);
+        line = line.replaceAll(MgfUtils.mgfCommentRegex, line);
       if (line.length() < 1) { // ignore empty lines
         continue;
       }
@@ -119,7 +120,7 @@ public class Ms2Query implements Spectrum {
       if (nLineNumber == lines.length - 1) {
         continue;
       }
-      Matcher attributeMatcher = MgfIndexedReader.attributePattern.matcher(line); // check if it's a property
+      Matcher attributeMatcher = MgfUtils.attributePattern.matcher(line); // check if it's a property
       boolean matchesAttributePattern = false;
       if (inAttributeSection) {
         matchesAttributePattern = attributeMatcher.find();
@@ -171,16 +172,16 @@ public class Ms2Query implements Spectrum {
       tolerance = Double.parseDouble(value);
     } else if ("TOLU".equals(value)) {
       if ("%".equals(value)) {
-        toleranceUnit = MgfIndexedReader.PeptideToleranceUnit.PERCENT;
+        toleranceUnit = MgfUtils.PeptideToleranceUnit.PERCENT;
       }
       if ("ppm".equals(value)) {
-        toleranceUnit = MgfIndexedReader.PeptideToleranceUnit.PPM;
+        toleranceUnit = MgfUtils.PeptideToleranceUnit.PPM;
       }
       if ("mmu".equals(value)) {
-        toleranceUnit = MgfIndexedReader.PeptideToleranceUnit.MMU;
+        toleranceUnit = MgfUtils.PeptideToleranceUnit.MMU;
       }
       if ("Da".equals(value)) {
-        toleranceUnit = MgfIndexedReader.PeptideToleranceUnit.DA;
+        toleranceUnit = MgfUtils.PeptideToleranceUnit.DA;
       }
       if (toleranceUnit == null) {
         throw new IllegalStateException("Invalid tolerance unit set.");
@@ -295,11 +296,11 @@ public class Ms2Query implements Spectrum {
     this.tolerance = tolerance;
   }
 
-  public MgfIndexedReader.PeptideToleranceUnit getToleranceUnit() {
+  public MgfUtils.PeptideToleranceUnit getToleranceUnit() {
     return toleranceUnit;
   }
 
-  public void setToleranceUnit(MgfIndexedReader.PeptideToleranceUnit toleranceUnit) {
+  public void setToleranceUnit(MgfUtils.PeptideToleranceUnit toleranceUnit) {
     this.toleranceUnit = toleranceUnit;
   }
 

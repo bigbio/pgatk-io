@@ -29,14 +29,6 @@ public interface MzIterableReader extends Serializable {
     Spectrum next() throws PgatkIOException;
 
     /**
-     * Return the batch of spectra
-     * @param batch Number of spectra tu be retrieve
-     * @return
-     */
-
-    Stream<Spectrum> next(int batch);
-
-    /**
      * Close the respective channel and File use to parse the Spectra
      */
     void close() throws PgatkIOException;

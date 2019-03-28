@@ -71,12 +71,6 @@ public interface MzReader extends Serializable {
 	Spectrum getSpectrumByIndex(int index) throws PgatkIOException;
 	
 	/**
-	 * Returns an Iterator over all spectra in the file.
-	 * @return
-	 */
-	Iterator<Spectrum> getSpectrumIterator();
-	
-	/**
 	 * Returns a list of IndexElements for the spectra
 	 * of the given MS level in the file.
 	 * 

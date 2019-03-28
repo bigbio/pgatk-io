@@ -145,20 +145,6 @@ public class MzXMLIndexedReaderTest {
 	}
 
 	@Test
-	public void testGetSpectrumIterator() {
-		Iterator<Spectrum> it = mzxmlIndexedReader.getSpectrumIterator();
-		
-		int count = 0;
-		
-		while (it.hasNext()) {
-			Spectrum s = it.next();
-			Assert.assertNotNull(s);
-			count++;
-		}
-		Assert.assertEquals(6449, count);
-	}
-
-	@Test
 	public void testConvertPeaksToMap() {
 		Iterator<Scan> scans = mzxmlIndexedReader.getScanIterator();
 		

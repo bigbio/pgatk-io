@@ -9,73 +9,16 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Represents a MgfIndexedReader.
  *
  * @author jg
  */
-public class MgfIndexedReader implements MzReader {
+public class MgfIndexedReader implements MzReader, MzIterableReader {
 
     public static final Logger logger = LoggerFactory.getLogger(MgfIndexedReader.class);
-
-    public enum FragmentToleranceUnits {DA, MMU}
-
-    public enum MassType {MONOISOTOPIC, AVERAGE}
-
-    public enum SearchType {
-        PMF("PMF"), SQ("SQ"), MIS("MIS");
-        private String name;
-
-        SearchType(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum ReportType {
-        PROTEIN("protein"), PEPTIDE("peptide"), ARCHIVE("archive"),
-        CONCISE("concise"), SELECT("select"), UNASSIGNED("unassigned");
-
-        private String name;
-
-        ReportType(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    public enum PeptideToleranceUnit {
-        PERCENT("%"), PPM("ppm"), MMU("mmu"), DA("Da");
-
-        private String name;
-
-        PeptideToleranceUnit(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
-
-    /**
-     * Regex to capture mgf comments in mgf files.
-     */
-    public static final String mgfCommentRegex = "^[#;!/].*";
-    /**
-     * Regex to recognize a attribute and extract its name and value
-     */
-    public static final Pattern attributePattern = Pattern.compile("(\\w+)\\[?\\d?\\]?\\s*=(.*)\\s*");
 
     /**
      * ---------- OPTIONAL PARAMETERS THAT CAN BE SET IN A MGF FILE --------------
@@ -93,20 +36,20 @@ public class MgfIndexedReader implements MzReader {
     private String instrument;
     private String variableModifications;
     private Double fragmentIonTolerance;
-    private FragmentToleranceUnits fragmentIonToleranceUnit;
-    private MassType massType;
+    private MgfUtils.FragmentToleranceUnits fragmentIonToleranceUnit;
+    private MgfUtils.MassType massType;
     private String fixedMofications;
     private Double peptideIsotopeError;
     private Integer partials;
     private Double precursor;
     private String quantitation;
     private String maxHitsToReport;
-    private ReportType reportType;
-    private SearchType searchType;
+    private MgfUtils.ReportType reportType;
+    private MgfUtils.SearchType searchType;
     private String proteinMass;
     private String taxonomy;
     private Double peptideMassTolerance;
-    private PeptideToleranceUnit peptideMassToleranceUnit;
+    private MgfUtils.PeptideToleranceUnit peptideMassToleranceUnit;
     private List<String> userParameter;
     private String userMail;
     private String userName;
@@ -120,10 +63,7 @@ public class MgfIndexedReader implements MzReader {
      * the "END IONS"
      */
     private List<IndexElement> index = new ArrayList<>();
-    /**
-     * PMF Queries
-     */
-    private List<PmfQuery> pmfQueries = new ArrayList<>();
+
     /**
      * MS2 queries. The index of the query in the file as key
      * and the respective query as value.
@@ -152,11 +92,12 @@ public class MgfIndexedReader implements MzReader {
      */
     private boolean ignoreWrongPeaks = false;
 
+    private int currentPosition;
+
     /**
      * Default constructor generating an empty mgf file object.
      */
     public MgfIndexedReader() {}
-
 
     /**
      * Creates the mgf file object from an existing
@@ -174,8 +115,7 @@ public class MgfIndexedReader implements MzReader {
     }
 
     /**
-     * Creates the mgf file object from an existing
-     * mgf file with a pre-parsed index of ms2 spectra.
+     * Creates the mgf file object from an existing mgf file with a pre-parsed index of ms2 spectra.
      * The index must hold the offsets of all "BEGIN IONS"
      * lines in the order they appear in the file.
      *
@@ -218,7 +158,7 @@ public class MgfIndexedReader implements MzReader {
 
                 // remove any comments from the line (if the line will be processed)
                 if (!inMs2)
-                    line = line.replaceAll(mgfCommentRegex, "").trim();
+                    line = line.replaceAll(MgfUtils.mgfCommentRegex, "").trim();
 
                 // ignore empty lines
                 if (line.length() < 1) {
@@ -254,7 +194,7 @@ public class MgfIndexedReader implements MzReader {
 
                 // check if it's an attribute line
                 if (inHeader && line.contains("=")) {
-                    Matcher matcher = attributePattern.matcher(line);
+                    Matcher matcher = MgfUtils.attributePattern.matcher(line);
 
                     if (!matcher.find())
                         throw new PgatkIOException("Malformatted attribute encountered");
@@ -276,8 +216,7 @@ public class MgfIndexedReader implements MzReader {
 
                 // if we're not in the header and it's not a ms2 it must be a pmf query
                 if (!inHeader) {
-                    PmfQuery query = new PmfQuery(line);
-                    pmfQueries.add(query);
+                    throw new PgatkIOException("The API do not support PMF spectra please use another library or create an issue");
                 }
 
                 //always update file pointer before continue
@@ -335,9 +274,9 @@ public class MgfIndexedReader implements MzReader {
         } else if ("ITOL".equals(name)) {
             fragmentIonTolerance = Double.parseDouble(value);
         } else if ("ITOLU".equals(name)) {
-            fragmentIonToleranceUnit = (value.equals("mmu")) ? FragmentToleranceUnits.MMU : FragmentToleranceUnits.DA;
+            fragmentIonToleranceUnit = (value.equals("mmu")) ? MgfUtils.FragmentToleranceUnits.MMU : MgfUtils.FragmentToleranceUnits.DA;
         } else if ("MASS".equals(name)) {
-            massType = (value.equals("Average")) ? MassType.AVERAGE : MassType.MONOISOTOPIC;
+            massType = (value.equals("Average")) ? MgfUtils.MassType.AVERAGE : MgfUtils.MassType.MONOISOTOPIC;
         } else if ("MODS".equals(name)) {
             fixedMofications = value;
         } else if ("PEP_ISOTOPE_ERROR".equals(name)) {
@@ -353,21 +292,21 @@ public class MgfIndexedReader implements MzReader {
         } else if ("REPTYPE".equals(name)) {
             reportType = null;
 
-            if ("protein".equalsIgnoreCase(value)) reportType = ReportType.PROTEIN;
-            if ("peptide".equalsIgnoreCase(value)) reportType = ReportType.PEPTIDE;
-            if ("archive".equalsIgnoreCase(value)) reportType = ReportType.ARCHIVE;
-            if ("concise".equalsIgnoreCase(value)) reportType = ReportType.CONCISE;
-            if ("select".equalsIgnoreCase(value)) reportType = ReportType.SELECT;
-            if ("unassigned".equalsIgnoreCase(value)) reportType = ReportType.UNASSIGNED;
+            if ("protein".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.PROTEIN;
+            if ("peptide".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.PEPTIDE;
+            if ("archive".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.ARCHIVE;
+            if ("concise".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.CONCISE;
+            if ("select".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.SELECT;
+            if ("unassigned".equalsIgnoreCase(value)) reportType = MgfUtils.ReportType.UNASSIGNED;
 
             if (reportType == null)
                 throw new IllegalStateException("Invalid report type set");
         } else if ("SEARCH".equals(name)) {
             searchType = null;
 
-            if ("PMF".equalsIgnoreCase(value)) searchType = SearchType.PMF;
-            if ("SQ".equalsIgnoreCase(value)) searchType = SearchType.SQ;
-            if ("MIS".equalsIgnoreCase(value)) searchType = SearchType.MIS;
+            if ("PMF".equalsIgnoreCase(value)) searchType = MgfUtils.SearchType.PMF;
+            if ("SQ".equalsIgnoreCase(value)) searchType = MgfUtils.SearchType.SQ;
+            if ("MIS".equalsIgnoreCase(value)) searchType = MgfUtils.SearchType.MIS;
 
             if (searchType == null)
                 throw new IllegalStateException("Invalid search type set");
@@ -380,10 +319,10 @@ public class MgfIndexedReader implements MzReader {
         } else if ("TOLU".equals(name)) {
             peptideMassToleranceUnit = null;
 
-            if ("%".equalsIgnoreCase(value)) peptideMassToleranceUnit = PeptideToleranceUnit.PERCENT;
-            if ("ppm".equalsIgnoreCase(value)) peptideMassToleranceUnit = PeptideToleranceUnit.PPM;
-            if ("mmu".equalsIgnoreCase(value)) peptideMassToleranceUnit = PeptideToleranceUnit.MMU;
-            if ("Da".equalsIgnoreCase(value)) peptideMassToleranceUnit = PeptideToleranceUnit.DA;
+            if ("%".equalsIgnoreCase(value)) peptideMassToleranceUnit = MgfUtils.PeptideToleranceUnit.PERCENT;
+            if ("ppm".equalsIgnoreCase(value)) peptideMassToleranceUnit = MgfUtils.PeptideToleranceUnit.PPM;
+            if ("mmu".equalsIgnoreCase(value)) peptideMassToleranceUnit = MgfUtils.PeptideToleranceUnit.MMU;
+            if ("Da".equalsIgnoreCase(value)) peptideMassToleranceUnit = MgfUtils.PeptideToleranceUnit.DA;
 
             if (peptideMassToleranceUnit == null)
                 throw new IllegalStateException("Invalid peptide mass tolerance unit set");
@@ -463,7 +402,7 @@ public class MgfIndexedReader implements MzReader {
 
             while ((line = reader.getNextLine()) != null) {
                 // remove any comments from the line (if the line will be processed)
-                line = line.replaceAll(mgfCommentRegex, "").trim();
+                line = line.replaceAll(MgfUtils.mgfCommentRegex, "").trim();
 
                 // ignore empty lines
                 if (line.length() < 1) {
@@ -476,7 +415,7 @@ public class MgfIndexedReader implements MzReader {
 
                 // check if it's an attribute line
                 if (inHeader && line.contains("=")) {
-                    Matcher matcher = attributePattern.matcher(line);
+                    Matcher matcher = MgfUtils.attributePattern.matcher(line);
 
                     if (!matcher.find())
                         throw new PgatkIOException("Malformatted attribute encountered");
@@ -495,8 +434,7 @@ public class MgfIndexedReader implements MzReader {
 
                 // if we're not in the header and it's not a ms2 it must be a pmf query
                 if (!inHeader) {
-                    PmfQuery query = new PmfQuery(line);
-                    pmfQueries.add(query);
+                    throw new PgatkIOException("The API do not support PMF spectra please use another library or create an issue");
                 }
             }
 
@@ -613,20 +551,20 @@ public class MgfIndexedReader implements MzReader {
         this.fragmentIonTolerance = fragmentIonTolerance;
     }
 
-    public FragmentToleranceUnits getFragmentIonToleranceUnit() {
+    public MgfUtils.FragmentToleranceUnits getFragmentIonToleranceUnit() {
         return fragmentIonToleranceUnit;
     }
 
     public void setFragmentIonToleranceUnit(
-            FragmentToleranceUnits fragmentIonToleranceUnit) {
+            MgfUtils.FragmentToleranceUnits fragmentIonToleranceUnit) {
         this.fragmentIonToleranceUnit = fragmentIonToleranceUnit;
     }
 
-    public MassType getMassType() {
+    public MgfUtils.MassType getMassType() {
         return massType;
     }
 
-    public void setMassType(MassType massType) {
+    public void setMassType(MgfUtils.MassType massType) {
         this.massType = massType;
     }
 
@@ -678,19 +616,19 @@ public class MgfIndexedReader implements MzReader {
         this.maxHitsToReport = maxHitsToReport;
     }
 
-    public ReportType getReportType() {
+    public MgfUtils.ReportType getReportType() {
         return reportType;
     }
 
-    public void setReportType(ReportType reportType) {
+    public void setReportType(MgfUtils.ReportType reportType) {
         this.reportType = reportType;
     }
 
-    public SearchType getSearchType() {
+    public MgfUtils.SearchType getSearchType() {
         return searchType;
     }
 
-    public void setSearchType(SearchType searchType) {
+    public void setSearchType(MgfUtils.SearchType searchType) {
         this.searchType = searchType;
     }
 
@@ -718,12 +656,12 @@ public class MgfIndexedReader implements MzReader {
         this.peptideMassTolerance = peptideMassTolerance;
     }
 
-    public PeptideToleranceUnit getPeptideMassToleranceUnit() {
+    public MgfUtils.PeptideToleranceUnit getPeptideMassToleranceUnit() {
         return peptideMassToleranceUnit;
     }
 
     public void setPeptideMassToleranceUnit(
-            PeptideToleranceUnit peptideMassToleranceUnit) {
+            MgfUtils.PeptideToleranceUnit peptideMassToleranceUnit) {
         this.peptideMassToleranceUnit = peptideMassToleranceUnit;
     }
 
@@ -749,14 +687,6 @@ public class MgfIndexedReader implements MzReader {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public List<PmfQuery> getPmfQueries() {
-        return pmfQueries;
-    }
-
-    public void setPmfQueries(List<PmfQuery> pmfQueries) {
-        this.pmfQueries = pmfQueries;
     }
 
     public boolean isUseCache() {
@@ -887,10 +817,6 @@ public class MgfIndexedReader implements MzReader {
             // write the parameters
             writer.write(parameters);
 
-            // process the pmf spectra
-            for (PmfQuery q : pmfQueries)
-                writer.write(q.toString() + '\n');
-
             writer.write("\n");
 
             // write the spectra
@@ -913,13 +839,6 @@ public class MgfIndexedReader implements MzReader {
     public String toString() {
         // add the parameters
         StringBuilder string = new StringBuilder(marshallAdditionalParameters());
-
-        // process the pmf spectra
-        for (PmfQuery q : pmfQueries)
-            string.append(q.toString()).append('\n');
-
-        if (pmfQueries.size() > 0)
-            string.append('\n');
 
         // write the spectra
         for (Integer index = 0; index < 1000000; index++) {
@@ -988,10 +907,10 @@ public class MgfIndexedReader implements MzReader {
             parameters.append("ITOL=").append(fragmentIonTolerance.toString()).append('\n');
 
         if (fragmentIonToleranceUnit != null)
-            parameters.append("ITOLU=").append((fragmentIonToleranceUnit == FragmentToleranceUnits.MMU) ? "mmu" : "Da").append('\n');
+            parameters.append("ITOLU=").append((fragmentIonToleranceUnit == MgfUtils.FragmentToleranceUnits.MMU) ? "mmu" : "Da").append('\n');
 
         if (massType != null)
-            parameters.append("MASS=").append((massType == MassType.AVERAGE) ? "Average" : "Monoisotopic").append('\n');
+            parameters.append("MASS=").append((massType == MgfUtils.MassType.AVERAGE) ? "Average" : "Monoisotopic").append('\n');
 
         if (fixedMofications != null)
             parameters.append("MODS=").append(fixedMofications).append('\n');
@@ -1044,111 +963,24 @@ public class MgfIndexedReader implements MzReader {
         return parameters.toString();
     }
 
-    /**
-     * Returns an iterator over all the ms2 queries.
-     *
-     * @return
-     */
-    public Ms2QueryIterator getMs2QueryIterator() {
-        return new Ms2QueryIterator();
-    }
-
-    private class SpectrumIterator implements Iterator<Spectrum> {
-        Iterator<Ms2Query> it;
-
-        public SpectrumIterator() {
-            it = new Ms2QueryIterator();
-        }
-
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        public Spectrum next() {
-            return it.next();
-        }
-
-        public void remove() {
-            it.remove();
+    @Override
+    public boolean hasNext() {
+        if (sourceFile == null) {
+            return currentPosition < ms2Queries.size();
+        } else {
+            return currentPosition < index.size();
         }
     }
 
-    public class Ms2QueryIterator implements Iterator<Ms2Query>, Iterable<Ms2Query> {
-        /**
-         * Either the index in the elements of in the array of the source file.
-         */
-        private Integer currentPosition = 0;
-        /**
-         * A list of keys in the ms2Query HashMap
-         */
-        private ArrayList<Integer> keys = new ArrayList<>(ms2Queries.keySet());
+    @Override
+    public Spectrum next() throws PgatkIOException {
+        currentPosition++;
+        return getMs2Query(currentPosition, ignoreWrongPeaks);
+    }
 
-        /**
-         * Creates a Ms2QueryIterator. In case a source file is
-         * used a FileNotFoundException might be thrown.
-         *
-         * @throws FileNotFoundException
-         */
-        protected Ms2QueryIterator() {
+    @Override
+    public void close() throws PgatkIOException {
 
-        }
-
-        public Iterator<Ms2Query> iterator() {
-            return this;
-        }
-
-        public boolean hasNext() {
-            if (sourceFile == null) {
-                return currentPosition < keys.size();
-            } else {
-                return currentPosition < index.size();
-            }
-        }
-
-        public Ms2Query next() {
-            // if there is not file set, get the object from the HashMap
-            if (sourceFile == null) {
-                // make sure the current position is valid
-                if (currentPosition < 0 || currentPosition >= keys.size())
-                    throw new IllegalStateException(new IndexOutOfBoundsException());
-
-                // get the key
-                Integer key = keys.get(currentPosition++);
-
-                // make sure the key exists
-                if (!ms2Queries.containsKey(key))
-                    throw new IllegalStateException("Key not found in hashmap");
-
-                return ms2Queries.get(key);
-            } else {
-                // check if the object was cached
-                if (ms2Queries.containsKey(currentPosition))
-                    return ms2Queries.get(currentPosition);
-
-                // read the query from file
-                Ms2Query query;
-                try {
-                    query = loadIndexedQueryFromFile(currentPosition, ignoreWrongPeaks);
-
-                    // if caching is enabled do so
-                    if (useCache)
-                        ms2Queries.put(currentPosition, query);
-
-                    // move to the next position
-                    currentPosition++;
-
-                    // return the query
-                    return query;
-                } catch (PgatkIOException e) {
-                    throw new RuntimeException("Failed to load query from file.", e);
-                }
-            }
-        }
-
-        public void remove() {
-            // this function is not supported
-            throw new IllegalStateException("Function not supported");
-        }
     }
 
     /**
@@ -1200,10 +1032,6 @@ public class MgfIndexedReader implements MzReader {
 
     public Spectrum getSpectrumByIndex(int index) throws PgatkIOException {
         return getMs2Query(index - 1, ignoreWrongPeaks);
-    }
-
-    public Iterator<Spectrum> getSpectrumIterator() {
-        return new SpectrumIterator();
     }
 
     @Override

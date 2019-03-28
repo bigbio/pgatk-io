@@ -899,11 +899,6 @@ public class MzXMLIndexedReader implements MzReader {
     }
 
     @Override
-    public Iterator<Spectrum> getSpectrumIterator() {
-        return new SpectrumIterator();
-    }
-
-    @Override
     public List<org.bigbio.pgatk.io.common.IndexElement> getMsNIndexes(
             int msLevel) {
         if (!msNScans.containsKey(msLevel))

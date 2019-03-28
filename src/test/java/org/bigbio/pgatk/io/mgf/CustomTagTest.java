@@ -34,10 +34,4 @@ public class CustomTagTest{
         mgfFile = new MgfIndexedReader(sourceFile, true, false);
     }
 
-    @Test
-    public void testgGtMs2QueryIterator() throws Exception{
-        Iterator<Ms2Query> it = mgfFile.getMs2QueryIterator();
-        Assert.assertNotNull("NULL SPECTRUM Encountered!", it.next());
-    }
-
 }

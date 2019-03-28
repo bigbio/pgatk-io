@@ -12,9 +12,9 @@ below for details on each feature.
 | Feature                         | MGF                           | APL (Maxquant)                | mzXML                         | mzML                          | Json                            |Parquet                 |
 | ------------------------------- | ----------------------------- | ----------------------------- | ----------------------------- | ----------------------------- |---------------------------------|------------------------|
 | Random Access                   | :heavy_check_mark:            | :heavy_check_mark:            | :heavy_check_mark:            | :white_check_mark:            | :white_check_mark:              |                        |
-| Fast Iterable Access            | :white_check_mark:            | :white_check_mark:            | :x:                           | :x:                           |                                 |                        |
+| Fast Iterable Access            | :heavy_check_mark:            | :white_check_mark:            | :x:                           | :x:                           |                                 |                        |
 | Gzip Support                    | NA                            | NA                            | NA                            | :white_check_mark:            |                                 |                        | 
-| Numpress Support                | :white_check_mark:            | :white_check_mark:            | :white_check_mark:            | :white_check_mark:            |:white_check_mark:               |                        | 
+| Numpress Support                | :x:                           | :white_check_mark:            | :white_check_mark:            | :white_check_mark:            |:white_check_mark:               |                        | 
 
 # License
 
