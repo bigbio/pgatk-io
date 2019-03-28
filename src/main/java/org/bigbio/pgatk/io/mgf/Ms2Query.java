@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 public class Ms2Query implements Spectrum {
 
   public static final Logger logger = LoggerFactory.getLogger(Ms2Query.class);
+  private static final int DEFAULT_NUMBER_PEAKS = 100;
 
   // It is important to notice that
   private final int DEFAULT_MS_LEVEL = 2;
@@ -94,10 +95,14 @@ public class Ms2Query implements Spectrum {
    * @throws PgatkIOException any problems parsing the mgf part
    */
   public Ms2Query(String mgfQuery, int index, boolean disableCommentSupport, boolean ignoreWrongPeaks) throws PgatkIOException {
+
     this.disableCommentSupport = disableCommentSupport;
     this.index = (long) index;
+
     String[] lines = mgfQuery.trim().split("\n");
+
     boolean inAttributeSection = true;
+
     for (int nLineNumber = 0; nLineNumber < lines.length; nLineNumber++) {
       String line = lines[nLineNumber].trim();
       // remove comments from the line
@@ -226,7 +231,7 @@ public class Ms2Query implements Spectrum {
    */
   public void addPeak(Double mz, Double intensity) {
     if (peakList == null) {
-      peakList = new HashMap<>(1);
+      peakList = new HashMap<>(DEFAULT_NUMBER_PEAKS);
     }
     peakList.put(mz, intensity);
   }

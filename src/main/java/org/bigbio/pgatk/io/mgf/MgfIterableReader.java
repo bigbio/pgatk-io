@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 
 /**
@@ -89,7 +90,7 @@ public class MgfIterableReader implements MzIterableReader {
     }
 
     @Override
-    public Spectrum next() throws PgatkIOException {
+    public Spectrum next() throws NoSuchElementException {
         Ms2Query spectrum = null;
         if(buffer == null || !buffer.hasRemaining()){
             readBuffer();
@@ -130,7 +131,7 @@ public class MgfIterableReader implements MzIterableReader {
                     }
                     if (matchesAttributePattern) {
                         if (attributeMatcher.groupCount() != 2) {
-                            throw new PgatkIOException("Invalid attribute line encountered in MS2 query: " + line);
+                            throw new NoSuchElementException("Invalid attribute line encountered in MS2 query: " + line);
                         }
                         String name = attributeMatcher.group(1);
                         String value = attributeMatcher.group(2);
@@ -153,7 +154,7 @@ public class MgfIterableReader implements MzIterableReader {
                             if (ignoreWrongPeaks) {
                                 logger.error("The following peaks and wronly annotated -- " + line);
                             } else
-                                throw new PgatkIOException("Unable to parse 'mz' and 'intensity' values for " + line);
+                                throw new NoSuchElementException("Unable to parse 'mz' and 'intensity' values for " + line);
                         }
                         inAttributeSection = false;
                     }

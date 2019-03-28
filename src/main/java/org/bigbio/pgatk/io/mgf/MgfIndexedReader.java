@@ -232,8 +232,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
     }
 
     /**
-     * Process a given attribute line and saves the variable
-     * in the respective member variable.
+     * Process a given attribute line and saves the variable in the respective member variable.
      *
      * @param name  The attribute's name
      * @param value The attribute's value
@@ -445,7 +444,6 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
             throw new PgatkIOException("Failed to read from mgf file.", e);
         }
     }
-
 
     public List<String> getAccessions() {
         return accessions;
@@ -973,9 +971,13 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
     }
 
     @Override
-    public Spectrum next() throws PgatkIOException {
+    public Spectrum next() throws NoSuchElementException {
         currentPosition++;
-        return getMs2Query(currentPosition, ignoreWrongPeaks);
+        try {
+            return getMs2Query(currentPosition, ignoreWrongPeaks);
+        } catch (PgatkIOException e) {
+           throw new NoSuchElementException(e.getMessage());
+        }
     }
 
     @Override

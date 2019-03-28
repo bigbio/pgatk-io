@@ -2,6 +2,8 @@ package org.bigbio.pgatk.io.common;
 
 
 import java.io.Serializable;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.stream.Stream;
 
 /**
@@ -11,7 +13,7 @@ import java.util.stream.Stream;
  *
  * @author yperez
  */
-public interface MzIterableReader extends Serializable {
+public interface MzIterableReader extends Serializable, Iterator<Spectrum> {
 
 
     /**
@@ -26,7 +28,8 @@ public interface MzIterableReader extends Serializable {
      * Return the next Spectra
      * @return
      */
-    Spectrum next() throws PgatkIOException;
+    @Override
+    Spectrum next() throws NoSuchElementException;
 
     /**
      * Close the respective channel and File use to parse the Spectra

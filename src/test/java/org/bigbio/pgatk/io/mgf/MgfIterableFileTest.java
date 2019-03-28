@@ -9,6 +9,7 @@ import org.bigbio.pgatk.io.common.Spectrum;
 import java.io.File;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.NoSuchElementException;
 
 public class MgfIterableFileTest {
 
@@ -34,8 +35,7 @@ public class MgfIterableFileTest {
                 Spectrum spectrum = mgfIterableReader.next();
                 System.out.println(spectrum);
             }
-
-        } catch (PgatkIOException e) {
+        } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
     }
