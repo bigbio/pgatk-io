@@ -15,8 +15,8 @@ below for details on each feature.
 | ---------------------|--------------------|------------------------|---------------------|----------------------|---------------------|------------------------|
 | Random Access        | :heavy_check_mark: | :heavy_check_mark:     | :heavy_check_mark:  | :heavy_check_mark:   | :heavy_check_mark:  |                        |
 | Fast Iterable Access | :heavy_check_mark: | :white_check_mark:     | :x:                 | :x:                  |                     |                        |
-| Gzip Support         | NA                 | NA                     | NA                  | :white_check_mark:   |                     |                        | 
-| Numpress Support     | :x:                | :white_check_mark:     | :white_check_mark:  | :white_check_mark:   |:white_check_mark:   |                        | 
+| Gzip Support         | :x:                | :x:                    | :x:                 | :x:                  |                     |                        | 
+| Numpress Support     | :x:                | :x:                    | :white_check_mark:  | :white_check_mark:   |:x:                  |                        | 
 
 # License
 
