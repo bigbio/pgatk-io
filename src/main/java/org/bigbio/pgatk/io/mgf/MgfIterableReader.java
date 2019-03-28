@@ -48,6 +48,8 @@ public class MgfIterableReader implements MzIterableReader {
     private MappedByteBuffer buffer;
     private int channelCursor = 0;
     private long nextPosition = 0;
+
+    // The index (1-based) is used to know in the order of the spectrum in the file.
     private long specIndex = 1;
 
     public MgfIterableReader(File file, boolean ignoreWrongPeaks, boolean disableCommentSupport, boolean allowCustomTags) throws PgatkIOException {
@@ -111,7 +113,7 @@ public class MgfIterableReader implements MzIterableReader {
                     logger.debug("Start reading the following spectrum -- ");
                     spectrum = new Ms2Query(this.disableCommentSupport);
                 }else if(line.contains("END IONS")) {
-                    spectrum.setId(specIndex);
+                    spectrum.setIndex(specIndex);
                     specIndex++;
                     return spectrum;
                 }else if(spectrum != null){

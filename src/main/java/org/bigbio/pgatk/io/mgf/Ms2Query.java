@@ -484,7 +484,7 @@ public class Ms2Query implements Spectrum {
     return result;
   }
 
-  public void setId(long index){
+  public void setIndex(long index){
     this.index = index;
   }
 

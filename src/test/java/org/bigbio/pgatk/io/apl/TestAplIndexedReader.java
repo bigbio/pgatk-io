@@ -70,21 +70,6 @@ public class TestAplIndexedReader {
     }
 
     @Test
-    public void testGetPeakListIterator() {
-        int queryCount = 0;
-
-        try {
-            for (AplSpectrum q : aplIndexedReader.getPeakListIterator()) {
-                Assert.assertNotNull(q);
-                queryCount++;
-            }
-            Assert.assertEquals(10, queryCount);
-        } catch (Exception x){
-            System.out.println(x.getMessage());
-        }
-    }
-
-    @Test
     public void testAplFile() {
         // get the index
         List<IndexElement> index = aplIndexedReader.getIndex();
@@ -94,11 +79,8 @@ public class TestAplIndexedReader {
         try {
             newFile = new AplIndexedReader(sourceFile, index);
 
-            Iterator<AplSpectrum> it1 = aplIndexedReader.getPeakListIterator();
-            Iterator<AplSpectrum> it2 = newFile.getPeakListIterator();
-
-            while (it1.hasNext() && it2.hasNext()) {
-                Assert.assertEquals(it1.next().toString(), it2.next().toString());
+            while (aplIndexedReader.hasNext() && newFile.hasNext()) {
+                Assert.assertEquals(aplIndexedReader.next().toString(), newFile.next().toString());
             }
         } catch (PgatkIOException e) {
             System.out.println(e.getMessage());

@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * @author ypriverol
  *
  */
-public class AplIndexedReader implements MzReader {
+public class AplIndexedReader implements MzReader, MzIterableReader {
 
     public static final Logger logger = LoggerFactory.getLogger(AplIndexedReader.class);
 
@@ -47,6 +47,10 @@ public class AplIndexedReader implements MzReader {
      * Indicates whether the cache should be used
      */
     private boolean useCache = false;
+
+    private int currentPosition = 0;
+
+    private List<Integer> keys;
 
     /**
      * Loads a (MS2) spectrum from an  APL file who's
@@ -131,6 +135,7 @@ public class AplIndexedReader implements MzReader {
                 lastPosition = braf.getFilePointer();
             }
             peakLists= new HashMap<>(index.size());
+            keys = new ArrayList<>(index.size());
             braf.close();
         } catch (FileNotFoundException e) {
             throw new PgatkIOException("APLFile does not exist.", e);
@@ -174,7 +179,7 @@ public class AplIndexedReader implements MzReader {
                     break;
             }
             peakLists = new HashMap<>();
-
+            keys = new ArrayList<>();
             reader.close();
         } catch (FileNotFoundException e) {
             throw new PgatkIOException("AplIndexedReader does not exist.", e);
@@ -195,8 +200,11 @@ public class AplIndexedReader implements MzReader {
         index.clear();
 
         // save the queries in the HashMap
-        for (int index = 0; index < aplSpectrums.size(); index++)
+        for (int index = 0; index < aplSpectrums.size(); index++){
             this.peakLists.put(index, aplSpectrums.get(index));
+            this.keys.add(index);
+        }
+
     }
 
     /**
@@ -260,7 +268,6 @@ public class AplIndexedReader implements MzReader {
             accFile.read(byteBuffer);
             String ms2Buffer = new String(byteBuffer);
             // create the query
-
             return new AplSpectrum(ms2Buffer, (long)index);
         } catch (FileNotFoundException e) {
             throw new PgatkIOException("APL file could not be found.", e);
@@ -299,114 +306,6 @@ public class AplIndexedReader implements MzReader {
         }
 
         return string.toString();
-    }
-
-    /**
-     * Returns an iterator over all the ms2 queries.
-     *
-     * @return
-     */
-    public PeakListIterator getPeakListIterator() {
-        return new PeakListIterator();
-    }
-
-    private class SpectrumIterator implements Iterator<Spectrum> {
-        Iterator<AplSpectrum> it;
-
-        @SuppressWarnings("unchecked")
-        public SpectrumIterator() {
-            it = new PeakListIterator();
-        }
-
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        public Spectrum next() {
-            return it.next();
-        }
-
-        public void remove() {
-            it.remove();
-        }
-    }
-
-    public class PeakListIterator implements Iterator<AplSpectrum>, Iterable<AplSpectrum> {
-        /**
-         * Either the index in the elements of in the array of the source file.
-         */
-        private Integer currentPosition = 0;
-        /**
-         * A list of keys in the ms2Query HashMap
-         */
-        private ArrayList<Integer> keys = new ArrayList<>(peakLists.keySet());
-
-        /**
-         * Creates a Ms2QueryIterator. In case a source file is
-         * used a FileNotFoundException might be thrown.
-         *
-         * @throws java.io.FileNotFoundException
-         */
-        public PeakListIterator() {
-
-        }
-
-        public Iterator<AplSpectrum> iterator() {
-            return this;
-        }
-
-        public boolean hasNext() {
-            if (sourceFile == null) {
-                return currentPosition < keys.size();
-            } else {
-                return currentPosition < index.size();
-            }
-        }
-
-        public AplSpectrum next() {
-            // if there is not file set, get the object from the HashMap
-            if (sourceFile == null) {
-                // make sure the current position is valid
-                if (currentPosition < 0 || currentPosition >= keys.size())
-                    throw new IllegalStateException(new IndexOutOfBoundsException());
-
-                // get the key
-                Integer key = keys.get(currentPosition++);
-
-                // make sure the key exists
-                if (!peakLists.containsKey(key))
-                    throw new IllegalStateException("Key not found in hashmap");
-
-                return peakLists.get(key);
-            } else {
-                // check if the object was cached
-                if (peakLists.containsKey(currentPosition))
-                    return peakLists.get(currentPosition);
-
-                // read the query from file
-                AplSpectrum query;
-                try {
-                    query = loadIndexedQueryFromFile(currentPosition);
-
-                    // if caching is enabled do so
-                    if (useCache)
-                        peakLists.put(currentPosition, query);
-
-                    // move to the next position
-                    currentPosition++;
-
-                    // return the query
-                    return query;
-                } catch (PgatkIOException e) {
-                    throw new RuntimeException("Failed to load query from file.", e);
-                }
-            }
-        }
-
-        public void remove() {
-            // this function is not supported
-            throw new IllegalStateException("Function not supported");
-        }
     }
 
     /**
@@ -460,10 +359,6 @@ public class AplIndexedReader implements MzReader {
         return getPeakList(index - 1);
     }
 
-    public Iterator<Spectrum> getSpectrumIterator() {
-        return new SpectrumIterator();
-    }
-
     @Override
     public List<IndexElement> getMsNIndexes(
             int msLevel) {
@@ -491,6 +386,59 @@ public class AplIndexedReader implements MzReader {
         }
 
         return idToIndexMap;
+    }
+
+    @Override
+    public AplSpectrum next() {
+        // if there is not file set, get the object from the HashMap
+        if (sourceFile == null) {
+            // make sure the current position is valid
+            if (currentPosition < 0 || currentPosition >= peakLists.size())
+                throw new IllegalStateException(new IndexOutOfBoundsException());
+
+            // get the key
+            Integer key = keys.get(currentPosition++);
+
+            // make sure the key exists
+            if (!peakLists.containsKey(key))
+                throw new IllegalStateException("Key not found in hashmap");
+
+            return peakLists.get(key);
+        } else {
+            // check if the object was cached
+            if (peakLists.containsKey(currentPosition))
+                return peakLists.get(currentPosition);
+
+            // read the query from file
+            AplSpectrum query;
+            try {
+                query = loadIndexedQueryFromFile(currentPosition);
+
+                // if caching is enabled do so
+                if (useCache)
+                    peakLists.put(currentPosition, query);
+
+                // move to the next position
+                currentPosition++;
+
+                // return the query
+                return query;
+            } catch (PgatkIOException e) {
+                throw new RuntimeException("Failed to load query from file.", e);
+            }
+        }
+    }
+
+    @Override
+    public void close() throws PgatkIOException { }
+
+    @Override
+    public boolean hasNext() {
+        if (sourceFile == null) {
+            return currentPosition < peakLists.size();
+        } else {
+            return currentPosition < index.size();
+        }
     }
 }
 
