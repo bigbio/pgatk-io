@@ -9,7 +9,10 @@ import java.util.*;
 import java.util.regex.Matcher;
 
 /**
- * This class reads in information from an MGF file.
+ * This class reads the MS2 information in the MGF.
+ *
+ * @author ypriverol
+ *
  */
 public class Ms2Query implements Spectrum {
 
@@ -25,7 +28,7 @@ public class Ms2Query implements Spectrum {
   // Optional charge state of the precursor peptide.
   private String chargeState;
 
-  // Optional petpide tolerance
+  // Optional peptide tolerance
   private Double tolerance;
 
   // Optional peptide tolerance unit
