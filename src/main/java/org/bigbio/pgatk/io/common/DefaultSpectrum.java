@@ -4,20 +4,22 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 
-public class SpectrumImplementation implements Spectrum, Serializable {
+public class DefaultSpectrum implements Spectrum, Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private final String id;
-	private final Integer precursorCharge;
+	private final Long index;
+	private final int precursorCharge;
 	private final Double precursorMz;
 	private final Double precursorIntensity;
 	private final Map<Double, Double> peakList;
 	private final Integer msLevel;
 
-	public SpectrumImplementation(String id, Integer precursorCharge,
-			Double precursorMz, Double precursorIntensity,
-			Map<Double, Double> peakList, Integer msLevel) {
+	public DefaultSpectrum(String id, long index, int precursorCharge,
+						   double precursorMz, double precursorIntensity,
+						   Map<Double, Double> peakList, Integer msLevel) {
 		this.id = id;
+		this.index = index;
 		this.precursorCharge = precursorCharge;
 		this.precursorMz = precursorMz;
 		this.precursorIntensity = precursorIntensity;
@@ -25,6 +27,12 @@ public class SpectrumImplementation implements Spectrum, Serializable {
 		this.msLevel = msLevel;
 	}
 
+	@Override
+	public Long getIndex() {
+		return null;
+	}
+
+	@Override
 	public String getId() {
 		return id;
 	}
@@ -44,7 +52,7 @@ public class SpectrumImplementation implements Spectrum, Serializable {
 	public Map<Double, Double> getPeakList() {
 		return peakList;
 	}
-	
+
 	public Integer getMsLevel() {
 		return msLevel;
 	}
@@ -57,10 +65,10 @@ public class SpectrumImplementation implements Spectrum, Serializable {
 		result = prime * result
 				+ ((peakList == null) ? 0 : peakList.hashCode());
 		result = prime * result
-				+ ((precursorCharge == null) ? 0 : precursorCharge.hashCode());
+				+ ((precursorCharge == -1) ? 0 : precursorCharge);
 		result = prime
 				* result
-				+ ((precursorIntensity == null) ? 0 : precursorIntensity
+				+ ((precursorIntensity == -1) ? 0 : precursorIntensity
 						.hashCode());
 		result = prime * result
 				+ ((precursorMz == null) ? 0 : precursorMz.hashCode());
@@ -77,7 +85,7 @@ public class SpectrumImplementation implements Spectrum, Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		SpectrumImplementation other = (SpectrumImplementation) obj;
+		DefaultSpectrum other = (DefaultSpectrum) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -88,10 +96,10 @@ public class SpectrumImplementation implements Spectrum, Serializable {
 				return false;
 		} else if (!peakList.equals(other.peakList))
 			return false;
-		if (precursorCharge == null) {
-			if (other.precursorCharge != null)
+		if (precursorCharge == -1) {
+			if (other.precursorCharge != -1)
 				return false;
-		} else if (!precursorCharge.equals(other.precursorCharge))
+		} else if (!(precursorCharge == other.precursorCharge))
 			return false;
 		if (precursorIntensity == null) {
 			if (other.precursorIntensity != null)

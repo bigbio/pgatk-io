@@ -48,6 +48,8 @@ public class MzXMLSpectrum implements Spectrum {
 	 */
 	private Long msLevel;
 
+	private Long index;
+
 	/**
 	 * Create a new MzXMLSpectrum object wrapping
 	 * the given Scan object.
@@ -102,7 +104,12 @@ public class MzXMLSpectrum implements Spectrum {
 		if (scan.getTotIonCurrent() != null)
 			paramGroup.add(new CvParam("total ion current", scan.getTotIonCurrent().toString(), "MS", "MS:1000285"));
 	}
-	
+
+	@Override
+	public Long getIndex() {
+		return index;
+	}
+
 	@Override
 	public String getId() {
 		return num.toString();

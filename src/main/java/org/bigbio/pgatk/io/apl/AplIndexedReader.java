@@ -261,7 +261,7 @@ public class AplIndexedReader implements MzReader {
             String ms2Buffer = new String(byteBuffer);
             // create the query
 
-            return new AplSpectrum(ms2Buffer, index);
+            return new AplSpectrum(ms2Buffer, (long)index);
         } catch (FileNotFoundException e) {
             throw new PgatkIOException("APL file could not be found.", e);
         } catch (IOException e) {

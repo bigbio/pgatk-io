@@ -22,9 +22,9 @@ public class AplSpectrum implements Spectrum {
     private Double mz;
     private String fragmentation;
     private String chargeState;
-    private Integer index;
+    private Long index;
 
-    public AplSpectrum(String mgfQuery, int index) throws PgatkIOException {
+    public AplSpectrum(String mgfQuery, Long index) throws PgatkIOException {
         this.index = index;
 
         // process the mgf section line by line
@@ -104,6 +104,11 @@ public class AplSpectrum implements Spectrum {
             peakList = new HashMap<>(1);
 
         peakList.put(mz, intensity);
+    }
+
+    @Override
+    public Long getIndex() {
+        return index;
     }
 
     @Override

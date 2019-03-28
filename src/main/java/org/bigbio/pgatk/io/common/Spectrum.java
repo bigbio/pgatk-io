@@ -15,8 +15,14 @@ import java.util.Map;
 public interface Spectrum extends Serializable {
 
 	/**
-	 * Retrieves the spectrum's id.
-	 * @return
+	 * Internal Spectrum in the corresponding file MGF or mzXML or mzML, starting from 1, incrementing by one for each consecutive spectrum. This is
+	 * the number is used in the mzIdentML and mzTab files to reference the Spectrum.
+	 */
+	Long getIndex();
+
+	/**
+	 * The textual representation of an ID of a scan. mzML provides those IDs by default, in mzXML
+	 * there is no such element, so this will return the same as {@link #getIndex()}}.
 	 */
     String getId();
 	
@@ -42,7 +48,7 @@ public interface Spectrum extends Serializable {
 	 * @return
 	 */
 	Double getPrecursorIntensity();
-	
+
 	/**
 	 * Returns the spectrum's peak list as
 	 * a HashMap with the m/z values as keys
@@ -51,7 +57,7 @@ public interface Spectrum extends Serializable {
 	 * @return
 	 */
 	Map<Double, Double> getPeakList();
-	
+
 	/**
 	 * Returns the msLevel of the spectrum. NULL
 	 * in case the MS level is not available or

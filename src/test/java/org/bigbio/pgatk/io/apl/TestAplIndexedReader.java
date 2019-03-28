@@ -42,7 +42,7 @@ public class TestAplIndexedReader {
     public void testSetPeakLists() {
         AplSpectrum query;
         try {
-            query = new AplSpectrum("peaklist start\nmz=1271.13935636076\ncharge=4\nheader=RawFile: 20080830_Orbi6_NaNa_SA_BiotechVariation_MH03_02 Index: 16236 Silind: 43885\n380.02725\t7.750772\n419.57687\t11.58331\n423.23862\t10.6417\npeaklist end\n", 1);
+            query = new AplSpectrum("peaklist start\nmz=1271.13935636076\ncharge=4\nheader=RawFile: 20080830_Orbi6_NaNa_SA_BiotechVariation_MH03_02 Index: 16236 Silind: 43885\n380.02725\t7.750772\n419.57687\t11.58331\n423.23862\t10.6417\npeaklist end\n", (long) 1);
 
             ArrayList<AplSpectrum> queries = new ArrayList<>();
             queries.add(query);

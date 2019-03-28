@@ -462,6 +462,11 @@ public class Ms2Query implements Spectrum {
     return query.toString();
   }
 
+  @Override
+  public Long getIndex() {
+    return index;
+  }
+
   /**
    * Gets the ID.
    * @return the ID. If none is set, null is returned,
