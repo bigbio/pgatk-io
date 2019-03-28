@@ -1,8 +1,6 @@
 package org.bigbio.pgatk.io.mzml;
 
-import org.bigbio.pgatk.io.common.IndexElementImpl;
-import org.bigbio.pgatk.io.common.MzReader;
-import org.bigbio.pgatk.io.common.PgatkIOException;
+import org.bigbio.pgatk.io.common.*;
 import psidev.psi.tools.xxindex.index.IndexElement;
 import uk.ac.ebi.jmzml.MzMLElement;
 import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
@@ -17,11 +15,12 @@ import java.util.*;
  * @author jg
  * @author ypriverol
  */
-public class MzMlIndexedReader implements MzReader {
+public class MzMlIndexedReader implements MzReader, MzIterableReader {
 
     private HashMap<String, psidev.psi.tools.xxindex.index.IndexElement> idToIndexElementMap;
     private HashMap<Integer, List<psidev.psi.tools.xxindex.index.IndexElement>> msNScans;
 
+    private Iterator<String> idIterator;
     /**
      * MzML cvParams to be used to extract
      * required parameters from the spectra.
@@ -73,6 +72,7 @@ public class MzMlIndexedReader implements MzReader {
 
             //initialize spectrum maps
             initializeSpectrumMaps();
+            idIterator = spectraIds.iterator();
 
         } catch (RuntimeException e) {
             throw new PgatkIOException("Failed to parse mzML file.", e);
@@ -195,26 +195,22 @@ public class MzMlIndexedReader implements MzReader {
         return convertedIndex;
     }
 
-    /**
-     * Iterator over all spectra in the mzML
-     * file returning Peak List Parser
-     *
-     * @author jg
-     */
-    private class MzMLSpectrumIterator implements Iterator<org.bigbio.pgatk.io.common.Spectrum> {
-        private final Iterator<String> idIterator = spectraIds.iterator();
-
-        public boolean hasNext() {
+    @Override
+    public boolean hasNext() {
             return idIterator.hasNext();
-        }
+    }
 
-        public org.bigbio.pgatk.io.common.Spectrum next() {
-            try {
-                return getSpectrumById(idIterator.next());
-            } catch (PgatkIOException e) {
-                throw new RuntimeException("Failed to parse mzML spectrum.", e);
-            }
+    @Override
+    public org.bigbio.pgatk.io.common.Spectrum next() {
+        try {
+            return getSpectrumById(idIterator.next());
+        } catch (PgatkIOException e) {
+            throw new RuntimeException("Failed to parse mzML spectrum.", e);
         }
+    }
+
+    @Override
+    public void close() throws PgatkIOException {
 
     }
 

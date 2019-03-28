@@ -44,20 +44,20 @@ public class MzMlTest {
         Assert.assertFalse(wrapper.acceptsDirectory());
 
 
-//        try {
-//            int count = 0;
-//
-//            while (wrapper.hasNext()) {
-//                Spectrum s = wrapper.next();
-//                Assert.assertNotNull(s);
-//                count++;
-//            }
-//
-//            Assert.assertEquals(10, count);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println(e.getMessage());
-//        }
+        try {
+            int count = 0;
+
+            while (wrapper.hasNext()) {
+                Spectrum s = wrapper.next();
+                Assert.assertNotNull(s);
+                count++;
+            }
+
+            Assert.assertEquals(10, count);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
     }
 
     @Test
