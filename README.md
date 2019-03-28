@@ -1,6 +1,6 @@
 pgatk-io
 ===============
-[![Build Status](https://travis-ci.org/bigbio/pgatk-io.svg?branch=master)](https://travis-ci.org/bigbio/pgatk-io)
+[![Build Status](https://travis-ci.org/bigbio/pgatk-io.svg?branch=master)](https://travis-ci.org/bigbio/pgatk-io) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) 
 
 # About pgatk-io
 
