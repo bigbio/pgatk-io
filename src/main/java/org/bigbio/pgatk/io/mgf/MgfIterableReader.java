@@ -1,7 +1,10 @@
 package org.bigbio.pgatk.io.mgf;
 
+import org.bigbio.pgatk.io.common.MzIterableChannelReader;
 import org.bigbio.pgatk.io.common.MzIterableReader;
 import org.bigbio.pgatk.io.common.PgatkIOException;
+import org.bigbio.pgatk.io.mzxml.MzXMLParsingException;
+import org.bigbio.pgatk.io.mzxml.mzxml.model.Peaks;
 import org.bigbio.pgatk.io.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,10 +13,16 @@ import org.bigbio.pgatk.io.common.Spectrum;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 /**
  * This implementation only allows to iterate over all the spectra in a file and retrieve the corresponding
@@ -21,7 +30,7 @@ import java.util.regex.Matcher;
  *
  * @author ypriverol
  */
-public class MgfIterableReader implements MzIterableReader {
+public class MgfIterableReader extends MzIterableChannelReader implements MzIterableReader {
 
     public static final Logger logger = LoggerFactory.getLogger(MgfIterableReader.class);
 
@@ -44,23 +53,20 @@ public class MgfIterableReader implements MzIterableReader {
      */
     private File sourceFile;
 
-    private final FileChannel accessChannel;
-    private MappedByteBuffer buffer;
     private int channelCursor = 0;
-    private long nextPosition = 0;
 
     // The index (1-based) is used to know in the order of the spectrum in the file.
     private long specIndex = 1;
 
     public MgfIterableReader(File file, boolean ignoreWrongPeaks, boolean disableCommentSupport, boolean allowCustomTags) throws PgatkIOException {
-
+        super(file);
         this.ignoreWrongPeaks = ignoreWrongPeaks;
         this.disableCommentSupport = disableCommentSupport;
         this.allowCustomTags = allowCustomTags;
         this.sourceFile = file;
 
         try {
-            RandomAccessFile accessFile = new RandomAccessFile(file, "rw");
+            RandomAccessFile accessFile = new RandomAccessFile(file, "r");
             accessChannel = accessFile.getChannel();
         } catch (IOException e) {
            throw new PgatkIOException("Error reading the following file " + file.getAbsolutePath(), e);
@@ -172,19 +178,6 @@ public class MgfIterableReader implements MzIterableReader {
                 readBuffer();
         }
         return spectrum;
-    }
-
-    private void readBuffer(){
-        try {
-            if(nextPosition >= accessChannel.size()) {
-            } else {
-                long remSize = Math.min(MgfUtils.BUFFER_SIZE_100MB, accessChannel.size() - nextPosition);
-                buffer = accessChannel.map(FileChannel.MapMode.READ_ONLY, nextPosition, remSize);
-                nextPosition += remSize;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -1,13 +1,12 @@
 package org.bigbio.pgatk.io.mzxml;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.bigbio.pgatk.io.common.Spectrum;
 import org.bigbio.pgatk.io.common.CvParam;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.Scan;
+
+import javax.xml.datatype.Duration;
 
 /**
  * This class wraps Scan elements into PeakListParser
@@ -19,13 +18,13 @@ import org.bigbio.pgatk.io.mzxml.mzxml.model.Scan;
  */
 public class MzXMLSpectrum implements Spectrum {
 	/**
-	 * The run's num attribute
+	 * The scan id
 	 */
-	private Long num;
+	private String id;
 	/**
 	 * The spectrum's charge
 	 */
-	private Long charge;
+	private Integer charge;
 	/**
 	 * The precursor's m/z
 	 */
@@ -42,13 +41,20 @@ public class MzXMLSpectrum implements Spectrum {
 	 * ParamGroup holding additional information
 	 * about the spectrum.
 	 */
-	private List<CvParam> paramGroup;
+	private List<CvParam> paramGroup = new ArrayList<>();
 	/**
 	 * The spectrum's ms level
 	 */
-	private Long msLevel;
+	private int msLevel;
 
 	private Long index;
+
+	private String retentionTime;
+
+	/**
+	 * Default Spectrum for mzXML scans
+	 */
+	public MzXMLSpectrum(){}
 
 	/**
 	 * Create a new MzXMLSpectrum object wrapping
@@ -66,44 +72,86 @@ public class MzXMLSpectrum implements Spectrum {
 		else
 			throw new MzXMLParsingException("Multiple peak lists can not be modeled in a mzXMLSpectrum.");
 		
-		msLevel = scan.getMsLevel();
+		msLevel = Math.toIntExact(scan.getMsLevel());
 		
 		// set the num
-		num = scan.getNum();
+		id = String.valueOf(scan.getNum());
 		
 		// set the rest of the information
 		if (scan.getPrecursorMz().size() == 1) {
 			precursorMz = (double) scan.getPrecursorMz().get(0).getValue();
 			precursorIntensity = (double) scan.getPrecursorMz().get(0).getPrecursorIntensity();
-			charge = scan.getPrecursorMz().get(0).getPrecursorCharge();
+			charge = Math.toIntExact(scan.getPrecursorMz().get(0).getPrecursorCharge());
 		}
 		
-		// create and populate the param group
-		paramGroup = new ArrayList<>();
-		
 		if (scan.getPolarity() != null)
-			paramGroup.add(new CvParam("scan polarity", scan.getPolarity(), "MS", "MS:1000465"));
+			setPolarity(scan.getPolarity());
 		if (scan.getScanType() != null)
-			paramGroup.add(new CvParam("scan type", scan.getScanType(), null, null));
+			setScanType(scan.getScanType());
 		if (scan.getFilterLine() != null)
-			paramGroup.add(new CvParam("filter line", scan.getFilterLine(), null, null));
+			setFilterLine(scan.getFilterLine());
 		if (scan.isCentroided() != null && scan.isCentroided())
-			paramGroup.add(new CvParam("centroid spectrum", "true", "MS", "MS:1000127"));
+			setCentroid(scan.isCentroided());
 		if (scan.isDeisotoped() != null && scan.isDeisotoped())
-			paramGroup.add(new CvParam("deisotoping", "true", "MS", "MS:1000033"));
+			setDeisotoped(scan.isDeisotoped());
 		if (scan.isChargeDeconvoluted())
-			paramGroup.add(new CvParam("charge deconvolution", "true", "MS", "MS:1000034"));
+			setChargeDeconvoluted();
 		if (scan.getRetentionTime() != null)
-			paramGroup.add(new CvParam("retention time", scan.getRetentionTime().toString(), "MS", "MS:1000894"));
+			setRetentionTime(scan.getRetentionTime());
 		if (scan.getIonisationEnergy() != null)
-			paramGroup.add(new CvParam("ionisation energy", scan.getIonisationEnergy().toString(), null, null));
+			setIonizationEnergy(scan.getIonisationEnergy());
 		if (scan.getCollisionEnergy() != null)
-			paramGroup.add(new CvParam("collision energy", scan.getCollisionEnergy().toString(), "MS", "MS:1000045"));
+			setCollitionEnergy(scan.getCollisionEnergy());
 		if (scan.getCidGasPressure() != null)
-			paramGroup.add(new CvParam("collision gas pressure", scan.getCidGasPressure().toString(), "MS", "MS:1000045"));
+			setCidgasPressure(scan.getCidGasPressure());
 		if (scan.getTotIonCurrent() != null)
-			paramGroup.add(new CvParam("total ion current", scan.getTotIonCurrent().toString(), "MS", "MS:1000285"));
+			setIonCurrent(scan.getTotIonCurrent());
 	}
+
+	public void setIonCurrent(Float totIonCurrent) {
+		paramGroup.add(new CvParam("total ion current", totIonCurrent.toString(), "MS", "MS:1000285"));
+	}
+
+
+	public void setCidgasPressure(Float cidGasPressure) {
+		paramGroup.add(new CvParam("collision gas pressure", cidGasPressure.toString(), "MS", "MS:1000045"));
+	}
+
+	public void setCollitionEnergy(Float collisionEnergy) {
+		paramGroup.add(new CvParam("collision energy", collisionEnergy.toString(), "MS", "MS:1000045"));
+	}
+
+	public void setIonizationEnergy(Float ionisationEnergy) {
+		paramGroup.add(new CvParam("ionisation energy", ionisationEnergy.toString(), null, null));
+	}
+
+
+	public void setRetentionTime(Duration retentionTime) {
+		this.retentionTime = retentionTime.toString();
+	}
+
+	public void setRetentionTime(String retentionTime) {
+		paramGroup.add(new CvParam("retention time", retentionTime, "MS", "MS:1000894"));
+	}
+
+
+	public void setChargeDeconvoluted() {
+		paramGroup.add(new CvParam("charge deconvolution", "true", "MS", "MS:1000034"));
+	}
+
+	public void setDeisotoped(Boolean deisotoped) {
+		paramGroup.add(new CvParam("deisotoping", "true", "MS", "MS:1000033"));
+	}
+
+
+	public void setCentroid(Boolean centroid) {
+		paramGroup.add(new CvParam("centroid spectrum", "true", "MS", "MS:1000127"));
+	}
+
+	public void setFilterLine(String filterLine) {
+		paramGroup.add(new CvParam("filter line", filterLine, null, null));
+	}
+
 
 	@Override
 	public Long getIndex() {
@@ -112,12 +160,12 @@ public class MzXMLSpectrum implements Spectrum {
 
 	@Override
 	public String getId() {
-		return num.toString();
+		return id;
 	}
 
 	@Override
 	public Integer getPrecursorCharge() {
-		return (charge != null) ? charge.intValue() : null;
+		return (charge != null) ? charge : null;
 	}
 
 	@Override
@@ -138,11 +186,80 @@ public class MzXMLSpectrum implements Spectrum {
 	@Override
 	public Integer getMsLevel() {
 		// these are always MS2 spectra
-		return msLevel.intValue();
+		return msLevel;
 	}
 
 	@Override
 	public Collection<CvParam> getAdditional() {
 		return paramGroup;
 	}
+
+
+	public void setIndex(Long index) {
+		this.index = index;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setMsLevel(int msLevel) {
+		this.msLevel = msLevel;
+	}
+
+	public void setPolarity(String polarity) {
+		paramGroup.add(new CvParam("scan polarity", polarity, "MS", "MS:1000465"));
+	}
+
+	private void setScanType(String scanType) {
+		paramGroup.add(new CvParam("scan type", scanType, null, null));
+	}
+
+	public void setPrecursorMz(Double valueOf) {
+		this.precursorMz = valueOf;
+	}
+
+	public void setPrecursorCharge(int charge) {
+		this.charge = charge;
+	}
+
+	public void setPrecursorIntesity(double intensity) {
+		this.precursorIntensity = intensity;
+	}
+
+	public void setActivationMethod(String activationMethod) {
+		paramGroup.add(new CvParam("activation method", activationMethod, null, null));
+	}
+
+	public void setPeaks(Map<Double, Double> peaks) {
+		this.peakList = peaks;
+	}
+
+	/**
+	 * Compiles all the information from this Ms2Query object.
+	 * @return a String of all the information from this object.
+	 */
+	@Override
+	public String toString() {
+		StringBuilder query = new StringBuilder("BEGIN IONS\n");
+		// process the optional attributes
+		if (charge != null) {
+			query.append("CHARGE=").append(charge).append('\n');
+		}
+
+		if (retentionTime != null) {
+			query.append("RTINSECONDS=").append(retentionTime).append('\n');
+		}
+
+		query.append(paramGroup.toString());
+
+		List<Double> masses = new ArrayList<>(peakList.keySet());
+		Collections.sort(masses);
+		for (Double mz : masses) {
+			query.append(mz).append(' ').append(peakList.get(mz)).append('\n');
+		}
+		query.append("END IONS\n");
+		return query.toString();
+	}
+
 }
