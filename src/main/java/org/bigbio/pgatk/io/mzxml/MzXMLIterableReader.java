@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
@@ -88,16 +85,16 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
                     scanLevel = -1;
                     spectrum = new MzXMLSpectrum();
                     spectrum.setId(Integer.valueOf(line.substring(line.indexOf("=")+2, line.lastIndexOf("\""))).toString());
-                }else if(line.contains("</scan>") && scanLevel == 2) {
+                }else if(line.contains("</scan") && scanLevel == 2) {
                     spectrum.setIndex((long)specIndex);
                     specIndex++;
+                    scanLevel = -1;
                     return spectrum;
                 }else if(spectrum != null){
                     if (line.contains("msLevel")) {
                         scanLevel = Integer.valueOf(line.substring(line.indexOf("=")+2, line.lastIndexOf("\"")));
                         spectrum.setMsLevel(scanLevel);
                     }
-
                     if (line.contains("polarity"))
                         spectrum.setPolarity(line.substring(line.indexOf("=")+2, line.lastIndexOf("\"")));
                     if (line.contains("retentionTime"))
@@ -110,12 +107,15 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
                         while (matcher.find()) {
                             spectrum.setPrecursorCharge(Integer.parseInt( matcher.group(1)));
                         }
-                        matcher = Pattern.compile("precursorIntensity=\"([A-Za-z0-9_]*)\"").matcher(line);
+                    }
+                    if (line.contains("<precursorMz") && scanLevel > 1){
+                        Matcher matcher = Pattern.compile("precursorIntensity=\"([A-Za-z0-9_]*)\"").matcher(line);
                         while (matcher.find()) {
                             spectrum.setPrecursorIntesity(Double.parseDouble(matcher.group(1)));
                         }
-
-                        matcher = Pattern.compile("activationMethod=\"([A-Za-z0-9_]*)\"").matcher(line);
+                    }
+                    if (line.contains("<precursorMz") && scanLevel > 1){
+                        Matcher matcher = Pattern.compile("activationMethod=\"([A-Za-z0-9_]*)\"").matcher(line);
                         while (matcher.find()) {
                             spectrum.setActivationMethod(matcher.group(1));
                         }
@@ -142,14 +142,20 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
 
                     if (line.contains("m/z-int"))
                     {
-                        if (line.contains("==</peaks>"))
-                            peakBytes = line.substring(line.indexOf(">")+1, line.indexOf("</peaks>")).getBytes();
+                        String mzArray = null;
+                        if (line.contains("==</peaks")) mzArray = line.substring(line.indexOf(">")+1, line.indexOf("==</peaks"));
+                        else if (line.contains("=</peaks")) mzArray = line.substring(line.indexOf(">")+1, line.indexOf("=</peaks"));
+                        else if (line.contains("</peaks")) mzArray = line.substring(line.indexOf(">")+1, line.indexOf("</peaks"));
+
                         try {
-                            Map<Double, Double> peaks = convertPeaksToMap(peakBytes, compressionType, byteOrder, precision);
-                            spectrum.setPeaks(peaks);
+                            if (mzArray != null){
+                                Map<Double, Double> peaks = convertPeaksToMap(mzArray, compressionType, byteOrder, precision);
+                                spectrum.setPeaks(peaks);
+                            }
                         } catch (MzXMLParsingException e) {
                             throw new NoSuchElementException("Error parsing the peak list in mzXML spectra line --" + line);
                         }
+
                     }
 
                 }
@@ -180,10 +186,12 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
      * Peaks object and returns it as a Map with
      * the m/z as key and the intensity as value.
      *
-     * @param peaks A peaks object.
+     * @param arrayPeaks A peaks object.
      * @return Map containing the m/z as key and the intensity as value.
      */
-    public static Map<Double, Double> convertPeaksToMap(byte[] peaks, String compressType, String byteOrder, Integer precision) throws MzXMLParsingException {
+    public static Map<Double, Double> convertPeaksToMap(String arrayPeaks, String compressType, String byteOrder, Integer precision) throws MzXMLParsingException {
+
+        byte[] peaks = Base64.getDecoder().decode(arrayPeaks);
         // make sure the scan is not null
         if (peaks == null || peaks == null)
             return Collections.emptyMap();

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bigbio.pgatk.io.common.IndexElement;
+import org.bigbio.pgatk.io.common.PgatkIOException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +37,21 @@ public class MzXMLIndexedReaderTest {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
+	}
+
+	@Test
+	public void testAllSpectra(){
+		for(String id: mzxmlIndexedReader.getSpectraIds()){
+			Spectrum spec = null;
+			try {
+				spec = mzxmlIndexedReader.getSpectrumById(id);
+				System.out.println(spec.getId() + " : " + spec.getPeakList().size());
+			} catch (PgatkIOException e) {
+				e.printStackTrace();
+			}
+
+		}
+
 	}
 
 	@Test

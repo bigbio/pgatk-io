@@ -1,6 +1,6 @@
 # Set root to dump to console, that way we're not getting the PRIDE logs full of
 # other people's bumf
-log4j.rootCategory=ERROR,console
+log4j.rootCategory=INFO,console
 
 # Set uk.ac.ebi.pride core logger level to WARN and appender to pride_core_file.
 #log4j.logger.uk.ac.ebi.pride.tools.converter=INFO, pride_xml_file

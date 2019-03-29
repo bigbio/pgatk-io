@@ -36,7 +36,7 @@ public class MzXMLIterableReaderTest {
 
         while(mzxmlIndexedReader.hasNext()){
             Spectrum spectrum = mzxmlIndexedReader.next();
-            System.out.println(spectrum.toString());
+            System.out.println(spectrum.getId() + " Number of peaks: " + spectrum.getPeakList().size());
         }
     }
 }
