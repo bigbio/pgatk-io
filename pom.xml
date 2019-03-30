@@ -32,6 +32,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
         <uk.ac.ebi.jmzml-jmzml.version>1.7.11</uk.ac.ebi.jmzml-jmzml.version>
+        <lombock.version>1.18.2</lombock.version>
+        <slf4j.version>1.7.25</slf4j.version>
+        <logback.version>1.2.3</logback.version>
     </properties>
 
     <dependencies>
@@ -39,28 +42,39 @@
             <groupId>uk.ac.ebi.jmzml</groupId>
             <artifactId>jmzml</artifactId>
             <version>${uk.ac.ebi.jmzml-jmzml.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>uk.ac.ebi.pride.architectural</groupId>
+                    <artifactId>pride-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
-        <!-- logger Dependencies -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombock.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.19</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.19</version>
+            <version>${slf4j.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.1.6</version>
+            <version>${logback.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.1.6</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <!-- junit dependencies -->
@@ -83,11 +97,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>1.10.19</version>
-        </dependency>
-        <dependency>
-            <groupId>net.jcip</groupId>
-            <artifactId>jcip-annotations</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 

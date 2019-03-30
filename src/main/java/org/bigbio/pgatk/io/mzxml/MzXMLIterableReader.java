@@ -1,12 +1,11 @@
 package org.bigbio.pgatk.io.mzxml;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.MzIterableChannelReader;
 import org.bigbio.pgatk.io.common.MzIterableReader;
 import org.bigbio.pgatk.io.common.PgatkIOException;
 import org.bigbio.pgatk.io.common.Spectrum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +18,8 @@ import java.util.regex.Pattern;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
+@Slf4j
 public class MzXMLIterableReader extends MzIterableChannelReader implements MzIterableReader {
-
-    public static final Logger logger = LoggerFactory.getLogger(MzXMLIterableReader.class);
 
     /**
      * Source File containing all the spectra.
@@ -81,7 +79,7 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
                 String line = stringBuffer.toString().trim();
 
                 if(line.contains("scan num")) {
-                    logger.debug("Start reading the following spectrum -- ");
+                    log.debug("Start reading the following spectrum -- ");
                     scanLevel = -1;
                     spectrum = new MzXMLSpectrum();
                     spectrum.setId(Integer.valueOf(line.substring(line.indexOf("=")+2, line.lastIndexOf("\""))).toString());

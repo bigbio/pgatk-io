@@ -1,9 +1,8 @@
 package org.bigbio.pgatk.io.mgf;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.*;
 import org.bigbio.pgatk.io.utils.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.regex.Matcher;
@@ -14,9 +13,10 @@ import java.util.regex.Matcher;
  * @author ypriverol
  *
  */
+
+@Slf4j
 public class Ms2Query implements Spectrum {
 
-  public static final Logger logger = LoggerFactory.getLogger(Ms2Query.class);
   private static final int DEFAULT_NUMBER_PEAKS = 100;
 
   // It is important to notice that
@@ -156,7 +156,7 @@ public class Ms2Query implements Spectrum {
           addPeak(Double.parseDouble(firstHalf), intensity);
         } else {  // no index could be found
           if(ignoreWrongPeaks){
-            logger.error("The following peaks and wronly annotated -- " + line);
+            log.error("The following peaks and wronly annotated -- " + line);
           }else
             throw new PgatkIOException("Unable to parse 'mz' and 'intensity' values for " + line);
         }

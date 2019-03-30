@@ -1,9 +1,8 @@
 package org.bigbio.pgatk.io.apl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.braf.BufferedRandomAccessFile;
 import org.bigbio.pgatk.io.common.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
@@ -16,9 +15,9 @@ import java.util.regex.Pattern;
  * @author ypriverol
  *
  */
+@Slf4j
 public class AplIndexedReader implements MzReader, MzIterableReader {
 
-    public static final Logger logger = LoggerFactory.getLogger(AplIndexedReader.class);
 
     public String getFormat() {
         return "Andromeda peaklist file";

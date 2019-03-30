@@ -1,28 +1,17 @@
 package org.bigbio.pgatk.io.mgf;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.MzIterableChannelReader;
 import org.bigbio.pgatk.io.common.MzIterableReader;
 import org.bigbio.pgatk.io.common.PgatkIOException;
-import org.bigbio.pgatk.io.mzxml.MzXMLParsingException;
-import org.bigbio.pgatk.io.mzxml.mzxml.model.Peaks;
 import org.bigbio.pgatk.io.utils.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.bigbio.pgatk.io.common.Spectrum;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
 
 /**
  * This implementation only allows to iterate over all the spectra in a file and retrieve the corresponding
@@ -30,9 +19,9 @@ import java.util.zip.Inflater;
  *
  * @author ypriverol
  */
-public class MgfIterableReader extends MzIterableChannelReader implements MzIterableReader {
 
-    public static final Logger logger = LoggerFactory.getLogger(MgfIterableReader.class);
+@Slf4j
+public class MgfIterableReader extends MzIterableChannelReader implements MzIterableReader {
 
     private boolean allowCustomTags = MgfUtils.DEFAULT_ALLOW_CUSTOM_TAGS;
 
@@ -116,7 +105,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
                 String line = StringUtils.removeBOMString(stringBuffer.toString().trim());
 
                 if(line.contains("BEGIN IONS")) {
-                    logger.debug("Start reading the following spectrum -- ");
+                    log.debug("Start reading the following spectrum -- ");
                     spectrum = new Ms2Query(this.disableCommentSupport);
                 }else if(line.contains("END IONS")) {
                     spectrum.setIndex(specIndex);
@@ -160,7 +149,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
                             spectrum.addPeak(Double.parseDouble(firstHalf), intensity);
                         } else {  // no index could be found
                             if (ignoreWrongPeaks) {
-                                logger.error("The following peaks and wronly annotated -- " + line);
+                                log.error("The following peaks and wronly annotated -- " + line);
                             } else
                                 throw new NoSuchElementException("Unable to parse 'mz' and 'intensity' values for " + line);
                         }

@@ -8,17 +8,15 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.sax.SAXSource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.xml.sax.InputSource;
 
 import org.bigbio.pgatk.io.mzxml.mzxml.model.ModelConstants;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.MzXMLObject;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.MzXmlElement;
 
-
+@Slf4j
 public class MzXMLUnmarshallerFactory {
-    private static final Logger logger = LoggerFactory.getLogger(MzXMLUnmarshallerFactory.class);
 
     private static MzXMLUnmarshallerFactory instance = new MzXMLUnmarshallerFactory();
     private static JAXBContext jc = null;
@@ -40,12 +38,12 @@ public class MzXMLUnmarshallerFactory {
 
             //create unmarshaller
             MzXMLUnmarshaller pum = new MzXMLUnmarshallerImpl();
-            logger.debug("Unmarshaller Initialized");
+            log.debug("Unmarshaller Initialized");
 
             return pum;
 
         } catch (JAXBException e) {
-            logger.error("UnmarshallerFactory.initializeUnmarshaller", e);
+            log.error("UnmarshallerFactory.initializeUnmarshaller", e);
             throw new IllegalStateException("Could not initialize unmarshaller", e);
         }
     }

@@ -1,24 +1,22 @@
 package org.bigbio.pgatk.io.mgf;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.braf.BufferedRandomAccessFile;
 import org.bigbio.pgatk.io.common.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 /**
  * Represents a MgfIndexedReader.
  *
  * @author jg
+ * @author ypriverol
  */
-public class MgfIndexedReader implements MzReader, MzIterableReader {
 
-    public static final Logger logger = LoggerFactory.getLogger(MgfIndexedReader.class);
+@Slf4j
+public class MgfIndexedReader implements MzReader, MzIterableReader {
 
     /**
      * ---------- OPTIONAL PARAMETERS THAT CAN BE SET IN A MGF FILE --------------
@@ -338,7 +336,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
             if (!allowCustomTags) {
                 throw new IllegalStateException("Unknown attribute '" + name + "' encountered");
             } else {
-                logger.warn("Ignored custom tag: " + name);
+                log.info("Ignored custom tag: " + name);
             }
         }
     }
