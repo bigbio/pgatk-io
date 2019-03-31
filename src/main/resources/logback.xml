@@ -1,6 +1,6 @@
 <configuration scan="true" scanPeriod="30 seconds">
 
-    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+    <appender name="PGTKIO-FILE" class="ch.qos.logback.core.FileAppender">
         <file>log/pgatk-io.log</file>
 
         <encoder>
@@ -15,7 +15,7 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="PGTKIO-FILE"/>
         <appender-ref ref="STDOUT"/>
     </root>
 </configuration>
