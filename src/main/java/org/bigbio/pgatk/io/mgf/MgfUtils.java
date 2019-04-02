@@ -4,7 +4,7 @@ import java.util.regex.Pattern;
 
 public class MgfUtils {
 
-    public static int BUFFER_SIZE = 1024 * 10;
+    public static int BUFFER_SIZE = 1024 * 100;
 
     public enum FragmentToleranceUnits {DA, MMU}
 
