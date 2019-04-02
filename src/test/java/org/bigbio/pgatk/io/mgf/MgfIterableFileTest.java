@@ -22,7 +22,7 @@ public class MgfIterableFileTest {
     }
 
     private void loadTestFile() throws Exception {
-        URL testFile = getClass().getClassLoader().getResource("F001257.mgf");
+        URL testFile = getClass().getClassLoader().getResource("qExactive01819.mgf");
         Assert.assertNotNull("Error loading mgf test file", testFile);
         sourceFile = new File(testFile.toURI());
         mgfIterableReader = new MgfIterableReader(sourceFile,true, false, true);
@@ -30,28 +30,30 @@ public class MgfIterableFileTest {
 
     @Test
     public void next() {
+        long time = System.currentTimeMillis();
         try {
             while (mgfIterableReader.hasNext()){
                 Spectrum spectrum = mgfIterableReader.next();
-                System.out.println(spectrum);
             }
         } catch (NoSuchElementException e) {
             e.printStackTrace();
         }
+        System.out.println(System.currentTimeMillis() - time);
     }
 
     @Test
     public void performanceTime() throws PgatkIOException, URISyntaxException {
         long time = System.currentTimeMillis();
-        URL testFile = getClass().getClassLoader().getResource("F001257.mgf");
+        URL testFile = getClass().getClassLoader().getResource("qExactive01819.mgf");
         Assert.assertNotNull("Error loading mgf test file", testFile);
         sourceFile = new File(testFile.toURI());
         mgfIterableReader = new MgfIterableReader(sourceFile,true, false, true);
+        int count = 0;
         while (mgfIterableReader.hasNext()){
-            Spectrum spectrum = mgfIterableReader.next();
-            System.out.println(spectrum.getId());
+            Ms2Query spectrum = (Ms2Query) mgfIterableReader.next();
+            count++;
         }
-        System.out.println(System.currentTimeMillis() - time);
+        System.out.println("Spectra Read: " + count + " in Time " + (System.currentTimeMillis() - time));
 
 
     }

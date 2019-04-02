@@ -471,15 +471,17 @@ public class TestMgfIndexedReader {
     @Test
     public void testPerformanceTime() throws Exception {
         long time = System.currentTimeMillis();
-        URL testFile = getClass().getClassLoader().getResource("F001257.mgf");
+        URL testFile = getClass().getClassLoader().getResource("qExactive01819.mgf");
         Assert.assertNotNull("Error loading mgf test file", testFile);
         File file = new File(testFile.toURI());
-        MgfIndexedReader mgfFile = new MgfIndexedReader(sourceFile);
+        MgfIndexedReader mgfFile = new MgfIndexedReader(file);
+        int count = 0;
         for(String id: mgfFile.getSpectraIds()){
             Spectrum spec = mgfFile.getSpectrumById(id);
-            System.out.println(spec.getId());
+            count++;
         }
-        System.out.println(System.currentTimeMillis() - time);
+        System.out.println("Spectra Read: " + count + " in Time " + (System.currentTimeMillis() - time));
+
     }
 
 

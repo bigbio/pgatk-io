@@ -47,6 +47,8 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
     // The index (1-based) is used to know in the order of the spectrum in the file.
     private long specIndex = 1;
 
+    private  Ms2Query spectrum = null;
+
     public MgfIterableReader(File file, boolean ignoreWrongPeaks, boolean disableCommentSupport, boolean allowCustomTags) throws PgatkIOException {
         super(file);
         this.ignoreWrongPeaks = ignoreWrongPeaks;
@@ -70,25 +72,28 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
             readBuffer();
         char ch = '\n';
         channelCursor = buffer.position();
-        while(buffer.hasRemaining() && (ch != '\u0000')){
+        while((ch != '\u0000') && (buffer.hasRemaining())){
             ch = ((char) buffer.get());
             channelCursor = buffer.position();
             stringBuffer.append(ch);
-            if(ch == '\n'){
-                if(stringBuffer.toString().contains("BEGIN IONS")){
-                    channelCursor = channelCursor -  stringBuffer.toString().length();
-                    buffer.position(channelCursor);
-                    return true;
-                }else
-                    stringBuffer = new StringBuffer();
+            if(ch == '\n' && stringBuffer.toString().contains("BEGIN IONS")){
+                spectrum = new Ms2Query(this.disableCommentSupport);
+                return true;
+            }
+            if(!buffer.hasRemaining()){
+               readBuffer();
             }
         }
+
         return false;
     }
 
     @Override
     public Spectrum next() throws NoSuchElementException {
-        Ms2Query spectrum = null;
+        log.debug("Start reading the following spectrum -- ");
+        if(spectrum == null)
+            throw new NoSuchElementException("First check if the file contains an spectum using hasNext()");
+
         if(buffer == null || !buffer.hasRemaining()){
             readBuffer();
         }
@@ -103,11 +108,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
             if(ch=='\n'){
                 stringBuffer.append(ch);
                 String line = StringUtils.removeBOMString(stringBuffer.toString().trim());
-
-                if(line.contains("BEGIN IONS")) {
-                    log.debug("Start reading the following spectrum -- ");
-                    spectrum = new Ms2Query(this.disableCommentSupport);
-                }else if(line.contains("END IONS")) {
+                if(line.contains("END IONS")) {
                     spectrum.setIndex(specIndex);
                     specIndex++;
                     return spectrum;

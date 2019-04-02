@@ -74,4 +74,5 @@ public interface Spectrum extends Serializable {
 	 * @return A ParamGroup containing the additional fields as parameters.
 	 */
 	Collection<? extends Param> getAdditional();
+
 }

@@ -30,7 +30,7 @@ public abstract class MzIterableChannelReader {
         try {
             if(nextPosition >= accessChannel.size()) {
             } else {
-                long remSize = Math.min(MgfUtils.BUFFER_SIZE_100MB, accessChannel.size() - nextPosition);
+                long remSize = Math.min(MgfUtils.BUFFER_SIZE, accessChannel.size() - nextPosition);
                 buffer = accessChannel.map(FileChannel.MapMode.READ_ONLY, nextPosition, remSize);
                 nextPosition += remSize;
             }
