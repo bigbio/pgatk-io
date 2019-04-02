@@ -3,7 +3,6 @@ package org.bigbio.pgatk.io.mgf;
 import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.bigbio.pgatk.io.common.IndexElement;
@@ -75,7 +74,7 @@ public class TestMgfIndexedReader {
         Assert.assertNull(specturm.getPrecursorCharge());
         Assert.assertEquals(413.2861, specturm.getPrecursorMZ(), 0.0);
         Assert.assertEquals(413.2861, specturm.getPeptideMass(), 0.0);
-        Assert.assertEquals(null, specturm.getPrecursorIntensity());
+        Assert.assertNull(specturm.getPrecursorIntensity());
         Assert.assertEquals(1, specturm.getAdditional().size());
         Assert.assertNull(specturm.getComposition());
         Assert.assertNull(specturm.getErrorTolerantTags());

@@ -144,13 +144,13 @@ public class MzMLSpectrum implements org.bigbio.pgatk.io.common.Spectrum {
             return Collections.emptyMap();
 
         // get the values as numbers
-        Number mzNumbers[] = mzArray.getBinaryDataAsNumberArray();
+        Number[] mzNumbers = mzArray.getBinaryDataAsNumberArray();
         ArrayList<Double> mzValues = new ArrayList<>(mzNumbers.length);
 
         for (Number n : mzNumbers)
             mzValues.add(n.doubleValue());
 
-        Number intenNumbers[] = intenArray.getBinaryDataAsNumberArray();
+        Number[] intenNumbers = intenArray.getBinaryDataAsNumberArray();
         ArrayList<Double> intenValues = new ArrayList<>(intenNumbers.length);
 
         for (Number n : intenNumbers)

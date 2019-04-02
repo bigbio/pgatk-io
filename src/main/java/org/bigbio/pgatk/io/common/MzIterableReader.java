@@ -4,7 +4,6 @@ package org.bigbio.pgatk.io.common;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.stream.Stream;
 
 /**
  * The {@link MzIterableReader} is an interface that only provides methods to read one Spectrum after another

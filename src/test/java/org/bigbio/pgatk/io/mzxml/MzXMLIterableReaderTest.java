@@ -8,8 +8,6 @@ import org.junit.Test;
 import java.io.File;
 import java.net.URL;
 
-import static org.junit.Assert.*;
-
 public class MzXMLIterableReaderTest {
 
 
@@ -34,9 +32,11 @@ public class MzXMLIterableReaderTest {
     @Test
     public void next() {
 
+        int count = 0;
         while(mzxmlIndexedReader.hasNext()){
             Spectrum spectrum = mzxmlIndexedReader.next();
-            System.out.println(spectrum.getId() + " Number of peaks: " + spectrum.getPeakList().size());
+            count++;
         }
+        Assert.assertEquals(3314, count);
     }
 }

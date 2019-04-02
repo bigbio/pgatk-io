@@ -8,7 +8,6 @@ import org.bigbio.pgatk.io.common.Spectrum;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Iterator;
 import java.util.List;
 
 public class MzMlTest {

@@ -2,11 +2,9 @@ package org.bigbio.pgatk.io.mgf;
 
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
-import java.util.Iterator;
 
 /**
  * Get custom tags from the MGF.

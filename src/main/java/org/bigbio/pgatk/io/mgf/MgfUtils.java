@@ -12,8 +12,8 @@ public class MgfUtils {
         boolean secondGap = false;
         boolean massFound = false;
         boolean intensityFound = false;
-        StringBuffer mass = new StringBuffer(100);
-        StringBuffer intensity = new StringBuffer(100);
+        StringBuilder mass = new StringBuilder(100);
+        StringBuilder intensity = new StringBuilder(100);
         for( int i = 0; i < line.length(); i++){
             if(lineArray[i] == ' ' || lineArray[i] == '\t'){
                if(massFound)

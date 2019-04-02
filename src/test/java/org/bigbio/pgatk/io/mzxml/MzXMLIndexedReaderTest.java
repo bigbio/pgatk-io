@@ -41,16 +41,17 @@ public class MzXMLIndexedReaderTest {
 
 	@Test
 	public void testAllSpectra(){
+		int count = 0;
 		for(String id: mzxmlIndexedReader.getSpectraIds()){
-			Spectrum spec = null;
 			try {
-				spec = mzxmlIndexedReader.getSpectrumById(id);
-				System.out.println(spec.getId() + " : " + spec.getPeakList().size());
+				Spectrum spec = mzxmlIndexedReader.getSpectrumById(id);
+				if(spec.getMsLevel() == 2)
+					count++;
 			} catch (PgatkIOException e) {
 				e.printStackTrace();
 			}
-
 		}
+		Assert.assertEquals(3314, count);
 
 	}
 

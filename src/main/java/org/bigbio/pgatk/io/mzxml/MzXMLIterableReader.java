@@ -28,6 +28,7 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
 
     private int channelCursor = 0;
     private int specIndex = 1;
+    private MzXMLSpectrum spectrum = null;
 
     public MzXMLIterableReader(File file) throws PgatkIOException {
         super(file);
@@ -35,35 +36,47 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
 
     @Override
     public boolean hasNext() {
-        StringBuffer stringBuffer = new StringBuffer();
-        if (buffer == null)
+        StringBuilder stringBuffer = new StringBuilder(100);
+
+        if (buffer == null || !buffer.hasRemaining())
             readBuffer();
         char ch = '\n';
         channelCursor = buffer.position();
-        while(buffer.hasRemaining() && (ch != '\u0000')){
+
+        while((ch != '\u0000') && (buffer.hasRemaining())){
             ch = ((char) buffer.get());
             channelCursor = buffer.position();
             stringBuffer.append(ch);
-            if(ch == '\n'){
-                if(stringBuffer.toString().contains("scan num")){
-                    channelCursor = channelCursor -  stringBuffer.toString().length();
-                    buffer.position(channelCursor);
-                    return true;
-                }else
-                    stringBuffer = new StringBuffer();
+            String line = stringBuffer.toString();
+            if(ch == '\n' && line.contains("scan num")){
+                spectrum = new MzXMLSpectrum();
+                Matcher matcher = Pattern.compile("num=\"([A-Za-z0-9_]*)\"").matcher(line);
+                while (matcher.find()) {
+                    spectrum.setId(matcher.group(1));
+                }
+                return true;
+            }
+            if(!buffer.hasRemaining()){
+                readBuffer();
             }
         }
+
         return false;
     }
 
     @Override
     public Spectrum next() throws NoSuchElementException {
         int scanLevel = -1;
+
         byte[] peakBytes = null;
         String compressionType = null;
         Integer precision = null;
         String byteOrder = null;
-        MzXMLSpectrum spectrum = null;
+
+        log.debug("Start reading the following spectrum -- ");
+        if(spectrum == null)
+            throw new NoSuchElementException("First check if the file contains an spectum using hasNext()");
+
         if(buffer == null || !buffer.hasRemaining()){
             readBuffer();
         }
@@ -78,12 +91,7 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
                 stringBuffer.append(ch);
                 String line = stringBuffer.toString().trim();
 
-                if(line.contains("scan num")) {
-                    log.debug("Start reading the following spectrum -- ");
-                    scanLevel = -1;
-                    spectrum = new MzXMLSpectrum();
-                    spectrum.setId(Integer.valueOf(line.substring(line.indexOf("=")+2, line.lastIndexOf("\""))).toString());
-                }else if(line.contains("</scan") && scanLevel == 2) {
+                if(line.contains("</scan") && scanLevel == 2) {
                     spectrum.setIndex((long)specIndex);
                     specIndex++;
                     scanLevel = -1;
@@ -191,7 +199,7 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
 
         byte[] peaks = Base64.getDecoder().decode(arrayPeaks);
         // make sure the scan is not null
-        if (peaks == null || peaks == null)
+        if (peaks == null)
             return Collections.emptyMap();
 
         // wrap the data with a ByteBuffer

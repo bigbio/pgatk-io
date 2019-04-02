@@ -14,7 +14,7 @@ below for details on each feature.
 | Feature              | MGF                | APL (Maxquant)         | mzXML               | mzML                 | Json                |Parquet                 |
 | ---------------------|--------------------|------------------------|---------------------|----------------------|---------------------|------------------------|
 | Random Access        | :heavy_check_mark: | :heavy_check_mark:     | :heavy_check_mark:  | :heavy_check_mark:   | NA                  |                        |
-| Fast Iterable Access | :heavy_check_mark: | :white_check_mark:     | :white_check_mark:  | :x:                  |                     |                        |
+| Fast Iterable Access | :heavy_check_mark: | :white_check_mark:     | :heavy_check_mark:  | :x:                  |                     |                        |
 | Gzip Support         | :x:                | :x:                    | :x:                 | :x:                  |                     |                        | 
 | Numpress Support     | :x:                | :x:                    | :white_check_mark:  | :white_check_mark:   |:x:                  |                        | 
 
