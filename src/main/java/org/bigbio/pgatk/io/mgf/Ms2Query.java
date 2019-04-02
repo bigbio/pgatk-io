@@ -141,24 +141,14 @@ public class Ms2Query implements Spectrum {
         String value = attributeMatcher.group(2);
         saveAttribute(name, value);
       } else {
-        String cleanedLine = line.replaceAll("\\s+", " ");
-        int indexSpace = cleanedLine.indexOf(' ');
-        if (indexSpace >= 0) {
-          String firstHalf = cleanedLine.substring(0, indexSpace);
-          String secondHalf = cleanedLine.substring(indexSpace + 1);
-          int anotherSpace = secondHalf.indexOf(' ');
-          Double intensity;
-          if (anotherSpace<0) {
-            intensity = Double.parseDouble(secondHalf);
-          } else { // ignore extra fragment charge number (3rd field), may be present
-            intensity = StringUtils.smartParseDouble((secondHalf.substring(0, anotherSpace)));
-          }
-          addPeak(Double.parseDouble(firstHalf), intensity);
+        double[] peakArray = MgfUtils.parsePeakLine(line);
+        if (peakArray != null && peakArray.length == 2) {
+          addPeak(peakArray[0], peakArray[1]);
         } else {  // no index could be found
-          if(ignoreWrongPeaks){
+          if (ignoreWrongPeaks) {
             log.error("The following peaks and wronly annotated -- " + line);
-          }else
-            throw new PgatkIOException("Unable to parse 'mz' and 'intensity' values for " + line);
+          } else
+            throw new NoSuchElementException("Unable to parse 'mz' and 'intensity' values for " + line);
         }
         inAttributeSection = false;
       }

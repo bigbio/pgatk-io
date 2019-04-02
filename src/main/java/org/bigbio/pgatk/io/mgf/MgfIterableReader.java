@@ -67,7 +67,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
 
     @Override
     public boolean hasNext() {
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuffer stringBuffer = new StringBuffer(100);
         if (buffer == null || !buffer.hasRemaining())
             readBuffer();
         char ch = '\n';
@@ -135,19 +135,9 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
                         String value = attributeMatcher.group(2);
                         spectrum.saveAttribute(name, value);
                     } else {
-                        String cleanedLine = line.replaceAll("\\s+", " ");
-                        int indexSpace = cleanedLine.indexOf(' ');
-                        if (indexSpace >= 0) {
-                            String firstHalf = cleanedLine.substring(0, indexSpace);
-                            String secondHalf = cleanedLine.substring(indexSpace + 1);
-                            int anotherSpace = secondHalf.indexOf(' ');
-                            Double intensity;
-                            if (anotherSpace < 0) {
-                                intensity = Double.parseDouble(secondHalf);
-                            } else { // ignore extra fragment charge number (3rd field), may be present
-                                intensity = StringUtils.smartParseDouble((secondHalf.substring(0, anotherSpace)));
-                            }
-                            spectrum.addPeak(Double.parseDouble(firstHalf), intensity);
+                        double[] peakArray = MgfUtils.parsePeakLine(line);
+                        if (peakArray != null && peakArray.length == 2) {
+                            spectrum.addPeak(peakArray[0], peakArray[1]);
                         } else {  // no index could be found
                             if (ignoreWrongPeaks) {
                                 log.error("The following peaks and wronly annotated -- " + line);
@@ -158,7 +148,6 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
                     }
 
                 }
-
                 stringBuffer = new StringBuffer();
 
             }else{

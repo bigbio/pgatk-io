@@ -6,6 +6,42 @@ public class MgfUtils {
 
     public static int BUFFER_SIZE = 1024 * 100;
 
+    public static double[] parsePeakLine(String line) {
+        char[] lineArray = line.toCharArray();
+        //If available
+        boolean secondGap = false;
+        boolean massFound = false;
+        boolean intensityFound = false;
+        StringBuffer mass = new StringBuffer(100);
+        StringBuffer intensity = new StringBuffer(100);
+        for( int i = 0; i < line.length(); i++){
+            if(lineArray[i] == ' ' || lineArray[i] == '\t'){
+               if(massFound)
+                   secondGap = true;
+               if(intensityFound)
+                   break;
+            }else {
+                if(!secondGap){
+                    mass.append(lineArray[i]);
+                    massFound = true;
+                }else{
+                    intensity.append(lineArray[i]);
+                    intensityFound = true;
+
+                }
+            }
+        }
+        if(intensity.length() > 0 && mass.length() > 0){
+            double[] peaks = new double[2];
+            peaks[0] = Double.parseDouble(mass.toString());
+            peaks[1] = Double.parseDouble(intensity.toString());
+            return peaks;
+        }
+
+        return null;
+
+    }
+
     public enum FragmentToleranceUnits {DA, MMU}
 
     public enum MassType {MONOISOTOPIC, AVERAGE}

@@ -151,7 +151,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
             boolean inMs2 = false;
             long lastPosition = 0;
             long beginIonsIndex = 0; // the index where the last "BEGIN IONS" was encountered
-
+            long time = System.currentTimeMillis();
             while ((line = braf.getNextLine()) != null) {
 
                 // remove any comments from the line (if the line will be processed)
@@ -220,6 +220,8 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
                 //always update file pointer before continue
                 lastPosition = braf.getFilePointer();
             }
+
+            log.debug("Time indexing -- " + (System.currentTimeMillis() - time));
 
             braf.close();
         } catch (FileNotFoundException e) {
