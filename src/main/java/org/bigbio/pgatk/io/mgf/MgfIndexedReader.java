@@ -90,7 +90,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
      */
     private boolean ignoreWrongPeaks = false;
 
-    private int currentPosition;
+    private int currentPosition = -1;
 
     /**
      * Default constructor generating an empty mgf file object.
@@ -109,7 +109,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
      * @throws PgatkIOException
      */
     public MgfIndexedReader(File file) throws PgatkIOException {
-        this(file, false, false);
+        this(file, false, true);
     }
 
     /**
@@ -964,7 +964,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
         if (sourceFile == null) {
             return currentPosition < ms2Queries.size();
         } else {
-            return currentPosition < index.size();
+            return currentPosition < index.size() - 1 ;
         }
     }
 

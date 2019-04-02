@@ -68,7 +68,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
     @Override
     public boolean hasNext() {
         StringBuffer stringBuffer = new StringBuffer();
-        if (buffer == null)
+        if (buffer == null || !buffer.hasRemaining())
             readBuffer();
         char ch = '\n';
         channelCursor = buffer.position();

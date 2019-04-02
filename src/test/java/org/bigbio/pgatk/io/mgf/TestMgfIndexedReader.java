@@ -476,8 +476,8 @@ public class TestMgfIndexedReader {
         File file = new File(testFile.toURI());
         MgfIndexedReader mgfFile = new MgfIndexedReader(file);
         int count = 0;
-        for(String id: mgfFile.getSpectraIds()){
-            Spectrum spec = mgfFile.getSpectrumById(id);
+        while (mgfFile.hasNext()){
+            Spectrum spec = mgfFile.next();
             count++;
         }
         System.out.println("Spectra Read: " + count + " in Time " + (System.currentTimeMillis() - time));
