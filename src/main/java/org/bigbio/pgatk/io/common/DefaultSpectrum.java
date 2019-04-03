@@ -2,6 +2,7 @@ package org.bigbio.pgatk.io.common;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public class DefaultSpectrum implements Spectrum, Serializable {
@@ -14,10 +15,12 @@ public class DefaultSpectrum implements Spectrum, Serializable {
 	private final Double precursorIntensity;
 	private final Map<Double, Double> peakList;
 	private final Integer msLevel;
+	private final List<CvParam> params;
+
 
 	public DefaultSpectrum(String id, long index, int precursorCharge,
 						   double precursorMz, double precursorIntensity,
-						   Map<Double, Double> peakList, Integer msLevel) {
+						   Map<Double, Double> peakList, Integer msLevel, List<CvParam> params ) {
 		this.id = id;
 		this.index = index;
 		this.precursorCharge = precursorCharge;
@@ -25,11 +28,14 @@ public class DefaultSpectrum implements Spectrum, Serializable {
 		this.precursorIntensity = precursorIntensity;
 		this.peakList = peakList;
 		this.msLevel = msLevel;
+		this.params = params;
 	}
+
+
 
 	@Override
 	public Long getIndex() {
-		return null;
+		return index;
 	}
 
 	@Override
@@ -118,7 +124,6 @@ public class DefaultSpectrum implements Spectrum, Serializable {
 
 	@Override
 	public Collection<? extends Param> getAdditional() {
-		// TODO: fix
-		return null;
+		return params;
 	}
 }

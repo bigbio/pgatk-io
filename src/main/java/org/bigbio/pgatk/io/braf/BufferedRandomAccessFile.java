@@ -125,7 +125,7 @@ public class BufferedRandomAccessFile extends RandomAccessFile {
      *
      * @return The byte position of the pointer in the file.
      */
-    public long getFilePointer() throws IOException {
+    public long getFilePointer() {
         long l = real_pos;
         return (l - buf_end + buf_pos);
     }

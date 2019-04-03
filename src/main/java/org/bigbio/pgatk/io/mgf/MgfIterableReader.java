@@ -23,14 +23,14 @@ import java.util.regex.Matcher;
 @Slf4j
 public class MgfIterableReader extends MzIterableChannelReader implements MzIterableReader {
 
-    private boolean allowCustomTags = MgfUtils.DEFAULT_ALLOW_CUSTOM_TAGS;
+    private boolean allowCustomTags;
 
     /**
      * If this option is set, comments are not removed
      * from MGF files. This speeds up parsing considerably
      * but causes problems if MGF files do contain comments.
      */
-    private boolean disableCommentSupport = false;
+    private boolean disableCommentSupport;
 
     /**
      * This function helps to ignore peaks if the parser found parser errors in the peaks
@@ -113,9 +113,8 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
                     specIndex++;
                     return spectrum;
                 }else if(spectrum != null){
-                    /**
-                     * Some files can have a lot of empty and nonsense information between Spectrums
-                     */
+
+                    // Some files can have a lot of empty and nonsense information between Spectrums
                     if (!disableCommentSupport)
                         line = line.replaceAll(MgfUtils.mgfCommentRegex, line);
                     if (line.length() < 1) { // ignore empty lines

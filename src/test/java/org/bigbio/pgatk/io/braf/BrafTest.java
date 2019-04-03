@@ -14,7 +14,7 @@ public class BrafTest {
 	private final int BUF_SIZE = 1024 * 1000;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 		URL testFile = getClass().getClassLoader().getResource("testfile.mzXML");
 		URL smallFileUrl = getClass().getClassLoader().getResource("testfile.mzXML");
         Assert.assertNotNull("Error loading mgf test file", testFile);

@@ -11,8 +11,6 @@ import java.net.URL;
  */
 public class CustomTagTest{
 
-    private MgfIndexedReader mgfFile = new MgfIndexedReader();
-
     @Before
     public void setUp() throws Exception {
         loadTestFile();
@@ -22,6 +20,7 @@ public class CustomTagTest{
         URL testFile = getClass().getClassLoader().getResource("custom_tags.mgf");
         Assert.assertNotNull("Error loading mgf test file", testFile);
         File sourceFile;
+        MgfIndexedReader mgfFile = new MgfIndexedReader();
         try {
             sourceFile = new File(testFile.toURI());
             mgfFile = new MgfIndexedReader(sourceFile, false, false);

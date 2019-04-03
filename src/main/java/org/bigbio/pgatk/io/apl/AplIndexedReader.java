@@ -58,7 +58,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      * @param sourcefile   The APL file to load the spectrum from.
      * @param indexElement IndexElement specifying the position of the MS2 spectrum in the APL file.
      * @return The unmarshalled spectrum object.
-     * @throws PgatkIOException
+     * @throws PgatkIOException Error processing the file..
      */
     public static Spectrum getIndexedSpectrum(File sourcefile, IndexElement indexElement) throws PgatkIOException {
         // make sure the parameters are set
@@ -83,7 +83,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      * APL file.
      *
      * @param file The APL file
-     * @throws PgatkIOException
+     * @throws PgatkIOException Error processing the file.
      */
     public AplIndexedReader(File file) throws PgatkIOException {
 
@@ -151,7 +151,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      *
      * @param file  The APL file
      * @param index An ArrayList holding the
-     * @throws PgatkIOException
+     * @throws PgatkIOException Error
      */
     public AplIndexedReader(File file, List<IndexElement> index) throws PgatkIOException {
         // open the file
@@ -191,7 +191,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      * Set the MS2 queries of the APL file. If this object was generated
      * from an existing APL file the connection to this APL file is lost.
      *
-     * @param aplSpectrums
+     * @param aplSpectrums Set list of Spectra.
      */
     public void setPeakLists(List<AplSpectrum> aplSpectrums) {
         // remove the source file link
@@ -220,8 +220,8 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      * in the file. To get the number of queries call
      * getPeakListCount().
      *
-     * @param nIndex
-     * @return
+     * @param nIndex Index to be search.
+     * @return Spectrum
      */
     public AplSpectrum getPeakList(int nIndex) throws PgatkIOException {
         // check if the ms2 query was already loaded
@@ -253,7 +253,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
      *
      * @param file         The file to read the query from.
      * @param indexElement The index element pointing to that specific ms2 query.
-     * @return
+     * @return Spectrum
      * @oaram index The query's 1-based index in the APL file. This index is stored in the returned Ms2Query object.
      */
     private static AplSpectrum loadIndexedQueryFromFile(File file, IndexElement indexElement, int index) throws PgatkIOException {
@@ -429,7 +429,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
     }
 
     @Override
-    public void close() throws PgatkIOException { }
+    public void close() {}
 
     @Override
     public boolean hasNext() {

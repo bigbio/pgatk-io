@@ -16,7 +16,7 @@ public class MzMlTest {
     private static File sourcefile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         if (sourcefile != null)
             return;
 

@@ -15,7 +15,7 @@ public class MzXMLIterableReaderTest {
     private File sourcefile;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         // create the mzxml dao
         try {
             URL testFile = getClass().getClassLoader().getResource("testfile.mzXML");
