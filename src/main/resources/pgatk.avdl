@@ -1,0 +1,428 @@
+
+@namespace("org.bigbio.pgatk.io.avro")
+protocol pgatk {
+
+  /** Ontology term cross reference in GFF3 style DBTAG:ID format. */
+  record OntologyTerm {
+
+    /** Ontology abbreviation in GFF3 style DBTAG:ID format, e.g. GO in GO:0046703. */
+    union { null, string } db = null;
+
+    /** Ontology term accession number or identifer in GFF3 style DBTAG:ID format,
+        e.g. 0046703 in GO:0046703. */
+    union { null, string } accession = null;
+
+    /** Ontology term name. **/
+    union {null, string} name = null;
+
+  }
+
+  /** Database cross reference in GFF3 style DBTAG:ID format.*/
+  record Dbxref {
+
+    /** Database tag in GFF3 style DBTAG:ID format, e.g. EMBL in EMBL:AA816246. */
+    union { null, string } db = null;
+
+    /**  Accession number in GFF3 style DBTAG:ID format, e.g. AA816246 in EMBL:AA816246. */
+    union { null, string } accession = null;
+  }
+
+  /** Description of a computational processing step. mzIdentML, mzTab header record type @PG. */
+  record ProcessingStep {
+
+    /** The identifier of this processing step. */
+    union { null, string } id = null;
+
+    /** The name of the program used to run this processing step. */
+    union { null, string } programName = null;
+
+    /** The command line used to run this processing step. */
+    union { null, string } commandLine = null;
+
+    /** Previous processing step identifier. Omit if this is the first step. */
+    union { null, string } previousId = null;
+
+    /** The description of this processing step. */
+    union { null, string } description = null;
+
+    /** The version of the program that was run in this processing step. */
+    union { null, string } version = null;
+  }
+
+  /** Sample. */
+  record Sample {
+
+    /**
+     Identifier for this sample, e.g. IDENTIFIERS &rarr; PRIMARY_ID or other
+     subelements of IDENTIFERS in BioSamples metadata.  */
+    union { null, string } id = null;
+
+    /**
+     Descriptive name for this sample, e.g. SAMPLE_NAME &rarr; TAXON_ID, COMMON_NAME,
+     INDIVIDUAL_NAME, or other subelements of SAMPLE_NAME in SRA metadata.
+     */
+    union { null, string } name = null;
+
+    /**
+     Map of attributes. Common attributes may include: SAMPLE &rarr; TITLE, SAMPLE &rarr; DESCRIPTION, and
+     SAMPLE_ATTRIBUTES; ENA default sample checklist attributes such as cell_type, dev_stage, and germline; and Genomes,
+     Mixture, and Description from sample meta-information lines in VCF files.
+     */
+    map<OntologyTerm> attributes = {};
+
+    /** The processing steps that have been applied to this sample. */
+    array<ProcessingStep> processingSteps = [];
+
+  }
+
+  /** Mass spectrum capture mode **/
+  enum MSMode{
+
+    PROFILE,
+
+    CENTROIED
+
+  }
+
+  record PeptideSpectrumMatch {
+
+     union { null, boolean } isDecoy = null;
+
+     union { null, string  } decoyPrefix = "decoy_";
+
+     union { null, string  } msRunAccession = null;
+
+     union { null, string } scanNumber = null;
+
+     union { null, int } precursorCharge = null;
+
+     union { null, string } sequence = null;
+
+     union { null, string } proteinAccession = null;
+
+     union { null, string } geneAccession = null;
+
+     union { null, string } transcriptAccession = null;
+
+     union { null, string } geneSymbol = null;
+
+     union { null, string } geneName = null;
+
+     union { null, string } headerDescription;
+
+     union { null, double } precursorMz = null;
+
+     union { null, double } ms1Area = null;
+
+     map<string> proteinGroups = null;
+
+     union { null, double } qValue = null;
+
+     union { null, SoftwareScore} nativeScore = null;
+
+     union { null, double } rt = null;
+
+     union { null, int } chromosome = null;
+
+     union { null, int } start = null;
+
+     union { null, int } end = null;
+
+  }
+
+  /** Software Score from search engines and proteomics tools. **/
+  record SoftwateScore {
+
+    /** Name of the score **/
+    union { null, OntologyTerm } name = null;
+
+    /** Value of the score **/
+    union { null, double } value = null;
+
+  }
+
+
+
+  /** Spectrum Scan, same information from mzML, mzXML  */
+  record Spectrum {
+
+    /** The index of the spectrum in the file, the index is 0-based */
+    union { null, int } index = null;
+
+    /** Spectrum identifier, it can be the e.g. id="scan=1" */
+    union { null, string } id = null;
+
+    /** Number of peaks in the spectrum */
+    union { null , int } numberPeaks = null;
+
+    /** MS level for the spectra **/
+    union { null , int} msLevel = 0;
+
+    /** Mass psectrum capture mode CENTROID or PROFILE **/
+    union { null, MSMode } msMode = null;
+
+    /** Lowest Observed Mz Value **/
+    union { null, double } lowestObservedMz = null;
+
+    /** Highest Observed Mz Value **/
+    union { null, double } highestObservedMz = null;
+
+    /** Base Peak Mz **/
+    union { null, double } basePeakMz = null;
+
+    /** Base Peak Intensity **/
+    union { null, double } basePeakInt = null;
+
+    /** Total ion count **/
+    union { null, double } tic = null;
+
+    /** Rentention time or scan start time **/
+    union { null, double }  rt  = null;
+
+    /** precursor charge **/
+    union { null, int  } precursorCharge = null;
+
+    /** Precursor mz value **/
+    union { null, double } precursorMz = null;
+
+    /** Peaks of the spectrum **/
+    map<Peak> peaks = null;
+
+    /** Other Attributes **/
+    map<OntologyTerm> attributes = {};
+  }
+
+  /** Peak from an spectrum **/
+  record Peak {
+
+     /** Mz value of the Peak **/
+     union { null, double } mz = null;
+
+     /** Intesity of the Peak **/
+     union { null, double } intensity = null;
+
+     /** Charge of the peak, this is optional in most of the cases **/
+     union { null, double } charge = null;
+  }
+
+  /** Alphabet. */
+  enum Alphabet {
+
+  /** DNA alphabet. */
+    DNA,
+
+  /** RNA alphabet. */
+    RNA,
+
+  /** Protein alphabet. */
+    PROTEIN
+  }
+
+ /** Strand of an alignment or feature. */
+  enum Strand {
+
+  /** Forward ("+") strand. */
+    FORWARD,
+
+  /** Reverse ("-") strand. */
+    REVERSE,
+
+  /** Independent or not stranded ("."). */
+    INDEPENDENT,
+
+  /** Strandedness is relevant, but unknown ("?"). */
+    UNKNOWN
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** Feature, such as those represented in native file formats BED, GFF2/GTF, GFF3, IntervalList, and NarrowPeak.
+ */
+  record Feature {
+
+  /**
+   Identifier for this feature. ID tag in GFF3.
+   */
+    union { null, string } featureId = null;
+
+  /**
+   Sample identifier for this feature. Join with Sample.id for sample metadata.
+   sampleId tag in GFF3.
+  */
+    union { null, string } sampleId = null;
+
+  /**
+   Display name for this feature, e.g. DVL1. Name tag in GFF3, optional column 4 "name"
+   in BED format.
+   */
+    union { null, string } name = null;
+
+  /**
+   Source of this feature, typically the algorithm or operating procedure that generated
+   this feature, e.g. GeneWise. Column 2 "source" in GFF3.
+   */
+    union { null, string } source = null;
+
+  /**
+   Feature type, constrained by some formats to a term from the Sequence Ontology (SO),
+   e.g. gene, mRNA, exon, or a SO accession number (SO:0000704, SO:0000234, SO:0000147,
+   respectively). Column 3 "type" in GFF3.
+   */
+    union { null, string } featureType = null;
+
+  /**
+   Reference this feature is located on. Column 1 "seqid" in GFF3, column 1 "chrom"
+   in BED format.
+   */
+    union { null, string } referenceName = null;
+
+  /**
+   Start position for this feature, in zero-based coordinate system with closed-open
+   intervals. This may require conversion from the coordinate system of the native
+   file format. Column 4 "start" in GFF3, column 2 "chromStart" in BED format.
+   */
+    union { null, long } start = null;
+
+  /**
+   End position for this feature, in zero-based coordinate system with closed-open
+   intervals. This may require conversion from the coordinate system of the native
+   file format. Column 5 "end" in GFF3, column 3 "chromEnd" in BED format.
+   */
+    union { null, long } end = null;
+
+  /**
+   Strand for this feature. Column 7 "strand" in GFF3, optional column 6 "strand"
+   in BED format.
+   */
+    union { null, Strand } strand = null;
+
+  /**
+   For features of type "CDS", the phase indicates where the feature begins with reference
+   to the reading frame. The phase is one of the integers 0, 1, or 2, indicating the number
+   of bases that should be removed from the beginning of this feature to reach the first base
+   of the next codon. Column 8 "phase" in GFF3.
+   */
+    union { null, int } phase = null;
+
+  /**
+   For features of type "CDS", the frame indicates whether the first base of the CDS segment is
+   the first (frame 0), second (frame 1) or third (frame 2) in the codon of the ORF. Column 8
+   "frame" in GFF2/GTF format.
+   */
+    union { null, int } frame = null;
+
+  /**
+   Score for this feature. Column 6 "score" in GFF3, optional column 5
+   "score" in BED format.
+   */
+    union { null, double } score = null;
+
+  /**
+   Gene identifier, e.g. ENSG00000107404. gene_id tag in GFF2/GTF.
+   */
+    union { null, string } geneId = null;
+
+  /**
+   Transcript identifier, e.g. ENST00000378891. transcript_id tag in GFF2/GTF.
+   */
+    union { null, string } transcriptId = null;
+
+  /**
+   Exon identifier, e.g. ENSE00001479184. exon_id tag in GFF2/GTF.
+   */
+    union { null, string } exonId = null;
+
+  /**
+   Secondary names or identifiers for this feature. Alias tag in GFF3.
+   */
+    array<string> aliases = [];
+
+  /**
+   Parent feature identifiers. Parent tag in GFF3.
+   */
+    array<string> parentIds = [];
+
+  /**
+   Target of a nucleotide-to-nucleotide or protein-to-nucleotide alignment
+   feature. The format of the value is "target_id start end [strand]", where
+   strand is optional and may be "+" or "-". Target tag in GFF3.
+   */
+    union { null, string } target = null;
+
+  /**
+   Alignment of the feature to the target in CIGAR format. Gap tag in GFF3.
+   */
+    union { null, string } gap = null;
+
+  /**
+   Used to disambiguate the relationship between one feature and another when
+   the relationship is a temporal one rather than a purely structural "part of"
+   one. Derives_from tag in GFF3.
+   */
+    union { null, string } derivesFrom = null;
+
+  /**
+   Notes or comments for this feature. Note tag in GFF3.
+   */
+    array<string> notes = [];
+
+  /**
+   Database cross references for this feature. Dbxref tag in GFF3.
+   */
+    array<Dbxref> dbxrefs = [];
+
+  /**
+   Ontology term cross references for this feature. Ontology_term tag in GFF3.
+   */
+    array<OntologyTerm> ontologyTerms = [];
+
+  /**
+   True if this feature is circular. Is_circular tag in GFF3.
+   */
+    union { null, boolean } circular = null;
+
+  /**
+   Additional feature attributes. Column 9 "attributes" in GFF3, excepting those
+   reserved tags parsed into other fields, such as parentIds, dbxrefs, and ontologyTerms.
+   */
+    map<string> attributes = {};
+  }
+
+
+
+/**
+ Contiguous sequence from an alphabet, e.g. a DNA contig, an RNA transcript, or a protein translation.
+ */
+  record Sequence {
+
+    /** Name of this sequence. */
+    union { null, string } name = null;
+
+    /** Description for this sequence. */
+    union { null, string } description = null;
+
+    /** Alphabet for this sequence, defaults to Alphabet.PROTEIN */
+    union { Alphabet, null } alphabet = "PROTEIN";
+
+    /** Sequence. */
+    union { null, string } sequence = null;
+
+    /** Length of this sequence.*/
+    union { null, long } length = null;
+
+    /** Map of attributes. */
+    map<string> attributes = {};
+  }
+
+
+}
