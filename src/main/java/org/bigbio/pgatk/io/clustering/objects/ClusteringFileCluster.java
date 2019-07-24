@@ -57,7 +57,7 @@ public class ClusteringFileCluster implements ICluster {
 
         // calculate the ratio for each sequence
         int nTotalPSMs = 0, nIdentifiedSpec = 0, nUnidentifiedSpec = 0;
-        countPerPsmSequence = new HashMap<String, Integer>();
+        countPerPsmSequence = new HashMap<>();
 
         for (ISpectrumReference specRef : spectrumRefs) {
             // SpecRefs now only store unqiue psms, the previous HashSet is no longer necessary
@@ -81,7 +81,7 @@ public class ClusteringFileCluster implements ICluster {
         this.unidentifiedSpecCount = nUnidentifiedSpec;
 
         // create the sequence counts
-        this.sequenceCounts = new ArrayList<SequenceCount>();
+        this.sequenceCounts = new ArrayList<>();
         for (String s : countPerPsmSequence.keySet()) {
             SequenceCount sc = new SequenceCount(s, countPerPsmSequence.get(s));
             sequenceCounts.add(sc);
@@ -121,7 +121,7 @@ public class ClusteringFileCluster implements ICluster {
         }
 
         // save the species
-        species = new HashSet<String>();
+        species = new HashSet<>();
         for (ISpectrumReference specRef : spectrumRefs) {
             if (specRef.getSpecies() == null) {
                 continue;

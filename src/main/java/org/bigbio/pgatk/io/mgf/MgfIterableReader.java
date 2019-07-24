@@ -5,7 +5,7 @@ import org.bigbio.pgatk.io.common.MzIterableChannelReader;
 import org.bigbio.pgatk.io.common.MzIterableReader;
 import org.bigbio.pgatk.io.common.PgatkIOException;
 import org.bigbio.pgatk.io.utils.StringUtils;
-import org.bigbio.pgatk.io.common.Spectrum;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.io.File;
 import java.io.IOException;

@@ -28,9 +28,7 @@ public class ClusteringFileModification implements IModification {
         ClusteringFileModification that = (ClusteringFileModification) o;
 
         if (position != that.position) return false;
-        if (!accession.equals(that.accession)) return false;
-
-        return true;
+        return accession.equals(that.accession);
     }
 
     @Override

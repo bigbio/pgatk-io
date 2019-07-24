@@ -1,6 +1,8 @@
 package org.bigbio.pgatk.io.common;
 
 
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
+
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.NoSuchElementException;

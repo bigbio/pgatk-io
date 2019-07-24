@@ -12,7 +12,7 @@ import java.util.*;
  *
  * @author jg
  */
-public class MzMLSpectrum implements org.bigbio.pgatk.io.common.Spectrum {
+public class MzMLSpectrum implements org.bigbio.pgatk.io.common.spectra.Spectrum {
 
     // The spectrum's id in the mzML file
     private final String id;

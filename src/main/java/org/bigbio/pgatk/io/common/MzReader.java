@@ -1,5 +1,7 @@
 package org.bigbio.pgatk.io.common;
 
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
+
 import java.io.Serializable;
 import java.util.List;
 import java.util.Map;

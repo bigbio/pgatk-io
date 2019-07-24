@@ -15,21 +15,21 @@ public interface IClusterSourceReader {
      * @return
      * @throws Exception
      */
-    public List<ICluster> readAllClusters() throws Exception;
+    List<ICluster> readAllClusters() throws Exception;
 
-    public boolean supportsReadAllClusters();
+    boolean supportsReadAllClusters();
 
     /**
      * This function includes spectra if they are available.
      * @param listeners
      * @throws Exception
      */
-    public void readClustersIteratively(Collection<IClusterSourceListener> listeners) throws Exception;
+    void readClustersIteratively(Collection<IClusterSourceListener> listeners) throws Exception;
 
     /**
      * Read a specific cluster.
      * @param id The cluster's id
      * @return The cluster.
      */
-    public ICluster readCluster(String id) throws Exception;
+    ICluster readCluster(String id) throws Exception;
 }

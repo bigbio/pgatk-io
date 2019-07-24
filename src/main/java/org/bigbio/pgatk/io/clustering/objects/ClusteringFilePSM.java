@@ -9,12 +9,13 @@ import java.util.List;
  * Created by jg on 24.09.14.
  */
 public class ClusteringFilePSM implements IPeptideSpectrumMatch {
+
     private final String sequence;
     private List<IModification> modifications;
 
     public ClusteringFilePSM(String sequence) {
         this.sequence = sequence;
-        modifications = new ArrayList<IModification>();
+        modifications = new ArrayList<>();
     }
 
     @Override
@@ -47,9 +48,7 @@ public class ClusteringFilePSM implements IPeptideSpectrumMatch {
         ClusteringFilePSM that = (ClusteringFilePSM) o;
 
         if (!sequence.equals(that.sequence)) return false;
-        if (!modifications.equals(that.modifications)) return false;
-
-        return true;
+        return modifications.equals(that.modifications);
     }
 
     @Override

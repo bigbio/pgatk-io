@@ -1,4 +1,6 @@
-package org.bigbio.pgatk.io.common;
+package org.bigbio.pgatk.io.common.spectra;
+
+import org.bigbio.pgatk.io.common.Param;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -1,12 +1,11 @@
 package org.bigbio.pgatk.io.mzxml;
 
-import java.util.*;
-
-import org.bigbio.pgatk.io.common.Spectrum;
 import org.bigbio.pgatk.io.common.CvParam;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.Scan;
 
 import javax.xml.datatype.Duration;
+import java.util.*;
 
 /**
  * This class wraps Scan elements into PeakListParser
@@ -165,7 +164,7 @@ public class MzXMLSpectrum implements Spectrum {
 
 	@Override
 	public Integer getPrecursorCharge() {
-		return (charge != null) ? charge : null;
+		return charge;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package org.bigbio.pgatk.io.mgf;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.*;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import org.bigbio.pgatk.io.utils.StringUtils;
 
 import java.util.*;

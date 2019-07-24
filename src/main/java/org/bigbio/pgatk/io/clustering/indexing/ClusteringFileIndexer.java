@@ -12,12 +12,13 @@ import java.util.Map;
  * Created by jg on 27.09.17.
  */
 public class ClusteringFileIndexer implements IIndexer {
+
     @Override
     public ClusteringFileIndex indexFile(File resultFile) throws Exception {
         // open the file
         BufferedRandomAccessFile randomAccessFile = new BufferedRandomAccessFile(resultFile, "r", 1024 * 100);
 
-        Map<String, ClusteringIndexElement> clusterIndexes = new HashMap<String, ClusteringIndexElement>();
+        Map<String, ClusteringIndexElement> clusterIndexes = new HashMap<>();
 
         // process the file line by line
         String line;

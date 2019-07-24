@@ -41,7 +41,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
 
         br = openClusteringFile(clusteringFile);
 
-        List<ICluster> clusters = new ArrayList<ICluster>();
+        List<ICluster> clusters = new ArrayList<>();
         ICluster cluster;
 
         while ((cluster = readNextCluster(br, false)) != null)
@@ -124,11 +124,11 @@ public class ClusteringFileReader implements IClusterSourceReader {
 
         float avPrecursorMz = 0, avPrecursorIntens = 0;
         String id = null;
-        List<Float> consensusMzValues = new ArrayList<Float>();
-        List<Float> consensusIntensValues = new ArrayList<Float>();
-        List<Integer> consensCountValues = new ArrayList<Integer>();
+        List<Float> consensusMzValues = new ArrayList<>();
+        List<Float> consensusIntensValues = new ArrayList<>();
+        List<Integer> consensCountValues = new ArrayList<>();
 
-        List<ISpectrumReference> spectrumRefs = new ArrayList<ISpectrumReference>();
+        List<ISpectrumReference> spectrumRefs = new ArrayList<>();
         ISpectrumReference lastSpecRef = null;
         String lastMzString = "";
 
@@ -231,7 +231,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
     }
 
     private List<Float> parseFloatValuesString(String line) {
-        List<Float> values = new ArrayList<Float>();
+        List<Float> values = new ArrayList<>();
 
         line = line.substring(line.indexOf('=') + 1);
 
@@ -248,7 +248,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
     }
 
     private List<Integer> parseIntValuesString(String line) {
-        List<Integer> values = new ArrayList<Integer>();
+        List<Integer> values = new ArrayList<>();
 
         line = line.substring(line.indexOf('=') + 1);
 
@@ -265,7 +265,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
     }
 
     private List<SequenceCount> parseSequenceString(String line) {
-        List<SequenceCount> sequenceCounts = new ArrayList<SequenceCount>();
+        List<SequenceCount> sequenceCounts = new ArrayList<>();
 
         line = line.trim();
         String value = line.substring(10, line.length() - 1); // remove '[' and ']'

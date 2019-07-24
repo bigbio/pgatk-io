@@ -30,7 +30,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
     private boolean hasPeaks = false;
     private List<Peak> peaks;
 
-    private List<IPeptideSpectrumMatch> psms = new ArrayList<IPeptideSpectrumMatch>();
+    private List<IPeptideSpectrumMatch> psms = new ArrayList<>();
     private IPeptideSpectrumMatch mostCommonPsm;
 
     public ClusteringFileSpectrumReference(String sequence, int charge, float precursorMz,
@@ -95,7 +95,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
      * Creates the PSM objects based on the sequence string and the modification strings.
      */
     private void createPSMs() {
-        psms = new ArrayList<IPeptideSpectrumMatch>();
+        psms = new ArrayList<>();
 
         if (sequence.equals(""))
             return;
@@ -113,7 +113,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
             if (modificationsPerPSM != null) {
                 Matcher matcher = modificationPattern.matcher(modificationsPerPSM[i]);
 
-                List<IModification> mods = new LinkedList<IModification>();
+                List<IModification> mods = new LinkedList<>();
                 while (matcher.find()) {
                     int position = Integer.parseInt(matcher.group(1));
                     String accession = matcher.group(2);
@@ -131,7 +131,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
         }
 
         // count how often a certain PSM was found
-        Map<ClusteringFilePSM, Integer> psmCounts = new HashMap<ClusteringFilePSM, Integer>();
+        Map<ClusteringFilePSM, Integer> psmCounts = new HashMap<>();
 
         for (IPeptideSpectrumMatch psmI : psms) {
             ClusteringFilePSM psm = (ClusteringFilePSM) psmI;
@@ -173,7 +173,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
             throw new Exception("Different number of m/z and intensity values encountered");
         }
 
-        peaks = new ArrayList<Peak>(mzValues.length);
+        peaks = new ArrayList<>(mzValues.length);
         for (int i = 0; i < mzValues.length; i++) {
             peaks.add(new Peak(Float.parseFloat(mzValues[i]), Float.parseFloat(intensValues[i])));
         }
@@ -256,9 +256,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
             Peak peak = (Peak) o;
 
             if (Float.compare(peak.intensity, intensity) != 0) return false;
-            if (Float.compare(peak.mz, mz) != 0) return false;
-
-            return true;
+            return Float.compare(peak.mz, mz) == 0;
         }
 
         @Override
@@ -285,17 +283,15 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
         if (isIdentified != that.isIdentified) return false;
         if (Float.compare(that.precursorMz, precursorMz) != 0) return false;
         if (Float.compare(that.similarityScore, similarityScore) != 0) return false;
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (modifications != null ? !modifications.equals(that.modifications) : that.modifications != null)
+        if (!Objects.equals(id, that.id)) return false;
+        if (!Objects.equals(modifications, that.modifications))
             return false;
-        if (mostCommonPsm != null ? !mostCommonPsm.equals(that.mostCommonPsm) : that.mostCommonPsm != null)
+        if (!Objects.equals(mostCommonPsm, that.mostCommonPsm))
             return false;
-        if (peaks != null ? !peaks.equals(that.peaks) : that.peaks != null) return false;
-        if (psms != null ? !psms.equals(that.psms) : that.psms != null) return false;
-        if (sequence != null ? !sequence.equals(that.sequence) : that.sequence != null) return false;
-        if (species != null ? !species.equals(that.species) : that.species != null) return false;
-
-        return true;
+        if (!Objects.equals(peaks, that.peaks)) return false;
+        if (!Objects.equals(psms, that.psms)) return false;
+        if (!Objects.equals(sequence, that.sequence)) return false;
+        return Objects.equals(species, that.species);
     }
 
     @Override

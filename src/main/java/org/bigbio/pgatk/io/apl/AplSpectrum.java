@@ -2,7 +2,7 @@ package org.bigbio.pgatk.io.apl;
 
 import org.bigbio.pgatk.io.common.Param;
 import org.bigbio.pgatk.io.common.PgatkIOException;
-import org.bigbio.pgatk.io.common.Spectrum;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.util.*;
 import java.util.regex.Matcher;

@@ -1,6 +1,6 @@
 package org.bigbio.pgatk.io.mzxml;
 
-import org.bigbio.pgatk.io.common.Spectrum;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

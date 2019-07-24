@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.MzIterableChannelReader;
 import org.bigbio.pgatk.io.common.MzIterableReader;
 import org.bigbio.pgatk.io.common.PgatkIOException;
-import org.bigbio.pgatk.io.common.Spectrum;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.io.File;
 import java.io.IOException;
@@ -206,7 +206,7 @@ public class MzXMLIterableReader extends MzIterableChannelReader implements MzIt
         ByteBuffer byteBuffer = ByteBuffer.wrap(peaks);
 
         // check if the string is compressed
-        boolean zlibCompression = (compressType != null && "zlib".equalsIgnoreCase(compressType));
+        boolean zlibCompression = ("zlib".equalsIgnoreCase(compressType));
 
         // handle compressed peak lists
         if (zlibCompression) {

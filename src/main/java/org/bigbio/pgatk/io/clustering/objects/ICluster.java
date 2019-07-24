@@ -9,49 +9,49 @@ import java.util.Set;
  */
 public interface ICluster {
 
-    public float getAvPrecursorMz();
+    float getAvPrecursorMz();
 
-    public float getAvPrecursorIntens();
+    float getAvPrecursorIntens();
 
-    public Set<String> getSequences();
+    Set<String> getSequences();
 
-    public List<ISpectrumReference> getSpectrumReferences();
+    List<ISpectrumReference> getSpectrumReferences();
 
-    public int getSpecCount();
+    int getSpecCount();
 
-    public int getIdentifiedSpecCount();
+    int getIdentifiedSpecCount();
 
-    public int getUnidentifiedSpecCount();
+    int getUnidentifiedSpecCount();
 
     /**
      * Returns the total number of PSMs. This can be larger than the total
      * number of spectra as spectra can be identified as multiple peptides.
      * @return
      */
-    public int getPsmCount();
+    int getPsmCount();
 
-    public List<SequenceCount> getSequenceCounts();
+    List<SequenceCount> getSequenceCounts();
 
     /**
      * Returns a Map with the PSM sequence as key and its occurrence
      * as value.
      * @return
      */
-    public Map<String, Integer> getPsmSequenceCounts();
+    Map<String, Integer> getPsmSequenceCounts();
 
-    public float getMaxRatio();
+    float getMaxRatio();
 
-    public String getMaxSequence();
+    String getMaxSequence();
 
-    public float getSpectrumPrecursorMzRange();
+    float getSpectrumPrecursorMzRange();
 
-    public List<Float> getConsensusMzValues();
+    List<Float> getConsensusMzValues();
 
-    public List<Float> getConsensusIntensValues();
+    List<Float> getConsensusIntensValues();
 
-    public List<Integer> getConsensusCountValues();
+    List<Integer> getConsensusCountValues();
 
-    public String getId();
+    String getId();
 
-    public Set<String> getSpecies();
+    Set<String> getSpecies();
 }

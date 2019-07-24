@@ -12,9 +12,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-
 /**
  * Created by jg on 01.08.14.
  */
@@ -34,7 +31,7 @@ public class ClusteringFileReaderTest {
     public void testReadClustersIteratively() throws Exception {
         IClusterSourceReader reader = new ClusteringFileReader(testFile);
 
-        List<IClusterSourceListener> listeners = new ArrayList<IClusterSourceListener>();
+        List<IClusterSourceListener> listeners = new ArrayList<>();
         reader.readClustersIteratively(listeners);
     }
 
@@ -44,22 +41,22 @@ public class ClusteringFileReaderTest {
 
         List<ICluster> clusters = reader.readAllClusters();
 
-        assertEquals(960, clusters.size());
+        Assert.assertEquals(960, clusters.size());
 
         ICluster cluster = clusters.get(6);
 
-        assertEquals(305.0F, cluster.getAvPrecursorMz());
-        assertEquals(2, cluster.getSpecCount());
+        Assert.assertEquals(305.0F, cluster.getAvPrecursorMz());
+        Assert.assertEquals(2, cluster.getSpecCount());
 
-        assertEquals("PXD000090;PRIDE_Exp_Complete_Ac_27993.xml;spectrum=2338", cluster.getSpectrumReferences().get(0).getSpectrumId());
-        assertEquals(304.61032F, cluster.getSpectrumReferences().get(0).getPrecursorMz());
-        assertEquals(0, cluster.getSpectrumReferences().get(0).getCharge());
+        Assert.assertEquals("PXD000090;PRIDE_Exp_Complete_Ac_27993.xml;spectrum=2338", cluster.getSpectrumReferences().get(0).getSpectrumId());
+        Assert.assertEquals(304.61032F, cluster.getSpectrumReferences().get(0).getPrecursorMz());
+        Assert.assertEquals(0, cluster.getSpectrumReferences().get(0).getCharge());
 
         ISpectrumReference ref = cluster.getSpectrumReferences().get(0);
-        assertEquals(1, ref.getPSMs().size());
-        assertFalse(ref.isIdentifiedAsMultiplePeptides());
-        assertEquals("KGSCR", ref.getMostCommonPSM().getSequence());
-        assertEquals(0, ref.getMostCommonPSM().getModifications().size());
+        Assert.assertEquals(1, ref.getPSMs().size());
+        Assert.assertFalse(ref.isIdentifiedAsMultiplePeptides());
+        Assert.assertEquals("KGSCR", ref.getMostCommonPSM().getSequence());
+        Assert.assertEquals(0, ref.getMostCommonPSM().getModifications().size());
     }
 
 
@@ -69,26 +66,26 @@ public class ClusteringFileReaderTest {
 
         List<ICluster> clusters = reader.readAllClusters();
 
-        assertEquals(1, clusters.size());
+        Assert.assertEquals(1, clusters.size());
 
         ICluster cluster = clusters.get(0);
         List<ISpectrumReference> spectrumReferences = cluster.getSpectrumReferences();
-        assertEquals(1, spectrumReferences.size());
+        Assert.assertEquals(1, spectrumReferences.size());
 
         ISpectrumReference spectrum = spectrumReferences.get(0);
-        assertEquals("PRD000715;PRIDE_Exp_Complete_Ac_24805.xml;spectrum=11", spectrum.getSpectrumId());
+        Assert.assertEquals("PRD000715;PRIDE_Exp_Complete_Ac_24805.xml;spectrum=11", spectrum.getSpectrumId());
 
-        assertEquals(399.68015F, spectrum.getPrecursorMz());
-        assertEquals(2, spectrum.getCharge());
-        assertEquals("9606", spectrum.getSpecies());
-        assertEquals(1.0f, spectrum.getSimilarityScore());
+        Assert.assertEquals(399.68015F, spectrum.getPrecursorMz());
+        Assert.assertEquals(2, spectrum.getCharge());
+        Assert.assertEquals("9606", spectrum.getSpecies());
+        Assert.assertEquals(1.0f, spectrum.getSimilarityScore());
 
-        assertEquals(1, spectrum.getPSMs().size());
-        assertFalse(spectrum.isIdentifiedAsMultiplePeptides());
-        assertEquals("TSLAGGGR", spectrum.getMostCommonPSM().getSequence());
-        assertEquals(1, spectrum.getMostCommonPSM().getModifications().size());
-        assertEquals(1, spectrum.getMostCommonPSM().getModifications().get(0).getPosition());
-        assertEquals("MOD:01455", spectrum.getMostCommonPSM().getModifications().get(0).getAccession());
+        Assert.assertEquals(1, spectrum.getPSMs().size());
+        Assert.assertFalse(spectrum.isIdentifiedAsMultiplePeptides());
+        Assert.assertEquals("TSLAGGGR", spectrum.getMostCommonPSM().getSequence());
+        Assert.assertEquals(1, spectrum.getMostCommonPSM().getModifications().size());
+        Assert.assertEquals(1, spectrum.getMostCommonPSM().getModifications().get(0).getPosition());
+        Assert.assertEquals("MOD:01455", spectrum.getMostCommonPSM().getModifications().get(0).getAccession());
     }
 
     @Test
@@ -104,7 +101,7 @@ public class ClusteringFileReaderTest {
             int nCountsValues = cluster.getConsensusCountValues().size();
 
             Assert.assertTrue(nMzValues > 0);
-            Assert.assertTrue(nMzValues == nIntensValues);
+            Assert.assertEquals(nMzValues, nIntensValues);
             Assert.assertEquals(0, nCountsValues);
         }
     }

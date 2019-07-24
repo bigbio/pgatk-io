@@ -23,7 +23,7 @@ import org.bigbio.pgatk.io.common.PgatkIOException;
 import psidev.psi.tools.xxindex.StandardXpathAccess;
 import psidev.psi.tools.xxindex.index.IndexElement;
 import psidev.psi.tools.xxindex.index.XpathIndex;
-import org.bigbio.pgatk.io.common.Spectrum;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import org.bigbio.pgatk.io.common.IndexElementImpl;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.DataProcessing;
 import org.bigbio.pgatk.io.mzxml.mzxml.model.MsInstrument;

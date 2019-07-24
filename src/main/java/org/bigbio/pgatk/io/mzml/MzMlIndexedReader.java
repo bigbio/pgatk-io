@@ -1,6 +1,7 @@
 package org.bigbio.pgatk.io.mzml;
 
 import org.bigbio.pgatk.io.common.*;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import psidev.psi.tools.xxindex.index.IndexElement;
 import uk.ac.ebi.jmzml.MzMLElement;
 import uk.ac.ebi.jmzml.xml.io.MzMLUnmarshaller;
@@ -127,7 +128,7 @@ public class MzMlIndexedReader implements MzReader, MzIterableReader {
         return spectraIds;
     }
 
-    public org.bigbio.pgatk.io.common.Spectrum getSpectrumById(String id) throws PgatkIOException {
+    public Spectrum getSpectrumById(String id) throws PgatkIOException {
         try {
             uk.ac.ebi.jmzml.model.mzml.Spectrum mzMlSpectrum = unmarshaller.getSpectrumById(id);
             int index = spectraIds.indexOf(id);
@@ -138,7 +139,7 @@ public class MzMlIndexedReader implements MzReader, MzIterableReader {
         }
     }
 
-    public org.bigbio.pgatk.io.common.Spectrum getSpectrumByIndex(int index) throws PgatkIOException {
+    public Spectrum getSpectrumByIndex(int index) throws PgatkIOException {
 
         if (index < 1 || index > spectraIds.size())
             throw new PgatkIOException("Index out of range.");
@@ -201,7 +202,7 @@ public class MzMlIndexedReader implements MzReader, MzIterableReader {
     }
 
     @Override
-    public org.bigbio.pgatk.io.common.Spectrum next() {
+    public Spectrum next() {
         try {
             return getSpectrumById(idIterator.next());
         } catch (PgatkIOException e) {

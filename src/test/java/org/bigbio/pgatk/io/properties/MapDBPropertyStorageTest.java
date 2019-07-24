@@ -40,7 +40,7 @@ public class MapDBPropertyStorageTest {
 
         System.out.println((System.currentTimeMillis() - time) / 1000);
 
-        ((MapDBPropertyStorage)storage).close();
+        storage.close();
     }
 
 
@@ -63,7 +63,7 @@ public class MapDBPropertyStorageTest {
 
         System.out.println((System.currentTimeMillis() - time) / 1000);
 
-        ((MapDBPropertyStorage)storage).close();
+        storage.close();
     }
 
 }
