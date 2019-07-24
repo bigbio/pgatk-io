@@ -1,25 +1,28 @@
-package org.bigbio.pgatk.io.clustering.objects;
+package org.bigbio.pgatk.io.common.cluster;
+
+import org.bigbio.pgatk.io.common.Param;
+import org.bigbio.pgatk.io.common.psms.IPeptideSpectrumMatch;
+import org.bigbio.pgatk.io.common.psms.SequenceCount;
 
 import java.util.*;
 
-/**
- * Created by jg on 10.07.14.
- */
+
 public class ClusteringFileCluster implements ICluster {
-    private final float avPrecursorMz;
-    private final float avPrecursorIntens;
+
+    private final double avPrecursorMz;
+    private final double avPrecursorIntens;
 
     private final List<SequenceCount> sequenceCounts;
     private final List<ISpectrumReference> spectrumRefs;
     private final String maxSequence;
-    private Float minSpecPrecursorMz = Float.MAX_VALUE;
-    private Float maxSpecPrecursorMz = 0F;
+    private Double minSpecPrecursorMz = Double.MAX_VALUE;
+    private Double maxSpecPrecursorMz = 0.0;
 
     private final float maxRatio;
     private final int totalPsms;
 
-    private final List<Float> consensusMzValues;
-    private final List<Float> consensusIntensValues;
+    private final List<Double> consensusMzValues;
+    private final List<Double> consensusIntensValues;
     private final List<Integer> consensusCountValues;
 
     private final String id;
@@ -38,11 +41,11 @@ public class ClusteringFileCluster implements ICluster {
         return maxSequence;
     }
 
-    public ClusteringFileCluster(float avPrecursorMz,
-                                 float avPrecursorIntens,
+    public ClusteringFileCluster(double avPrecursorMz,
+                                 double avPrecursorIntens,
                                  List<ISpectrumReference> spectrumRefs,
-                                 List<Float> consensusMzValues,
-                                 List<Float> consensusIntensValues,
+                                 List<Double> consensusMzValues,
+                                 List<Double> consensusIntensValues,
                                  List<Integer> consensusCountValues,
                                  String id,
                                  String fileName) {
@@ -112,7 +115,7 @@ public class ClusteringFileCluster implements ICluster {
 
         // get min and max spec precursor mz
         for (ISpectrumReference specRef : spectrumRefs) {
-            float specPrecursorMz = specRef.getPrecursorMz();
+            double specPrecursorMz = specRef.getPrecursorMZ();
 
             if (minSpecPrecursorMz > specPrecursorMz)
                 minSpecPrecursorMz = specPrecursorMz;
@@ -131,16 +134,6 @@ public class ClusteringFileCluster implements ICluster {
     }
 
     @Override
-    public float getAvPrecursorMz() {
-        return avPrecursorMz;
-    }
-
-    @Override
-    public float getAvPrecursorIntens() {
-        return avPrecursorIntens;
-    }
-
-    @Override
     public Set<String> getSequences() {
         return Collections.unmodifiableSet(countPerPsmSequence.keySet());
     }
@@ -151,7 +144,7 @@ public class ClusteringFileCluster implements ICluster {
     }
 
     @Override
-    public float getMaxRatio() {
+    public double getMaxRatio() {
         return maxRatio;
     }
 
@@ -161,7 +154,7 @@ public class ClusteringFileCluster implements ICluster {
     }
 
     @Override
-    public float getSpectrumPrecursorMzRange() {
+    public double getSpectrumPrecursorMzRange() {
         return maxSpecPrecursorMz - minSpecPrecursorMz;
     }
 
@@ -171,12 +164,12 @@ public class ClusteringFileCluster implements ICluster {
     }
 
     @Override
-    public List<Float> getConsensusMzValues() {
+    public List<Double> getConsensusMzValues() {
         return Collections.unmodifiableList(consensusMzValues);
     }
 
     @Override
-    public List<Float> getConsensusIntensValues() {
+    public List<Double> getConsensusIntensValues() {
         return Collections.unmodifiableList(consensusIntensValues);
     }
 
@@ -186,8 +179,46 @@ public class ClusteringFileCluster implements ICluster {
     }
 
     @Override
+    public Long getIndex() {
+        return null;
+    }
+
+    @Override
     public String getId() {
         return id;
+    }
+
+    @Override
+    public Integer getPrecursorCharge() {
+        return null;
+    }
+
+    @Override
+    public Double getPrecursorMZ() {
+        return avPrecursorMz;
+    }
+
+    @Override
+    public Double getPrecursorIntensity() {
+        return avPrecursorIntens;
+    }
+
+    @Override
+    public Map<Double, Double> getPeakList() {
+        Map<Double, Double> peaks = new HashMap<>();
+        for(int i = 0; i < consensusMzValues.size(); i++)
+            peaks.put(consensusMzValues.get(i), consensusIntensValues.get(i));
+        return peaks;
+    }
+
+    @Override
+    public Integer getMsLevel() {
+        return 2;
+    }
+
+    @Override
+    public Collection<? extends Param> getAdditional() {
+        return null;
     }
 
     @Override

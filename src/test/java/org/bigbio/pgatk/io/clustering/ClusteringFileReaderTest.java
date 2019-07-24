@@ -1,8 +1,8 @@
 package org.bigbio.pgatk.io.clustering;
 
 import junit.framework.Assert;
-import org.bigbio.pgatk.io.clustering.objects.ICluster;
-import org.bigbio.pgatk.io.clustering.objects.ISpectrumReference;
+import org.bigbio.pgatk.io.common.cluster.ICluster;
+import org.bigbio.pgatk.io.common.cluster.ISpectrumReference;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -45,12 +45,12 @@ public class ClusteringFileReaderTest {
 
         ICluster cluster = clusters.get(6);
 
-        Assert.assertEquals(305.0F, cluster.getAvPrecursorMz());
+        Assert.assertEquals(305.0, cluster.getPrecursorMZ());
         Assert.assertEquals(2, cluster.getSpecCount());
 
-        Assert.assertEquals("PXD000090;PRIDE_Exp_Complete_Ac_27993.xml;spectrum=2338", cluster.getSpectrumReferences().get(0).getSpectrumId());
-        Assert.assertEquals(304.61032F, cluster.getSpectrumReferences().get(0).getPrecursorMz());
-        Assert.assertEquals(0, cluster.getSpectrumReferences().get(0).getCharge());
+        Assert.assertEquals("PXD000090;PRIDE_Exp_Complete_Ac_27993.xml;spectrum=2338", cluster.getSpectrumReferences().get(0).getId());
+        Assert.assertEquals(304.61032, cluster.getSpectrumReferences().get(0).getPrecursorMZ());
+        Assert.assertEquals(0, cluster.getSpectrumReferences().get(0).getPrecursorCharge().intValue());
 
         ISpectrumReference ref = cluster.getSpectrumReferences().get(0);
         Assert.assertEquals(1, ref.getPSMs().size());
@@ -73,10 +73,10 @@ public class ClusteringFileReaderTest {
         Assert.assertEquals(1, spectrumReferences.size());
 
         ISpectrumReference spectrum = spectrumReferences.get(0);
-        Assert.assertEquals("PRD000715;PRIDE_Exp_Complete_Ac_24805.xml;spectrum=11", spectrum.getSpectrumId());
+        Assert.assertEquals("PRD000715;PRIDE_Exp_Complete_Ac_24805.xml;spectrum=11", spectrum.getId());
 
-        Assert.assertEquals(399.68015F, spectrum.getPrecursorMz());
-        Assert.assertEquals(2, spectrum.getCharge());
+        Assert.assertEquals(399.68015, spectrum.getPrecursorMZ());
+        Assert.assertEquals(2, spectrum.getPrecursorCharge().intValue());
         Assert.assertEquals("9606", spectrum.getSpecies());
         Assert.assertEquals(1.0f, spectrum.getSimilarityScore());
 

@@ -1,6 +1,6 @@
 package org.bigbio.pgatk.io.clustering;
 
-import org.bigbio.pgatk.io.clustering.objects.ICluster;
+import org.bigbio.pgatk.io.common.cluster.ICluster;
 
 import java.util.Collection;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 public interface IClusterSourceReader {
     /**
      * This function reads all clusters from the clustering source. Spectra
-     * are never includeded in this output.
+     * are never included in this output.
      * @return
      * @throws Exception
      */

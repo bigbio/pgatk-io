@@ -1,7 +1,7 @@
 package org.bigbio.pgatk.io.clustering;
 
 import junit.framework.Assert;
-import org.bigbio.pgatk.io.clustering.objects.ICluster;
+import org.bigbio.pgatk.io.common.cluster.ICluster;
 import org.junit.Before;
 import org.junit.Test;
 

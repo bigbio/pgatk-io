@@ -3,7 +3,7 @@ package org.bigbio.pgatk.io.clustering.indexing;
 import junit.framework.Assert;
 import org.bigbio.pgatk.io.braf.BufferedRandomAccessFile;
 import org.bigbio.pgatk.io.clustering.ClusteringFileReader;
-import org.bigbio.pgatk.io.clustering.objects.ICluster;
+import org.bigbio.pgatk.io.common.cluster.ICluster;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -74,13 +74,13 @@ public class ClusteringFileIndexerTest {
         Assert.assertNotNull(cluster);
         Assert.assertEquals(1, cluster.getSpecCount());
         Assert.assertEquals(1, cluster.getPsmCount());
-        Assert.assertEquals(400.0F, cluster.getAvPrecursorMz());
+        Assert.assertEquals(400.0, cluster.getPrecursorMZ());
         Assert.assertEquals("GLPFILILLAK", cluster.getMaxSequence());
         Assert.assertEquals(0, cluster.getUnidentifiedSpecCount());
 
         ICluster cluster2 = reader.readCluster("e075098d-875e-4359-b71b-35ebcf124a02");
         Assert.assertNotNull(cluster2);
-        Assert.assertEquals(400.004F, cluster2.getAvPrecursorMz());
+        Assert.assertEquals(400.0039978027344, cluster2.getPrecursorMZ());
         Assert.assertEquals(4, cluster2.getSpecCount());
         Assert.assertEquals(0, cluster.getUnidentifiedSpecCount());
     }

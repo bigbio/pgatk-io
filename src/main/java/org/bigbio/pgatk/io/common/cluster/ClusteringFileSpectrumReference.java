@@ -1,13 +1,19 @@
-package org.bigbio.pgatk.io.clustering.objects;
+package org.bigbio.pgatk.io.common.cluster;
+
+import org.bigbio.pgatk.io.common.Param;
+import org.bigbio.pgatk.io.common.modification.IModification;
+import org.bigbio.pgatk.io.common.psms.IPeptideSpectrumMatch;
 
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by jg on 01.08.14.
  */
 public class ClusteringFileSpectrumReference implements ISpectrumReference {
+
     public final int INDEX_ID = 1;
     public final int INDEX_SEQUENCE = 3;
     public final int INDEX_PRECURSOR_MZ = 4;
@@ -21,7 +27,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
 
     private final String sequence;
     private final int charge;
-    private final float precursorMz;
+    private final Double precursorMz;
     private final String id;
     private float similarityScore = 0;
     private final String species;
@@ -33,7 +39,44 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
     private List<IPeptideSpectrumMatch> psms = new ArrayList<>();
     private IPeptideSpectrumMatch mostCommonPsm;
 
-    public ClusteringFileSpectrumReference(String sequence, int charge, float precursorMz,
+    public final class Peak {
+
+        private final double mz;
+        private final double intensity;
+
+        public Peak(double mz, double intensity) {
+            this.mz = mz;
+            this.intensity = intensity;
+        }
+
+        public double getMz() {
+            return mz;
+        }
+
+        public double getIntensity() {
+            return intensity;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Peak peak = (Peak) o;
+
+            if (Double.compare(peak.intensity, intensity) != 0) return false;
+            return Double.compare(peak.mz, mz) == 0;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (mz != +0.0f ? Float.floatToIntBits((float)mz) : 0);
+            result = 31 * result + (intensity != +0.0f ? Float.floatToIntBits((float)intensity) : 0);
+            return result;
+        }
+    }
+
+    public ClusteringFileSpectrumReference(String sequence, int charge, double precursorMz,
                                            String id, float similarityScore, String species,
                                            String modifications) {
         this.sequence = sequence;
@@ -57,7 +100,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
         id = fields[INDEX_ID];
         sequence = fields[INDEX_SEQUENCE];
         isIdentified = sequence.length() > 0;
-        precursorMz = Float.parseFloat(fields[INDEX_PRECURSOR_MZ]);
+        precursorMz = Double.parseDouble(fields[INDEX_PRECURSOR_MZ]);
 
         if (fields.length > INDEX_CHARGE)
             charge = Integer.parseInt(fields[INDEX_CHARGE]);
@@ -192,17 +235,42 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
     }
 
     @Override
-    public String getSpectrumId() {
+    public Long getIndex() {
+        return null;
+    }
+
+    @Override
+    public String getId() {
         return id;
     }
 
     @Override
-    public float getPrecursorMz() {
+    public Double getPrecursorMZ() {
         return precursorMz;
     }
 
     @Override
-    public int getCharge() {
+    public Double getPrecursorIntensity() {
+        return null;
+    }
+
+    @Override
+    public Map<Double, Double> getPeakList() {
+        return peaks.stream().collect(Collectors.toMap(Peak::getMz, Peak::getIntensity));
+    }
+
+    @Override
+    public Integer getMsLevel() {
+        return null;
+    }
+
+    @Override
+    public Collection<? extends Param> getAdditional() {
+        return null;
+    }
+
+    @Override
+    public Integer getPrecursorCharge() {
         return charge;
     }
 
@@ -231,42 +299,6 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
         return Collections.unmodifiableList(psms);
     }
 
-    public final class Peak {
-        private final float mz;
-        private final float intensity;
-
-        public Peak(float mz, float intensity) {
-            this.mz = mz;
-            this.intensity = intensity;
-        }
-
-        public float getMz() {
-            return mz;
-        }
-
-        public float getIntensity() {
-            return intensity;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            Peak peak = (Peak) o;
-
-            if (Float.compare(peak.intensity, intensity) != 0) return false;
-            return Float.compare(peak.mz, mz) == 0;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = (mz != +0.0f ? Float.floatToIntBits(mz) : 0);
-            result = 31 * result + (intensity != +0.0f ? Float.floatToIntBits(intensity) : 0);
-            return result;
-        }
-    }
-
     public boolean isIdentified() {
         return isIdentified;
     }
@@ -281,7 +313,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
         if (charge != that.charge) return false;
         if (hasPeaks != that.hasPeaks) return false;
         if (isIdentified != that.isIdentified) return false;
-        if (Float.compare(that.precursorMz, precursorMz) != 0) return false;
+        if (Double.compare(that.precursorMz, precursorMz) != 0) return false;
         if (Float.compare(that.similarityScore, similarityScore) != 0) return false;
         if (!Objects.equals(id, that.id)) return false;
         if (!Objects.equals(modifications, that.modifications))
@@ -298,7 +330,7 @@ public class ClusteringFileSpectrumReference implements ISpectrumReference {
     public int hashCode() {
         int result = sequence != null ? sequence.hashCode() : 0;
         result = 31 * result + charge;
-        result = 31 * result + (precursorMz != +0.0f ? Float.floatToIntBits(precursorMz) : 0);
+        result = 31 * result + (precursorMz != +0.0f ? Float.floatToIntBits((float)precursorMz.doubleValue()) : 0);
         result = 31 * result + (id != null ? id.hashCode() : 0);
         result = 31 * result + (similarityScore != +0.0f ? Float.floatToIntBits(similarityScore) : 0);
         result = 31 * result + (species != null ? species.hashCode() : 0);

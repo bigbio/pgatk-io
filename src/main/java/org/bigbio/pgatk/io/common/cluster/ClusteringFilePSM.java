@@ -1,4 +1,7 @@
-package org.bigbio.pgatk.io.clustering.objects;
+package org.bigbio.pgatk.io.common.cluster;
+
+import org.bigbio.pgatk.io.common.modification.IModification;
+import org.bigbio.pgatk.io.common.psms.IPeptideSpectrumMatch;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,6 @@
-package org.bigbio.pgatk.io.clustering.objects;
+package org.bigbio.pgatk.io.clustering;
+
+import org.bigbio.pgatk.io.common.cluster.ClusteringFileSpectrumReference;
 
 import java.util.Comparator;
 
@@ -8,6 +10,6 @@ import java.util.Comparator;
 public class PeakMzComparator implements Comparator<ClusteringFileSpectrumReference.Peak> {
     @Override
     public int compare(ClusteringFileSpectrumReference.Peak o1, ClusteringFileSpectrumReference.Peak o2) {
-        return Float.compare(o1.getMz(), o2.getMz());
+        return Double.compare(o1.getMz(), o2.getMz());
     }
 }

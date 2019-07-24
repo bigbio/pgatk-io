@@ -1,16 +1,14 @@
-package org.bigbio.pgatk.io.clustering.objects;
+package org.bigbio.pgatk.io.common.cluster;
+
+import org.bigbio.pgatk.io.common.psms.IPeptideSpectrumMatch;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.util.List;
 
 /**
  * Created by jg on 01.08.14.
  */
-public interface ISpectrumReference {
-    String getSpectrumId();
-
-    float getPrecursorMz();
-
-    int getCharge();
+public interface ISpectrumReference extends Spectrum {
 
     float getSimilarityScore();
 

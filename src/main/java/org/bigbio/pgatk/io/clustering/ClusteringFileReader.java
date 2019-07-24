@@ -4,7 +4,11 @@ package org.bigbio.pgatk.io.clustering;
 import org.bigbio.pgatk.io.braf.BufferedRandomAccessFile;
 import org.bigbio.pgatk.io.clustering.indexing.ClusteringFileIndex;
 import org.bigbio.pgatk.io.clustering.indexing.ClusteringIndexElement;
-import org.bigbio.pgatk.io.clustering.objects.*;
+import org.bigbio.pgatk.io.common.cluster.ClusteringFileCluster;
+import org.bigbio.pgatk.io.common.cluster.ClusteringFileSpectrumReference;
+import org.bigbio.pgatk.io.common.cluster.ICluster;
+import org.bigbio.pgatk.io.common.cluster.ISpectrumReference;
+import org.bigbio.pgatk.io.common.psms.SequenceCount;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,6 +21,7 @@ import java.util.zip.GZIPInputStream;
  * Created by jg on 10.07.14.
  */
 public class ClusteringFileReader implements IClusterSourceReader {
+
     private final File clusteringFile;
     private BufferedReader br;
     private boolean inCluster = false;
@@ -122,10 +127,10 @@ public class ClusteringFileReader implements IClusterSourceReader {
     private ICluster readNextCluster(final BufferedReader br, boolean includeSpectra) throws Exception {
         String line;
 
-        float avPrecursorMz = 0, avPrecursorIntens = 0;
+        double avPrecursorMz = 0, avPrecursorIntens = 0;
         String id = null;
-        List<Float> consensusMzValues = new ArrayList<>();
-        List<Float> consensusIntensValues = new ArrayList<>();
+        List<Double> consensusMzValues = new ArrayList<>();
+        List<Double> consensusIntensValues = new ArrayList<>();
         List<Integer> consensCountValues = new ArrayList<>();
 
         List<ISpectrumReference> spectrumRefs = new ArrayList<>();
@@ -141,12 +146,9 @@ public class ClusteringFileReader implements IClusterSourceReader {
                         lastSpecRef = null;
                     }
 
-                    // create the cluster and return
-                    ICluster cluster = new ClusteringFileCluster(avPrecursorMz, avPrecursorIntens,
+                    return new ClusteringFileCluster(avPrecursorMz, avPrecursorIntens,
                             spectrumRefs, consensusMzValues, consensusIntensValues, consensCountValues,
                             id, clusteringFile.getName());
-
-                    return cluster;
                 }
                 else {
                     // this means that this is the start of the first cluster in the file
@@ -180,12 +182,12 @@ public class ClusteringFileReader implements IClusterSourceReader {
             }
 
             if (line.startsWith("consensus_mz=")) {
-                consensusMzValues = parseFloatValuesString(line);
+                consensusMzValues = parseDoubleValuesString(line);
                 continue;
             }
 
             if (line.startsWith("consensus_intens=")) {
-                consensusIntensValues = parseFloatValuesString(line);
+                consensusIntensValues = parseDoubleValuesString(line);
                 continue;
             }
 
@@ -230,8 +232,8 @@ public class ClusteringFileReader implements IClusterSourceReader {
         return null;
     }
 
-    private List<Float> parseFloatValuesString(String line) {
-        List<Float> values = new ArrayList<>();
+    private List<Double> parseDoubleValuesString(String line) {
+        List<Double> values = new ArrayList<>();
 
         line = line.substring(line.indexOf('=') + 1);
 
@@ -241,7 +243,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
 
         String[] stringValues = line.trim().split(",");
         for (String stringValue : stringValues) {
-            values.add(Float.parseFloat(stringValue));
+            values.add(Double.parseDouble(stringValue));
         }
 
         return values;
