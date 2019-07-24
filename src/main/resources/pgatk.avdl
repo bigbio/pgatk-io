@@ -141,8 +141,6 @@ protocol pgatk {
 
   }
 
-
-
   /** Spectrum Scan, same information from mzML, mzXML  */
   record Spectrum {
 
@@ -151,6 +149,9 @@ protocol pgatk {
 
     /** Spectrum identifier, it can be the e.g. id="scan=1" */
     union { null, string } id = null;
+
+    /** Scan Number **/
+    union { null, string } scanNumber = null;
 
     /** Number of peaks in the spectrum */
     union { null , int } numberPeaks = null;
@@ -185,8 +186,11 @@ protocol pgatk {
     /** Precursor mz value **/
     union { null, double } precursorMz = null;
 
-    /** Peaks of the spectrum **/
-    map<Peak> peaks = null;
+    /** Peak masses  **/
+    map<double> masses = null;
+
+    /** Peak Intensities **/
+    map<double> intensities = null;
 
     /** Other Attributes **/
     map<OntologyTerm> attributes = {};

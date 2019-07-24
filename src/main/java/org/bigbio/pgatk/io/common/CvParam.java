@@ -1,5 +1,6 @@
 package org.bigbio.pgatk.io.common;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @author ypriverol
  *
  */
-public class CvParam implements Param{
+public class CvParam implements Param, Serializable {
 
 	private String name;
 	private String value;
