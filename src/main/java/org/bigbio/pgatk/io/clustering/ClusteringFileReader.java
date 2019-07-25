@@ -1,9 +1,11 @@
 package org.bigbio.pgatk.io.clustering;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.braf.BufferedRandomAccessFile;
 import org.bigbio.pgatk.io.clustering.indexing.ClusteringFileIndex;
 import org.bigbio.pgatk.io.clustering.indexing.ClusteringIndexElement;
+import org.bigbio.pgatk.io.common.PgatkIOException;
 import org.bigbio.pgatk.io.common.cluster.ClusteringFileCluster;
 import org.bigbio.pgatk.io.common.cluster.ClusteringFileSpectrumReference;
 import org.bigbio.pgatk.io.common.cluster.ICluster;
@@ -11,21 +13,21 @@ import org.bigbio.pgatk.io.common.cluster.ISpectrumReference;
 import org.bigbio.pgatk.io.common.psms.SequenceCount;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 
 /**
  * Created by jg on 10.07.14.
  */
+@Slf4j
 public class ClusteringFileReader implements IClusterSourceReader {
 
     private final File clusteringFile;
     private BufferedReader br;
     private boolean inCluster = false;
     private Map<String, ClusteringIndexElement> index;
+
+    ICluster nextCluster = null;
 
     public ClusteringFileReader(File clusteringFile) {
         this.clusteringFile = clusteringFile;
@@ -285,5 +287,34 @@ public class ClusteringFileReader implements IClusterSourceReader {
         }
 
         return sequenceCounts;
+    }
+
+    @Override
+    public boolean hasNext() {
+        nextCluster = null;
+        if (br == null) {
+            try {
+                br = openClusteringFile(clusteringFile);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            inCluster = false;
+        }
+        try{
+            nextCluster =  readNextCluster(br, true);
+        }catch (Exception e){
+            log.debug("End of the file has been found");
+        }
+        return nextCluster != null;
+    }
+
+    @Override
+    public ICluster next() throws NoSuchElementException {
+        return nextCluster;
+    }
+
+    @Override
+    public void close() throws PgatkIOException {
+
     }
 }
