@@ -1,5 +1,7 @@
 package org.bigbio.pgatk.io.properties;
 
+import org.bigbio.pgatk.io.common.PgatkIOException;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.Set;
@@ -46,4 +48,16 @@ public interface IPropertyStorage extends Serializable {
      * Close a Property Storage.
      */
     void close() throws IOException;
+
+    /**
+     * Save the PropertyFile to a different file name
+     * @param filePath File Name
+     */
+    void saveToFile(String filePath) throws PgatkIOException;
+
+    /**
+     * This function allows to read properties from a File
+     * @param filePath file path
+     */
+    void readFromFile(String filePath) throws PgatkIOException;
 }

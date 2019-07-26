@@ -2,6 +2,7 @@ package org.bigbio.pgatk.io.properties;
 
 import lombok.extern.slf4j.Slf4j;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
+import org.bigbio.pgatk.io.common.PgatkIOException;
 import org.iq80.leveldb.CompressionType;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.Options;
@@ -9,6 +10,8 @@ import org.iq80.leveldb.impl.Iq80DBFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * This code is licensed under the Apache License, Version 2.0 (the
@@ -36,11 +39,15 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
     public static File dbFile = null;
 
+    public final static String CHRONICLE_MAP_EXTENSION = ".pcm";
+
     public static final long MAX_NUMBER_FEATURES = 100000000;
+    private long numberProperties;
     private DB levelDB = null;
     private int levelDBSize = 0;
 
     public boolean dynamic = false;
+
 
 
     public MapDBPropertyStorage(File directoryPath, boolean dynamic, long numberProperties) throws IOException {
@@ -49,11 +56,13 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
         this.dynamic = dynamic;
 
         if(numberProperties == -1)
-            numberProperties = MAX_NUMBER_FEATURES;
+            this.numberProperties = MAX_NUMBER_FEATURES;
+        else
+            this.numberProperties = numberProperties;
 
         if(dynamic){
             log.info("----- LEVELDB MAP ------------------------");
-            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime());
+            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + IN_MEMORY_EXT);
             if(!dbFile.exists())
                 dbFile.mkdirs();
             Options options = new Options();
@@ -64,7 +73,7 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
         }else{
             log.info("----- CHRONICLE MAP ------------------------");
-            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + ".db");
+            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + CHRONICLE_MAP_EXTENSION);
             dbFile.deleteOnExit();
             this.propertyStorage =
                     ChronicleMapBuilder.of(String.class, String.class)
@@ -131,4 +140,52 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
     }
 
+    @Override
+    public void saveToFile(String filePath) throws PgatkIOException {
+        if(!filePath.endsWith(IN_MEMORY_EXT) && !filePath.endsWith(CHRONICLE_MAP_EXTENSION))
+            if(dynamic)
+                throw new PgatkIOException("The provided extension for the Dynamic Property in Storage File is not allow -- " + filePath + " - It should be " + IN_MEMORY_EXT);
+            else
+                throw new PgatkIOException("The provided extension for the Fixed Property in Storage File is not allow -- " + filePath + " - It should be " + CHRONICLE_MAP_EXTENSION);
+        try {
+
+            if(dynamic){
+                super.saveToFile(filePath);
+            }else{
+                new File(filePath).deleteOnExit();
+                Files.move(dbFile.toPath(), new File(filePath).toPath(), StandardCopyOption.REPLACE_EXISTING);
+            }
+
+        } catch (IOException e) {
+            throw new PgatkIOException(e);
+        }
+    }
+
+    @Override
+    public void readFromFile(String filePath) throws PgatkIOException {
+        if(!filePath.endsWith(IN_MEMORY_EXT) && !filePath.endsWith(CHRONICLE_MAP_EXTENSION))
+            if(dynamic)
+                throw new PgatkIOException("The provided extension for the Dynamic Property in Storage File is not allow -- " + filePath + " - It should be " + IN_MEMORY_EXT);
+            else
+                throw new PgatkIOException("The provided extension for the Fixed Property in Storage File is not allow -- " + filePath + " - It should be " + CHRONICLE_MAP_EXTENSION);
+        try {
+            if(dynamic){
+                log.info("----- LEVELDB MAP ------------------------");
+                super.readFromFile(filePath);
+            }else{
+                log.info("----- CHRONICLE MAP ------------------------");
+                dbFile.deleteOnExit();
+                Files.copy(new File(filePath).toPath(), dbFile.toPath());
+                this.propertyStorage =
+                        ChronicleMapBuilder.of(String.class, String.class)
+                                .entries(numberProperties) //the maximum number of entries for the map
+                                .averageKeySize(64)
+                                .averageValueSize(54)
+                                .createPersistedTo(dbFile);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
