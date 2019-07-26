@@ -69,7 +69,7 @@ public class MapDBPropertyStorageTest {
     }
 
     @Test
-    public void writeAndreadToFile() throws IOException, PgatkIOException {
+    public void writeAndreadDynamicToFile() throws IOException, PgatkIOException {
 
         long time = System.currentTimeMillis();
         IPropertyStorage storage = PropertyStorageFactory.buildDynamicPropertyStorage(Files.createTempDirectory("temp").toFile());
@@ -100,5 +100,37 @@ public class MapDBPropertyStorageTest {
         storage.close();
 
 
+    }
+
+    @Test
+    public void writeAndreadStaticToFile() throws IOException, PgatkIOException {
+
+        long time = System.currentTimeMillis();
+        IPropertyStorage storage = PropertyStorageFactory.buildStaticPropertyStorage(Files.createTempDirectory("temp").toFile(), 200);
+        IPropertyStorage storageReader = PropertyStorageFactory.buildStaticPropertyStorage(Files.createTempDirectory("temp").toFile(), 200);
+        Random random = new Random();
+
+        for(int i = 0; i < 200; i++){
+            storage.storeProperty(String.valueOf(i), "RT", String.valueOf(Math.random()));
+        }
+
+        Assert.assertEquals(1, storage.getAvailableProperties().size());
+        Assert.assertEquals(200, storage.storageSize());
+
+        for( int i = 0; i < 40; i++){
+            System.out.println(storage.getProperty(String.valueOf(random.nextInt((200) + 1)),"RT"));
+        }
+
+        File tempFile = File.createTempFile("tempFile", MapDBPropertyStorage.IN_MEMORY_EXT);
+        storage.saveToFile(tempFile.getAbsolutePath());
+        storageReader.readFromFile(tempFile.getAbsolutePath());
+        for( int i = 0; i < 40; i++){
+            int value = random.nextInt((100000) + 1);
+            Assert.assertEquals(storageReader.getProperty(String.valueOf(value),"RT"), storage.getProperty(String.valueOf(value),"RT"));
+        }
+
+        System.out.println((System.currentTimeMillis() - time) / 1000);
+
+        storage.close();
     }
 }

@@ -38,6 +38,7 @@
         <avro.version>1.9.0</avro.version>
         <spark.version>2.4.3</spark.version>
         <scala.version>2.12.0</scala.version>
+        <org.zeroturnaround.version>1.13</org.zeroturnaround.version>
     </properties>
 
     <dependencies>
@@ -45,6 +46,13 @@
             <groupId>uk.ac.ebi.jmzml</groupId>
             <artifactId>jmzml</artifactId>
             <version>${uk.ac.ebi.jmzml-jmzml.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zeroturnaround</groupId>
+            <artifactId>zt-zip</artifactId>
+            <version>${org.zeroturnaround.version}</version>
+            <type>jar</type>
         </dependency>
 
         <dependency>
