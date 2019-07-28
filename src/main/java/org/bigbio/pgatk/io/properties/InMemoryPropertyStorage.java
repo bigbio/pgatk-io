@@ -1,5 +1,6 @@
 package org.bigbio.pgatk.io.properties;
 
+import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.PgatkIOException;
 
 import java.io.*;
@@ -15,9 +16,10 @@ import java.util.*;
  * @author jg
  * @author ypriverol
  */
+@Slf4j
 public class InMemoryPropertyStorage implements IPropertyStorage {
 
-    public final static String IN_MEMORY_EXT = ".pin";
+    public final static String PROPERTY_BINARY_EXT = ".pin";
 
     protected Map<String, String> propertyStorage;
     protected Set<String> propertyNames = new HashSet<>(20);
@@ -56,15 +58,29 @@ public class InMemoryPropertyStorage implements IPropertyStorage {
     }
 
     @Override
-    public void saveToFile(String filePath) throws PgatkIOException {
-        if(!filePath.endsWith(IN_MEMORY_EXT))
-            throw new PgatkIOException("The provided extension for the property in memory file is not allow -- " + filePath + " - It should be " + IN_MEMORY_EXT);
+    public void toBinaryStorage(String filePath) throws PgatkIOException {
+        if(!filePath.endsWith(PROPERTY_BINARY_EXT))
+            throw new PgatkIOException("The provided extension for the property in memory file" +
+                    " is not allow -- " + filePath + " - It should be " + PROPERTY_BINARY_EXT);
         try {
             RandomAccessFile raf = new RandomAccessFile(filePath, "rw");
             FileOutputStream fos = new FileOutputStream(raf.getFD());
-            ObjectOutputStream objectOut = new ObjectOutputStream(fos);
-            List<PropertyStorage> properties = transformSerializablePropertyStorage();
-            objectOut.writeObject(properties);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fos);
+            for(Map.Entry entry: this.propertyStorage.entrySet()){
+                String key = (String) entry.getKey();
+                String value = (String) entry.getValue();
+                String propertyName = "";
+                Optional<String> stringOptional = this.propertyNames.stream()
+                        .filter(x -> key.endsWith(x)).findAny();
+                if(stringOptional.isPresent())
+                    propertyName = stringOptional.get();
+                try {
+                    objectOutputStream.writeObject(transformSerializablePropertyStorage(key,
+                            propertyName, value));
+                } catch (IOException e) {
+                     log.error("The object with key -- " + key + " " + " can be written into BinaryFile");
+                }
+            }
             raf.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -73,75 +89,47 @@ public class InMemoryPropertyStorage implements IPropertyStorage {
 
     /**
      * Transform the structure into a Serialize object.
-     * @return List of {@link PropertyStorage}
+     * @return List of {@link BinaryPropertyStorage}
      */
-    private List<PropertyStorage> transformSerializablePropertyStorage() {
-        List<PropertyStorage> propertySerializeList = new ArrayList<>();
-        this.propertyStorage.forEach((key, value) -> {
-            Optional<String> propertyOptional = propertyNames.stream().filter(key::endsWith).findAny();
-            String propertyName = "";
-            if (propertyOptional.isPresent())
-                propertyName = propertyOptional.get();
-            propertySerializeList.add(new PropertyStorage(key, propertyName, value));
-        });
-        return propertySerializeList;
+    protected BinaryPropertyStorage transformSerializablePropertyStorage(String key, String propertyName,
+                                                                      String value) {
+        return new BinaryPropertyStorage(key, propertyName, value);
     }
 
     @Override
-    public void readFromFile(String filePath) throws PgatkIOException {
-        if(!filePath.endsWith(IN_MEMORY_EXT))
-            throw new PgatkIOException("The provided extension for the property in memory file is not allow -- " + filePath + " - It should be " + IN_MEMORY_EXT);
-        ObjectInputStream in = null;
+    public void fromBinaryStorage(String filePath) throws PgatkIOException {
+        if(!filePath.endsWith(PROPERTY_BINARY_EXT))
+            throw new PgatkIOException("The provided extension for the property in memory file is " +
+                    "not allow -- " + filePath + " - It should be " + PROPERTY_BINARY_EXT);
+
         try {
-            in = new ObjectInputStream(new FileInputStream(filePath));
-            List<PropertyStorage> value = (List<PropertyStorage>) in.readObject();
-            this.propertyStorage = new HashMap<>();
-            this.propertyNames = new HashSet<>();
-            value.forEach( x-> {
-                this.propertyStorage.put(x.getKey(), x.getValue());
-                this.propertyNames.add(x.getPropertyName());
-            });
-            in.close();
+            RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+            FileInputStream fos = new FileInputStream(raf.getFD());
+            ObjectInputStream objectInputStream = new ObjectInputStream(fos);
+            cleanStorage();
+            boolean endFile = false;
+            while (!endFile) {
+                try {
+                    BinaryPropertyStorage acc = (BinaryPropertyStorage) objectInputStream.readObject();
+                    this.propertyStorage.put(acc.getKey(), acc.getValue());
+                    this.propertyNames.add(acc.getPropertyName());
+                }catch (EOFException e){
+                    log.info("End of the file found");
+                    objectInputStream.close();
+                    endFile = true;
+                }
+            }
+
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public class PropertyStorage implements Serializable {
-
-        String key;
-        String value;
-        String propertyName;
-
-        public PropertyStorage(String key, String propertyName, String value) {
-            this.key = key;
-            this.value = value;
-            this.propertyName = propertyName;
-        }
-
-        public String getKey() {
-            return key;
-        }
-
-        public void setKey(String key) {
-            this.key = key;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
-
-        public String getPropertyName() {
-            return propertyName;
-        }
-
-        public void setPropertyName(String propertyName) {
-            this.propertyName = propertyName;
-        }
+    @Override
+    public void cleanStorage() throws PgatkIOException{
+        this.propertyStorage = new HashMap<>();
+        this.propertyNames = new HashSet<>();
     }
+
 
 }

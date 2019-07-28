@@ -71,9 +71,9 @@ public class InMemoryPropertyStorageTest {
         }
 
         try {
-            File tempFile = File.createTempFile("tempFile", InMemoryPropertyStorage.IN_MEMORY_EXT);
-            storage.saveToFile(tempFile.getAbsolutePath());
-            storageReader.readFromFile(tempFile.getAbsolutePath());
+            File tempFile = File.createTempFile("tempFile", InMemoryPropertyStorage.PROPERTY_BINARY_EXT);
+            storage.toBinaryStorage(tempFile.getAbsolutePath());
+            storageReader.fromBinaryStorage(tempFile.getAbsolutePath());
             for( int i = 0; i < 40; i++){
                 int value = random.nextInt((100000) + 1);
                 Assert.assertEquals(storageReader.getProperty(String.valueOf(value),"RT"), storage.getProperty(String.valueOf(value),"RT"));

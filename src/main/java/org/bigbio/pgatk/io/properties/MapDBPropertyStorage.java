@@ -2,14 +2,15 @@ package org.bigbio.pgatk.io.properties;
 
 import lombok.extern.slf4j.Slf4j;
 import net.openhft.chronicle.map.ChronicleMapBuilder;
+import org.apache.commons.io.FileUtils;
 import org.bigbio.pgatk.io.common.PgatkIOException;
-import org.iq80.leveldb.CompressionType;
-import org.iq80.leveldb.DB;
-import org.iq80.leveldb.Options;
+import org.iq80.leveldb.*;
 import org.iq80.leveldb.impl.Iq80DBFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * This code is licensed under the Apache License, Version 2.0 (the
@@ -44,8 +45,6 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
     public boolean dynamic = false;
 
-
-
     public MapDBPropertyStorage(File directoryPath, boolean dynamic, long numberProperties) throws IOException {
 
         // Create the file that will store the persistence database
@@ -58,7 +57,7 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
         if(dynamic){
             log.info("----- LEVELDB MAP ------------------------");
-            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + IN_MEMORY_EXT);
+            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + PROPERTY_BINARY_EXT);
             if(!dbFile.exists())
                 dbFile.mkdirs();
             Options options = new Options();
@@ -69,7 +68,7 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
 
         }else{
             log.info("----- CHRONICLE MAP ------------------------");
-            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + IN_MEMORY_EXT);
+            dbFile = new File(directoryPath.getAbsolutePath() + File.separator + "properties-" + System.nanoTime() + PROPERTY_BINARY_EXT);
             dbFile.deleteOnExit();
             this.propertyStorage =
                     ChronicleMapBuilder.of(String.class, String.class)
@@ -137,18 +136,114 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
     }
 
     @Override
-    public void saveToFile(String filePath) throws PgatkIOException {
-        super.saveToFile(filePath);
+    public void toBinaryStorage(String filePath) throws PgatkIOException {
+        if(!dynamic)
+            super.toBinaryStorage(filePath);
+        else{
+            try{
+                WriteBatch batch = levelDB.createWriteBatch();
+                levelDB.write(batch);
+                batch.close();
+                dbLeveltoBinaryStorage(filePath);
+            }catch (IOException e){
+                throw new PgatkIOException("Error compressing the levelDB database");
+            }
+        }
+    }
+
+    /**
+     * Transform the structure into a Serialize object.
+     * @return List of {@link BinaryPropertyStorage}
+     */
+
+    private void dbLeveltoBinaryStorage(String filePath) throws PgatkIOException{
+
+        if(!filePath.endsWith(PROPERTY_BINARY_EXT))
+            throw new PgatkIOException("The provided extension for the property in memory file" +
+                    " is not allow -- " + filePath + " - It should be " + PROPERTY_BINARY_EXT);
+
+        try {
+            RandomAccessFile raf = new RandomAccessFile(filePath, "rw");
+            FileOutputStream fos = new FileOutputStream(raf.getFD());
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fos);
+            DBIterator it = levelDB.iterator();
+            while(it.hasNext()){
+                Map.Entry<byte[], byte[]> entry = it.next();
+                String key = Iq80DBFactory.asString(entry.getKey());
+                String value = Iq80DBFactory.asString(entry.getValue());
+                String propertyName = "";
+                Optional<String> propertyOptional = propertyNames.stream().filter(key::endsWith).findAny();
+                if(propertyOptional.isPresent())
+                    propertyName = propertyOptional.get();
+                try {
+                    objectOutputStream.writeObject(transformSerializablePropertyStorage(key, propertyName, value));
+                } catch (IOException e) {
+                    log.error("The object with key -- " + key + " " + " can be written into BinaryFile");
+                }
+            }
+            objectOutputStream.close();
+            fos.close();
+            raf.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
-    public void readFromFile(String filePath) throws PgatkIOException {
-        if(!filePath.endsWith(IN_MEMORY_EXT))
-            throw new PgatkIOException("The provided extension for the Dynamic Property in Storage File is not allow -- " + filePath + " - It should be " + IN_MEMORY_EXT);
+    public void fromBinaryStorage(String filePath) throws PgatkIOException {
+        if(!dynamic)
+            super.fromBinaryStorage(filePath);
+        else
+            readBinaryStorage(filePath);
+    }
+
+    private void readBinaryStorage(String filePath) throws PgatkIOException{
+        if(!filePath.endsWith(PROPERTY_BINARY_EXT))
+            throw new PgatkIOException("The provided extension for the property in memory file is " +
+                    "not allow -- " + filePath + " - It should be " + PROPERTY_BINARY_EXT);
+
+        try {
+            RandomAccessFile raf = new RandomAccessFile(filePath, "r");
+            FileInputStream fos = new FileInputStream(raf.getFD());
+            ObjectInputStream objectInputStream = new ObjectInputStream(fos);
+            cleanStorage();
+            boolean endFile = false;
+            while (!endFile) {
+                try {
+                    BinaryPropertyStorage acc = (BinaryPropertyStorage) objectInputStream.readObject();
+                    levelDB.put(Iq80DBFactory.bytes(acc.getKey()), Iq80DBFactory.bytes(acc.getValue()));
+                    propertyNames.add(acc.getPropertyName());
+                    levelDBSize++;
+                }catch (EOFException e){
+                    log.info("End of the file found");
+                    objectInputStream.close();
+                    endFile = true;
+                }
+            }
+
+        } catch (IOException | ClassNotFoundException | PgatkIOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public void cleanStorage() throws PgatkIOException{
         try {
             if(dynamic){
                 log.info("----- LEVELDB MAP ------------------------");
-                super.readFromFile(filePath);
+                levelDB.close();
+                FileUtils.deleteDirectory(new File(dbFile.getAbsolutePath()));
+                if(!dbFile.exists())
+                    dbFile.mkdirs();
+                Options options = new Options();
+                options.cacheSize(100 * 1048576)
+                        .createIfMissing(true)
+                        .writeBufferSize(4096)
+                        .compressionType(CompressionType.SNAPPY);
+                levelDB = Iq80DBFactory.factory.open(dbFile, options);
+                levelDBSize = 0;
             }else{
                 log.info("----- CHRONICLE MAP ------------------------");
                 dbFile.deleteOnExit();
@@ -159,10 +254,11 @@ public class MapDBPropertyStorage extends InMemoryPropertyStorage{
                                 .averageKeySize(64)
                                 .averageValueSize(54)
                                 .createPersistedTo(dbFile);
-                super.readFromFile(filePath);
+
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PgatkIOException("Error cleaning the database");
         }
+        this.propertyNames = new HashSet<>();
     }
 }

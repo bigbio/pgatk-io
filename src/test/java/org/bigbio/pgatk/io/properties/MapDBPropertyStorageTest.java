@@ -87,11 +87,18 @@ public class MapDBPropertyStorageTest {
             System.out.println(storage.getProperty(String.valueOf(random.nextInt((200) + 1)),"RT"));
         }
 
-        File tempFile = File.createTempFile("tempFile", InMemoryPropertyStorage.IN_MEMORY_EXT);
-        storage.saveToFile(tempFile.getAbsolutePath());
-        storageReader.readFromFile(tempFile.getAbsolutePath());
+        File tempFile = File.createTempFile("tempFile", MapDBPropertyStorage.PROPERTY_BINARY_EXT);
+        storage.toBinaryStorage(tempFile.getAbsolutePath());
+
+        System.out.println("Store done");
+
         for( int i = 0; i < 40; i++){
-            int value = random.nextInt((100000) + 1);
+            System.out.println(storage.getProperty(String.valueOf(random.nextInt((200) + 1)),"RT"));
+        }
+
+        storageReader.fromBinaryStorage(tempFile.getAbsolutePath());
+        for( int i = 0; i < 40; i++){
+            int value = random.nextInt((200) + 1);
             Assert.assertEquals(storageReader.getProperty(String.valueOf(value),"RT"), storage.getProperty(String.valueOf(value),"RT"));
         }
 
@@ -121,9 +128,9 @@ public class MapDBPropertyStorageTest {
             System.out.println(storage.getProperty(String.valueOf(random.nextInt((200) + 1)),"RT"));
         }
 
-        File tempFile = File.createTempFile("tempFile", MapDBPropertyStorage.IN_MEMORY_EXT);
-        storage.saveToFile(tempFile.getAbsolutePath());
-        storageReader.readFromFile(tempFile.getAbsolutePath());
+        File tempFile = File.createTempFile("tempFile", MapDBPropertyStorage.PROPERTY_BINARY_EXT);
+        storage.toBinaryStorage(tempFile.getAbsolutePath());
+        storageReader.fromBinaryStorage(tempFile.getAbsolutePath());
         for( int i = 0; i < 40; i++){
             int value = random.nextInt((100000) + 1);
             Assert.assertEquals(storageReader.getProperty(String.valueOf(value),"RT"), storage.getProperty(String.valueOf(value),"RT"));
