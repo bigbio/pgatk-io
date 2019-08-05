@@ -19,7 +19,7 @@ import java.util.*;
 @Slf4j
 public class InMemoryPropertyStorage implements IPropertyStorage {
 
-    public final static String PROPERTY_BINARY_EXT = ".pin";
+    public final static String PROPERTY_BINARY_EXT = ".pser";
 
     protected Map<String, String> propertyStorage;
     protected Set<String> propertyNames = new HashSet<>(20);
