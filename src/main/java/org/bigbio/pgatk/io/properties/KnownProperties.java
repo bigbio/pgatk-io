@@ -95,7 +95,7 @@ public class KnownProperties {
 
     /**
      * parse an mgf line like SEQ or USER00..USER12
-     * @param props  properties to add
+     * @param props  properties to put
      * @param line The MGF line to test.
      * @return   true if successfully handled
      */

@@ -11,7 +11,8 @@ import java.io.File;
 import java.util.Map;
 
 /**
- * Created by jg on 27.09.17.
+ * @author ypriverol
+ * @author jgriss
  */
 public class ClusteringFileIndexerTest {
     private File oldTestFile;

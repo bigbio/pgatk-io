@@ -1,11 +1,11 @@
 package org.bigbio.pgatk.io.braf;
 
-import java.io.File;
-import java.net.URL;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.File;
+import java.net.URL;
 
 public class BrafTest {
 
@@ -83,7 +83,7 @@ public class BrafTest {
 				
 				lineNumber++;
 				
-				position += line.length() + 1; // add 1 for the \n character
+				position += line.length() + 1; // put 1 for the \n character
 
 			}
             reader.close();
