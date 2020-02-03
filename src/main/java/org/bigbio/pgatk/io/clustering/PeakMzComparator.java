@@ -7,6 +7,7 @@ import java.util.Comparator;
 /**
  * Created by jg on 05.01.15.
  */
+@Deprecated
 public class PeakMzComparator implements Comparator<ClusteringFileSpectrumReference.Peak> {
     @Override
     public int compare(ClusteringFileSpectrumReference.Peak o1, ClusteringFileSpectrumReference.Peak o2) {

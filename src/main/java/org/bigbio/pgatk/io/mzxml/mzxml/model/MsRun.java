@@ -257,9 +257,9 @@ public class MsRun
      * This is why there is not a <CODE>set</CODE> method for the parentFile property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getParentFile().add(newItem);
+     *    getParentFile().put(newItem);
      * </pre>
      * 
      * 
@@ -286,9 +286,9 @@ public class MsRun
      * This is why there is not a <CODE>set</CODE> method for the msInstrument property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getMsInstrument().add(newItem);
+     *    getMsInstrument().put(newItem);
      * </pre>
      * 
      * 
@@ -315,9 +315,9 @@ public class MsRun
      * This is why there is not a <CODE>set</CODE> method for the dataProcessing property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getDataProcessing().add(newItem);
+     *    getDataProcessing().put(newItem);
      * </pre>
      * 
      * 
@@ -392,9 +392,9 @@ public class MsRun
      * This is why there is not a <CODE>set</CODE> method for the scan property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getScan().add(newItem);
+     *    getScan().put(newItem);
      * </pre>
      * 
      * 

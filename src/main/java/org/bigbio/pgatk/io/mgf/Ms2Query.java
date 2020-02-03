@@ -232,7 +232,7 @@ public class Ms2Query implements Spectrum {
 
   /**
    * Ads a sequence qualifier.
-   * @param sequenceQualifier the sequence qualifier to add.
+   * @param sequenceQualifier the sequence qualifier to put.
    */
   public void addSequenceQualifier(String sequenceQualifier) {
     if (sequenceQualifiers == null) {
@@ -243,7 +243,7 @@ public class Ms2Query implements Spectrum {
 
   /**
    * Adds a tag.
-   * @param tag the tag to add.
+   * @param tag the tag to put.
    */
   public void addTag(String tag) {
     if (tags == null) {

@@ -122,7 +122,7 @@ public class AplIndexedReader implements MzReader, MzIterableReader {
                 if (inMs2 && line.contains("peaklist end")) {
                     inMs2 = false;
 
-                    //index.add(new IndexElement(beginIonsIndex, reader.getFilePointer()));
+                    //index.put(new IndexElement(beginIonsIndex, reader.getFilePointer()));
                     int size = (int) (braf.getFilePointer() - beginIonsIndex);
                     index.add(new IndexElementImpl(beginIonsIndex, size));
 

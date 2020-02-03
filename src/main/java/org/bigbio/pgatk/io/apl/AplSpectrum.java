@@ -68,7 +68,7 @@ public class AplSpectrum implements Spectrum {
                 if (!peakMatcher.find() || peakMatcher.groupCount() != 2)
                     throw new PgatkIOException("Invalid line encountered in MS2 query: " + line);
 
-                // add the peak
+                // put the peak
                 addPeak(Double.parseDouble(peakMatcher.group(1)), Double.parseDouble(peakMatcher.group(2)));
 
                 inAttributeSection = false;

@@ -51,9 +51,9 @@ public class Separation
      * This is why there is not a <CODE>set</CODE> method for the separationTechnique property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getSeparationTechnique().add(newItem);
+     *    getSeparationTechnique().put(newItem);
      * </pre>
      * 
      * 

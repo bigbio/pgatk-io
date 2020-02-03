@@ -187,9 +187,9 @@ public class Plate
      * This is why there is not a <CODE>set</CODE> method for the spot property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getSpot().add(newItem);
+     *    getSpot().put(newItem);
      * </pre>
      * 
      * 

@@ -262,9 +262,9 @@ public class Scan
      * This is why there is not a <CODE>set</CODE> method for the scanOrigin property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getScanOrigin().add(newItem);
+     *    getScanOrigin().put(newItem);
      * </pre>
      * 
      * 
@@ -291,9 +291,9 @@ public class Scan
      * This is why there is not a <CODE>set</CODE> method for the precursorMz property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getPrecursorMz().add(newItem);
+     *    getPrecursorMz().put(newItem);
      * </pre>
      * 
      * 
@@ -344,9 +344,9 @@ public class Scan
      * This is why there is not a <CODE>set</CODE> method for the peaks property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getPeaks().add(newItem);
+     *    getPeaks().put(newItem);
      * </pre>
      * 
      * 
@@ -373,9 +373,9 @@ public class Scan
      * This is why there is not a <CODE>set</CODE> method for the nameValueAndComment property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getNameValueAndComment().add(newItem);
+     *    getNameValueAndComment().put(newItem);
      * </pre>
      * 
      * 
@@ -403,9 +403,9 @@ public class Scan
      * This is why there is not a <CODE>set</CODE> method for the scan property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getScan().add(newItem);
+     *    getScan().put(newItem);
      * </pre>
      * 
      * 

@@ -117,9 +117,9 @@ public class Spotting
      * This is why there is not a <CODE>set</CODE> method for the plate property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getPlate().add(newItem);
+     *    getPlate().put(newItem);
      * </pre>
      * 
      * 

@@ -176,7 +176,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
                 if (inMs2 && line.contains("END IONS")) {
                     inMs2 = false;
 
-                    //index.add(new IndexElement(beginIonsIndex, reader.getFilePointer()));
+                    //index.put(new IndexElement(beginIonsIndex, reader.getFilePointer()));
                     int size = (int) (braf.getFilePointer() - beginIonsIndex);
                     index.add(new IndexElementImpl(beginIonsIndex, size));
 
@@ -836,7 +836,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
 
     @Override
     public String toString() {
-        // add the parameters
+        // put the parameters
         StringBuilder string = new StringBuilder(marshallAdditionalParameters());
 
         // write the spectra

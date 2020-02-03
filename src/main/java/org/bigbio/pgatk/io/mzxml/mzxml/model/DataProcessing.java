@@ -1,15 +1,10 @@
 
 package org.bigbio.pgatk.io.mzxml.mzxml.model;
 
+import javax.xml.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElements;
-import javax.xml.bind.annotation.XmlType;
 
 
 /**
@@ -102,9 +97,9 @@ public class DataProcessing
      * This is why there is not a <CODE>set</CODE> method for the processingOperationAndComment property.
      * 
      * <p>
-     * For example, to add a new item, do as follows:
+     * For example, to put a new item, do as follows:
      * <pre>
-     *    getProcessingOperationAndComment().add(newItem);
+     *    getProcessingOperationAndComment().put(newItem);
      * </pre>
      * 
      * 
