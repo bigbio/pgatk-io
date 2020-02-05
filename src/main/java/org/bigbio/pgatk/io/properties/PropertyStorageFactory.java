@@ -33,7 +33,7 @@ public class PropertyStorageFactory {
      * Get a Static Property Storage with default version MAX_NUMBER_FEATURES
      * @return IPropertyStorage
      */
-    public static IMapStorage<String> buildStaticPropertyStorage(File tempDirectory) throws PgatkIOException {
+    public static IPropertyStorage buildStaticPropertyStorage(File tempDirectory) throws PgatkIOException {
         try {
             return new ChronicleMapPropertyStorage(tempDirectory);
         } catch (IOException e) {
@@ -46,7 +46,7 @@ public class PropertyStorageFactory {
      * @param numberProperties Number of properties
      * @return IPropertyStorage
      */
-    public static IMapStorage<String> buildStaticPropertyStorage(File tempDirectory, int numberProperties) throws PgatkIOException {
+    public static IPropertyStorage buildStaticPropertyStorage(File tempDirectory, int numberProperties) throws PgatkIOException {
         try {
             return new ChronicleMapPropertyStorage(tempDirectory, numberProperties);
         } catch (IOException e) {
@@ -59,7 +59,7 @@ public class PropertyStorageFactory {
      * Get a Static Property Storage with s predefined number of entries.
      * @return IPropertyStorage
      */
-    public static IMapStorage<String> buildDynamicLevelDBPropertyStorage(File tempDirectory) throws PgatkIOException {
+    public static IPropertyStorage buildDynamicLevelDBPropertyStorage(File tempDirectory) throws PgatkIOException {
         try {
             return new LevelDBPropertyStorage(tempDirectory);
         } catch (IOException e) {
@@ -72,7 +72,7 @@ public class PropertyStorageFactory {
      * Get a Static Property Storage with s predefined number of entries.
      * @return IPropertyStorage
      */
-    public static IMapStorage<String> buildDynamicMapDBStorage(File tempDirectory) throws PgatkIOException {
+    public static IPropertyStorage buildDynamicMapDBStorage(File tempDirectory) throws PgatkIOException {
         try {
             return new MapDBPropertyStorage(tempDirectory);
         } catch (IOException e) {
@@ -84,9 +84,9 @@ public class PropertyStorageFactory {
      * Get a Static Property Storage with s predefined number of entries.
      * @return IPropertyStorage
      */
-    public static IMapStorage<String> buildDynamicSparkKeyStorage(File tempDirectory) throws PgatkIOException {
+    public static IPropertyStorage buildDynamicSparkKeyStorage(File tempDirectory) throws PgatkIOException {
         try {
-            return new SparkKeyPropertyStorage<>(tempDirectory);
+            return new SparkeyPropertyStorage<>(tempDirectory);
         } catch (IOException e) {
             throw new PgatkIOException("Error building the Dynamic Property Storage --", e.getCause());
         }

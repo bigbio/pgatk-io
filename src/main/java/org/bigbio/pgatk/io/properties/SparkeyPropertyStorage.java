@@ -14,7 +14,7 @@ import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SparkKeyPropertyStorage<T> extends InMemoryPropertyStorage {
+public class SparkeyPropertyStorage<T> extends InMemoryPropertyStorage {
 
     private final File dbDirectory;
     File dbFile;
@@ -24,7 +24,7 @@ public class SparkKeyPropertyStorage<T> extends InMemoryPropertyStorage {
 
     private final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    public SparkKeyPropertyStorage(File dbDirectory) throws IOException{
+    public SparkeyPropertyStorage(File dbDirectory) throws IOException{
         dbFile = new File(dbDirectory, "properties-" + System.nanoTime() + ".spi");
         this.dbDirectory = dbDirectory;
     }

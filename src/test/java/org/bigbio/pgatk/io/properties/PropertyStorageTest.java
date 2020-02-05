@@ -138,7 +138,7 @@ public class PropertyStorageTest {
     public void readDynamicSparkKeyPropertyStorage() throws IOException, PgatkIOException {
 
         long time = System.currentTimeMillis();
-        SparkKeyPropertyStorage<String> storage = (SparkKeyPropertyStorage<String>) PropertyStorageFactory.buildDynamicSparkKeyStorage(Files.createTempDirectory("properties-").toFile());
+        SparkeyPropertyStorage<String> storage = (SparkeyPropertyStorage<String>) PropertyStorageFactory.buildDynamicSparkKeyStorage(Files.createTempDirectory("properties-").toFile());
         Random random = new Random();
 
         for(int i = 0; i < MAX_ENTRY_TEST; i++){
@@ -148,7 +148,7 @@ public class PropertyStorageTest {
         Assert.assertEquals(MAX_ENTRY_TEST, storage.storageSize());
 
         storage.flush();
-        System.out.println("SparkKey: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
+        System.out.println("Sparkey: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
 
         time = System.currentTimeMillis();
         IntStream.range(0, MAX_READING_TEST).forEach(x -> {
@@ -160,7 +160,7 @@ public class PropertyStorageTest {
             }
         });
 
-        System.out.println("SparkKey: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
+        System.out.println("Sparkey: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
 
         storage.close();
     }
