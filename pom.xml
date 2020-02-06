@@ -41,6 +41,11 @@
         <org.zeroturnaround.version>1.13</org.zeroturnaround.version>
         <ehcache.version>3.8.1</ehcache.version>
         <zoodb.version>0.5.2</zoodb.version>
+        <chroniclemap.version>3.17.1</chroniclemap.version>
+        <leveldb.version>0.10</leveldb.version>
+        <junit.version>4.12</junit.version>
+        <mockito-core.version>1.10.19</mockito-core.version>
+        <hamcrest.version>1.3</hamcrest.version>
     </properties>
 
     <dependencies>
@@ -79,14 +84,14 @@
         <dependency>
             <groupId>net.openhft</groupId>
             <artifactId>chronicle-map</artifactId>
-            <version>3.17.1</version>
+            <version>${chroniclemap.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.iq80.leveldb/leveldb -->
         <dependency>
             <groupId>org.iq80.leveldb</groupId>
             <artifactId>leveldb</artifactId>
-            <version>0.10</version>
+            <version>${leveldb.version}</version>
         </dependency>
 
         <dependency>
@@ -113,39 +118,26 @@
             <version>${zoodb.version}</version>
         </dependency>
 
-        <!-- Avro / Parquet -->
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.9.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.parquet</groupId>
-            <artifactId>parquet-avro</artifactId>
-            <version>1.10.1</version>
-        </dependency>
-
-
         <!-- junit dependencies -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-library</artifactId>
-            <version>1.3</version>
+            <version>${hamcrest.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest-core</artifactId>
-            <version>1.3</version>
+            <version>${hamcrest.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
+            <version>${mockito-core.version}</version>
         </dependency>
 
 
