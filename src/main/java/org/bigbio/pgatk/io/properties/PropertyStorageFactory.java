@@ -91,4 +91,16 @@ public class PropertyStorageFactory {
             throw new PgatkIOException("Error building the Dynamic Property Storage --", e.getCause());
         }
     }
+
+    /**
+     * Get a Static Property Storage with s predefined number of entries.
+     * @return IPropertyStorage
+     */
+    public static IPropertyStorage buildDynamicEcacheStorage(File tempDirectory) throws PgatkIOException {
+        try {
+            return new EcachePropertyStorage(tempDirectory);
+        } catch (IOException e) {
+            throw new PgatkIOException("Error building the Ecache Property Storage --", e.getCause());
+        }
+    }
 }

@@ -101,7 +101,6 @@ public class PropertyStorageTest {
 
         storage.close();
 
-
     }
 
     @Test
@@ -135,10 +134,43 @@ public class PropertyStorageTest {
     }
 
     @Test
+    public void readDynamicEcachePropertyStorage() throws IOException, PgatkIOException {
+
+        long time = System.currentTimeMillis();
+        EcachePropertyStorage<String> storage = (EcachePropertyStorage<String>) PropertyStorageFactory
+                .buildDynamicEcacheStorage(Files.createTempDirectory("properties-").toFile());
+        Random random = new Random();
+
+        for(int i = 0; i < MAX_ENTRY_TEST; i++){
+            storage.put(String.valueOf(i), "RT", String.valueOf(Math.random()));
+        }
+        Assert.assertEquals(1, storage.getAvailableProperties().size());
+        Assert.assertEquals(MAX_ENTRY_TEST, storage.storageSize());
+
+
+        System.out.println("Ecache: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
+
+        time = System.currentTimeMillis();
+        IntStream.range(0, MAX_READING_TEST).forEach(x -> {
+            try {
+                int key = random.nextInt(MAX_ENTRY_TEST);
+                String value = storage.get(String.valueOf(key), "RT");
+            }catch (PgatkIOException ex){
+                log.error("Error reading entry -- " + x);
+            }
+        });
+
+        System.out.println("Ecache: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
+
+        storage.close();
+    }
+
+    @Test
     public void readDynamicSparkKeyPropertyStorage() throws IOException, PgatkIOException {
 
         long time = System.currentTimeMillis();
-        SparkeyPropertyStorage<String> storage = (SparkeyPropertyStorage<String>) PropertyStorageFactory.buildDynamicSparkKeyStorage(Files.createTempDirectory("properties-").toFile());
+        SparkeyPropertyStorage<String> storage = (SparkeyPropertyStorage<String>) PropertyStorageFactory
+                .buildDynamicSparkKeyStorage(Files.createTempDirectory("properties-").toFile());
         Random random = new Random();
 
         for(int i = 0; i < MAX_ENTRY_TEST; i++){
@@ -164,6 +196,7 @@ public class PropertyStorageTest {
 
         storage.close();
     }
+
 
     @Test
     public void readStaticPropertyStorage() throws IOException, PgatkIOException {

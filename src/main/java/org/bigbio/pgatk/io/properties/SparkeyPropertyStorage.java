@@ -79,8 +79,7 @@ public class SparkeyPropertyStorage<T> extends InMemoryPropertyStorage {
     public String get(String itemId, String propertyName) throws PgatkIOException {
         String key = getCombinedKey(itemId, propertyName);
         try{
-            String value =  deserialize(readers.get().getAsByteArray(serialize(key)));
-            return value;
+            return deserialize(readers.get().getAsByteArray(serialize(key)));
         }catch (IOException ex){
             throw new PgatkIOException("Error retrieving the value for key -- " + itemId + " " + propertyName);
         }
