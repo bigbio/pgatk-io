@@ -39,6 +39,8 @@
         <spark.version>2.4.3</spark.version>
         <scala.version>2.12.0</scala.version>
         <org.zeroturnaround.version>1.13</org.zeroturnaround.version>
+        <ehcache.version>3.8.1</ehcache.version>
+        <zoodb.version>0.5.2</zoodb.version>
     </properties>
 
     <dependencies>
@@ -97,6 +99,18 @@
             <groupId>com.spotify.sparkey</groupId>
             <artifactId>sparkey</artifactId>
             <version>3.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>${ehcache.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.zoodb</groupId>
+            <artifactId>zoodb</artifactId>
+            <version>${zoodb.version}</version>
         </dependency>
 
         <!-- Avro / Parquet -->
