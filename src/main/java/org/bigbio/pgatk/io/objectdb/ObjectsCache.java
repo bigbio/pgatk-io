@@ -1,12 +1,13 @@
 package org.bigbio.pgatk.io.objectdb;
 
 
-import static org.bigbio.pgatk.io.objectdb.DbMutex.loadObjectMutex;
-import org.bigbio.pgatk.io.objectdb.WaitingHandler;
+import javax.jdo.PersistenceManager;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
-import javax.jdo.PersistenceManager;
+import java.util.Map;
+
+import static org.bigbio.pgatk.io.objectdb.DbMutex.loadObjectMutex;
 
 /**
  * An object cache can be combined to an ObjectsDB to improve its performance. A
@@ -19,12 +20,6 @@ import javax.jdo.PersistenceManager;
  * @author Harald Barsnes
  */
 public class ObjectsCache {
-
-    /**
-     * Empty default constructor
-     */
-    public ObjectsCache() {
-    }
 
     /**
      * Share of the memory to be used.
@@ -49,12 +44,12 @@ public class ObjectsCache {
     /**
      * Number of objects that should at least be kept.
      */
-    private final int keepObjectsThreshold = 10000;
+    private final int keepObjectsThreshold = 10_000;
     /**
      * If number number of registered objects exceeds value, commit to db should
      * be triggered.
      */
-    private final int numToCommit = 10000;
+    private final int numToCommit = 10_000;
 
     /**
      * Constructor.
@@ -63,6 +58,12 @@ public class ObjectsCache {
      */
     public ObjectsCache(ObjectsDB objectsDB) {
         this.objectsDB = objectsDB;
+    }
+
+    /**
+     * Empty default constructor
+     */
+    public ObjectsCache() {
     }
 
     /**
@@ -117,13 +118,10 @@ public class ObjectsCache {
         DbMutex.loadObjectMutex.acquire();
 
         if (loadedObjects.containsKey(objectKey)) {
-
             object = loadedObjects.get(objectKey);
-
         }
 
         loadObjectMutex.release();
-
         return object;
     }
 
@@ -193,7 +191,7 @@ public class ObjectsCache {
      * @param objects the key / objects to store in the cache
      *
      */
-    public void addObjects(HashMap<Long, Object> objects) {
+    public void addObjects(Map<Long, Object> objects) {
 
         loadObjectMutex.acquire();
 
@@ -254,35 +252,24 @@ public class ObjectsCache {
             for (int i = 0; i < numLastEntries && objectQueue.size() > 0; ++i) {
 
                 if (waitingHandler != null) {
-
                     waitingHandler.increaseSecondaryProgressCounter();
-
                     if (waitingHandler.isRunCanceled()) {
-
                         break;
-
                     }
                 }
 
                 long key = clearEntries ? objectQueue.pollFirst() : listIterator.next();
-
                 Object obj = loadedObjects.get(key);
-
                 if (!((DbObject) obj).jdoZooIsPersistent()) {
-
                     pm.makePersistent(obj);
                     objectsDB.getIdMap().put(key, ((DbObject) obj).jdoZooGetOid());
-
                 }
 
                 if (clearEntries) {
                     loadedObjects.remove(key);
                 }
-
             }
-
             objectsDB.commit();
-
         }
 
     }
@@ -346,9 +333,7 @@ public class ObjectsCache {
         }
 
         if (waitingHandler != null) {
-
             waitingHandler.setSecondaryProgressCounterIndeterminate(true);
-
         }
 
         loadObjectMutex.release();
@@ -381,9 +366,7 @@ public class ObjectsCache {
     public void setReadOnly(boolean readOnly) {
 
         loadObjectMutex.acquire();
-
         this.readOnly = readOnly;
-
         loadObjectMutex.release();
 
     }

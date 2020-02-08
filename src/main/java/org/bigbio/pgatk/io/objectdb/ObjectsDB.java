@@ -239,35 +239,25 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " Inserting single object " + object.getClass().getSimpleName() + ", key: " + objectKey);
+            log.info(System.currentTimeMillis() + " Inserting single object " + object.getClass().getSimpleName() + ", key: " + objectKey);
         }
 
         if (object == null) {
-
             throw new IllegalArgumentException("error: null insertion: " + objectKey);
-
         }
 
         ((DbObject) object).setId(objectKey);
         ((DbObject) object).setFirstLevel(true);
 
         if (!idMap.containsKey(objectKey)) {
-
             idMap.put(objectKey, 0l);
             String simpleName = object.getClass().getSimpleName();
-
             if (!classCounter.containsKey(simpleName)) {
-
                 classCounter.put(simpleName, new HashSet<>());
-
             }
-
             classCounter.get(simpleName).add(objectKey);
-
         } else {
-
             throw new IllegalArgumentException("error double insertion: " + objectKey);
-
         }
 
         currentAdded += 1;
@@ -313,7 +303,7 @@ public class ObjectsDB {
      * null). The progress will be displayed on the secondary progress bar.
      * method should be displayed on the waiting handler
      */
-    public void insertObjects(HashMap<Long, Object> objects, WaitingHandler waitingHandler) {
+    public void insertObjects(Map<Long, Object> objects, WaitingHandler waitingHandler) {
 
         DbMutex.dbMutex.acquire();
 
@@ -335,10 +325,8 @@ public class ObjectsDB {
             ((DbObject) object).setFirstLevel(true);
 
             if (!idMap.containsKey(objectKey)) {
-
                 idMap.put(objectKey, 0l);
                 String simpleName = object.getClass().getSimpleName();
-
                 if (!classCounter.containsKey(simpleName)) {
                     classCounter.put(simpleName, new HashSet<>());
                 }
@@ -375,24 +363,16 @@ public class ObjectsDB {
         for (long objectKey : keys) {
 
             if (waitingHandler != null && waitingHandler.isRunCanceled()) {
-
                 return;
-
             }
 
             Long zooid = idMap.get(objectKey);
-
             if (zooid != null && zooid != 0 && !objectsCache.inCache(objectKey)) {
-
                 Object obj = pm.getObjectById(zooid);
                 allObjects.put(objectKey, obj);
-
             }
-
         }
-
         objectsCache.addObjects(allObjects);
-
         DbMutex.dbMutex.release();
     }
 
@@ -412,30 +392,20 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " retrieving all " + className + " objects");
+           log.info(System.currentTimeMillis() + " retrieving all " + className + " objects");
         }
 
         HashMap<Long, Object> allObjects = new HashMap<>(hashedKeys.size());
-
         for (Long longKey : hashedKeys) {
-
             if (waitingHandler != null && waitingHandler.isRunCanceled()) {
-
                 return;
-
             }
-
             Long zooid = idMap.get(longKey);
-
             if (zooid != null && zooid != 0 && !objectsCache.inCache(longKey)) {
-
                 allObjects.put(longKey, pm.getObjectById(zooid));
-
             }
         }
-
         objectsCache.addObjects(allObjects);
-
         DbMutex.dbMutex.release();
     }
 
@@ -452,20 +422,15 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " | retrieving one object with key: " + longKey);
+            log.info(System.currentTimeMillis() + " | retrieving one object with key: " + longKey);
         }
 
         Long zooid = idMap.get(longKey);
-
         if (zooid != null) {
-
             obj = objectsCache.getObject(longKey);
-
             if (obj == null) {
-
                 obj = pm.getObjectById(zooid);
                 objectsCache.addObject(longKey, obj);
-
             }
         }
         DbMutex.dbMutex.release();
@@ -485,15 +450,12 @@ public class ObjectsDB {
         HashSet counter;
 
         DbMutex.dbMutex.acquire();
-
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " query number of " + className.getSimpleName() + " objects");
+            log.info(System.currentTimeMillis() + " query number of " + className.getSimpleName() + " objects");
         }
 
         counter = classCounter.get(className.getSimpleName());
-
         DbMutex.dbMutex.release();
-
         return (counter != null ? counter.size() : 0);
     }
 
@@ -522,43 +484,31 @@ public class ObjectsDB {
         ArrayList<Object> retrievingObjects = new ArrayList<>(keys.size());
 
         DbMutex.dbMutex.acquire();
-
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " retrieving " + keys.size() + " objects");
+            log.info(System.currentTimeMillis() + " retrieving " + keys.size() + " objects");
         }
 
         HashMap<Long, Object> objectsNotInCache = new HashMap<>();
 
         for (Long objectKey : keys) {
-
             if (waitingHandler != null && waitingHandler.isRunCanceled()) {
-
                 return retrievingObjects;
-
             }
 
             Long zooid = idMap.get(objectKey);
-
             if (zooid != null) {
-
                 Object obj = objectsCache.getObject(objectKey);
-
                 if (obj == null) {
-
                     obj = pm.getObjectById(zooid);
                     objectsNotInCache.put(objectKey, obj);
 
                 }
-
                 retrievingObjects.add(obj);
-
             }
         }
 
         objectsCache.addObjects(objectsNotInCache);
-
         DbMutex.dbMutex.release();
-
         return retrievingObjects;
 
     }
@@ -587,35 +537,23 @@ public class ObjectsDB {
         HashMap<Long, Object> objectsNotInCache = new HashMap<>();
 
         for (long longKey : classCounter.get(className.getSimpleName())) {
-
             if (waitingHandler != null && waitingHandler.isRunCanceled()) {
-
                 return retrievingObjects;
-
             }
 
             Long zooid = idMap.get(longKey);
-
             if (zooid != null) {
-
                 Object obj = objectsCache.getObject(longKey);
-
                 if (obj == null) {
-
                     obj = pm.getObjectById(zooid);
                     objectsNotInCache.put(longKey, obj);
-
                 }
-
                 retrievingObjects.add(obj);
-
             }
         }
 
         objectsCache.addObjects(objectsNotInCache);
-
         DbMutex.dbMutex.release();
-
         return retrievingObjects;
     }
 
@@ -633,37 +571,29 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " removing " + keys.size() + " objects");
+            log.info(System.currentTimeMillis() + " removing " + keys.size() + " objects");
         }
 
         for (long key : keys) {
-
             if (waitingHandler.isRunCanceled()) {
                 break;
             }
 
             Long zooid = idMap.get(key);
-
             if (zooid != null) {
-
                 String className = objectsCache.removeObject(key);
-
                 if (zooid != 0) {
-
                     Object obj = pm.getObjectById((zooid));
                     pm.deletePersistent(obj);
                     className = obj.getClass().getSimpleName();
-
                 }
 
                 classCounter.get(className).remove(key);
                 idMap.remove(key);
-
             }
         }
 
         DbMutex.dbMutex.release();
-
     }
 
     /**
@@ -676,30 +606,23 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " removing object: " + key);
+            log.info(System.currentTimeMillis() + " removing object: " + key);
         }
 
         Long zooid = idMap.get(key);
-
         if (zooid != null) {
-
             String className = objectsCache.removeObject(key);
-
             if (zooid != 0) {
-
                 Object obj = pm.getObjectById(zooid);
                 pm.deletePersistent(obj);
                 className = obj.getClass().getSimpleName();
-
             }
 
             classCounter.get(className).remove(key);
             idMap.remove(key);
-
         }
 
         DbMutex.dbMutex.release();
-
     }
 
     /**
@@ -712,13 +635,9 @@ public class ObjectsDB {
     public boolean inCache(long objectKey) {
 
         boolean isInCache;
-
         DbMutex.dbMutex.acquire();
-
         isInCache = objectsCache.inCache(objectKey);
-
         DbMutex.dbMutex.release();
-
         return isInCache;
     }
 
@@ -732,9 +651,8 @@ public class ObjectsDB {
     public boolean inDB(long objectKey) {
 
         if (debugInteractions) {
-            System.out.println(System.currentTimeMillis() + " Checking db content,  key: " + objectKey);
+            log.info(System.currentTimeMillis() + " Checking db content,  key: " + objectKey);
         }
-
         return idMap.containsKey(objectKey);
     }
 
@@ -757,19 +675,13 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-
-            System.out.println("locking database");
-
+            log.info("locking database");
         }
 
         connectionActive = false;
-
         objectsCache.saveCache(waitingHandler, true);
-
         pm.currentTransaction().commit();
-
         DbMutex.dbMutex.release();
-
     }
 
     /**
@@ -780,9 +692,7 @@ public class ObjectsDB {
         DbMutex.dbMutex.acquire();
 
         if (debugInteractions) {
-
-            System.out.println("unlocking database");
-
+            log.info("unlocking database");
         }
 
         connectionActive = true;
@@ -795,11 +705,7 @@ public class ObjectsDB {
     /**
      * Closes the db connection.
      */
-    public void close() {
-
-        close(true);
-
-    }
+    public void close() { close(true); }
 
     /**
      * Closes the db connection.
@@ -809,11 +715,8 @@ public class ObjectsDB {
     public void close(boolean clearing) {
 
         DbMutex.dbMutex.acquire();
-
         if (debugInteractions) {
-
-            System.out.println("closing database");
-
+            log.info("closing database");
         }
 
         objectsCache.saveCache(null, clearing); // @TODO: verify that this is actullly needed (as this looks more like saving?)
@@ -823,18 +726,14 @@ public class ObjectsDB {
         pm.currentTransaction().commit();
 
         if (pm.currentTransaction().isActive()) {
-
             pm.currentTransaction().rollback();
-
         }
 
         pm.close();
         pm.getPersistenceManagerFactory().close();
 
         if (clearing) {
-
             idMap.clear();
-
         }
 
         DbMutex.dbMutex.release();
@@ -844,11 +743,7 @@ public class ObjectsDB {
     /**
      * Establishes connection to the database.
      */
-    private void establishConnection() {
-
-        establishConnection(true);
-
-    }
+    private void establishConnection() { establishConnection(true); }
 
     /**
      * Establishes connection to the database.
@@ -862,9 +757,7 @@ public class ObjectsDB {
         File dbFile = getDbFile();
 
         if (debugInteractions) {
-
-            System.out.println(System.currentTimeMillis() + " Establishing database: " + dbFile.getAbsolutePath());
-
+            log.info(System.currentTimeMillis() + " Establishing database: " + dbFile.getAbsolutePath());
         }
 
         pm = ZooJdoHelper.openOrCreateDB(dbFile.getAbsolutePath());
@@ -903,20 +796,12 @@ public class ObjectsDB {
      *
      * @return the path to the database
      */
-    public String getPath() {
-
-        return path;
-
-    }
+    public String getPath() { return path; }
 
     /**
      * Turn the debugging of interactions on or off.
      *
      * @param debug if true, the debugging is turned on
      */
-    public static void setDebugInteractions(boolean debug) {
-
-        debugInteractions = debug;
-
-    }
+    public static void setDebugInteractions(boolean debug) { debugInteractions = debug; }
 }

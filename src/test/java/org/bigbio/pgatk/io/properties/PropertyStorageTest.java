@@ -2,11 +2,16 @@ package org.bigbio.pgatk.io.properties;
 
 import lombok.extern.slf4j.Slf4j;
 import org.bigbio.pgatk.io.common.PgatkIOException;
+import org.bigbio.pgatk.io.common.SpectrumProperty;
+import org.bigbio.pgatk.io.objectdb.LongObject;
+import org.bigbio.pgatk.io.objectdb.ObjectsDB;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.stream.IntStream;
 
@@ -227,5 +232,42 @@ public class PropertyStorageTest {
         System.out.println("ChronicleMap: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
 
         storage.close();
+    }
+
+    @Test
+    public void clusteringObjectDBTest() throws IOException {
+
+        long time = System.currentTimeMillis();
+        Random random = new Random();
+
+        ObjectDBPropertyStorage storage = new ObjectDBPropertyStorage(new ObjectsDB(Files
+                .createTempDirectory("properties-").toFile()
+                .getAbsolutePath(), "properties-results.zcl")
+        );
+        Map<Long, Object> propertyBash = new HashMap<>();
+        for(int i = 0; i < (6_000_000); i++){
+            String key = String.valueOf(i) + "RT";
+            SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
+            propertyBash.put(LongObject.asLong(key), property);
+            if((i+1) % 10_000 == 0) {
+                storage.addProperty(propertyBash);
+                propertyBash.clear();
+            }
+        }
+
+        Assert.assertEquals(6_000_000, storage.getNumber(SpectrumProperty.class));
+
+        System.out.println("ObjectDB: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
+
+//        time = System.currentTimeMillis();
+//        IntStream.range(0, MAX_READING_TEST).forEach(x -> {
+//            int key = random.nextInt(MAX_ENTRY_TEST);
+//            SpectrumProperty value = storage.getProperty(LongObject.asLong(String.valueOf(key) + "RT"));
+//        });
+//
+//        System.out.println("ObjectDB: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
+
+        storage.close();
+
     }
 }
