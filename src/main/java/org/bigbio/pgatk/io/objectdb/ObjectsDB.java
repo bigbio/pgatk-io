@@ -9,6 +9,7 @@ import org.zoodb.tools.ZooHelper;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -79,6 +80,12 @@ public class ObjectsDB {
         this(folder, dbName, true);
     }
 
+    /**
+     * Constructor.
+     */
+    public ObjectsDB(String dbFullPath, boolean overwrite) {
+        this(Paths.get(dbFullPath).getParent().toString(), new File(dbFullPath).getName(),  overwrite);
+    }
     /**
      * Constructor.
      *
@@ -735,7 +742,6 @@ public class ObjectsDB {
         if (clearing) {
             idMap.clear();
         }
-
         DbMutex.dbMutex.release();
 
     }

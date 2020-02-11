@@ -1,12 +1,14 @@
 package org.bigbio.pgatk.io.common;
 
+import org.bigbio.pgatk.io.objectdb.LongObject;
+
 /**
  * This class storage the properties for a single spectrum such as Retention time,
  * mz value, etc.
  *
  * @author ypriverol
  */
-public class SpectrumProperty {
+public class SpectrumProperty extends LongObject {
 
     // The key is the combination of spectrumId + propertyId
     String key;
