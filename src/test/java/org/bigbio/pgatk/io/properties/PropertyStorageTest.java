@@ -6,6 +6,7 @@ import org.bigbio.pgatk.io.common.SpectrumProperty;
 import org.bigbio.pgatk.io.objectdb.LongObject;
 import org.bigbio.pgatk.io.objectdb.ObjectsDB;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -109,6 +110,7 @@ public class PropertyStorageTest {
     }
 
     @Test
+    @Ignore
     public void readDynamicMapDBPropertyStorage() throws IOException, PgatkIOException {
 
         long time = System.currentTimeMillis();
@@ -139,6 +141,7 @@ public class PropertyStorageTest {
     }
 
     @Test
+    @Ignore
     public void readDynamicEcachePropertyStorage() throws IOException, PgatkIOException {
 
         long time = System.currentTimeMillis();
@@ -235,6 +238,7 @@ public class PropertyStorageTest {
     }
 
     @Test
+    @Ignore
     public void clusteringObjectDBTest() throws IOException {
 
         long time = System.currentTimeMillis();
@@ -242,10 +246,10 @@ public class PropertyStorageTest {
 
         ObjectDBPropertyStorage storage = new ObjectDBPropertyStorage(new ObjectsDB(Files
                 .createTempDirectory("properties-").toFile()
-                .getAbsolutePath(), "properties-results.zcl")
+                .getAbsolutePath(), "properties-results.zpr")
         );
         Map<Long, Object> propertyBash = new HashMap<>();
-        for(int i = 0; i < (6_000_000); i++){
+        for(int i = 0; i < (4_000_000); i++){
             String key = String.valueOf(i) + "RT";
             SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
             propertyBash.put(LongObject.asLongHash(key), property);
@@ -255,17 +259,9 @@ public class PropertyStorageTest {
             }
         }
 
-        Assert.assertEquals(6_000_000, storage.getNumber(SpectrumProperty.class));
+        Assert.assertEquals(4_000_000, storage.getNumber(SpectrumProperty.class));
 
         System.out.println("ObjectDB: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
-
-//        time = System.currentTimeMillis();
-//        IntStream.range(0, MAX_READING_TEST).forEach(x -> {
-//            int key = random.nextInt(MAX_ENTRY_TEST);
-//            SpectrumProperty value = storage.getProperty(LongObject.asLongHash(String.valueOf(key) + "RT"));
-//        });
-//
-//        System.out.println("ObjectDB: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
 
         storage.close();
 

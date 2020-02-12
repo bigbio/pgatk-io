@@ -1,10 +1,10 @@
 package org.bigbio.pgatk.io.mzml;
 
 import org.bigbio.pgatk.io.common.IndexElement;
+import org.bigbio.pgatk.io.common.spectra.Spectrum;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.io.File;
 import java.net.URL;
