@@ -248,7 +248,7 @@ public class PropertyStorageTest {
         for(int i = 0; i < (6_000_000); i++){
             String key = String.valueOf(i) + "RT";
             SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
-            propertyBash.put(LongObject.asLong(key), property);
+            propertyBash.put(LongObject.asLongHash(key), property);
             if((i+1) % 10_000 == 0) {
                 storage.addProperty(propertyBash);
                 propertyBash.clear();
@@ -262,7 +262,7 @@ public class PropertyStorageTest {
 //        time = System.currentTimeMillis();
 //        IntStream.range(0, MAX_READING_TEST).forEach(x -> {
 //            int key = random.nextInt(MAX_ENTRY_TEST);
-//            SpectrumProperty value = storage.getProperty(LongObject.asLong(String.valueOf(key) + "RT"));
+//            SpectrumProperty value = storage.getProperty(LongObject.asLongHash(String.valueOf(key) + "RT"));
 //        });
 //
 //        System.out.println("ObjectDB: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);

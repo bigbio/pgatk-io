@@ -7,10 +7,12 @@ import java.util.HashMap;
  * parameters can be added to classes extending this class.
  *
  * @author Marc Vaudel
+ * @author ypriverol
  */
 public abstract class LongObject extends DbObject {
 
     public LongObject() {
+
     }
 
     private final static long[] HASHVALUELIST = {
@@ -48,7 +50,7 @@ public abstract class LongObject extends DbObject {
         -6830438329227218944L, -1024496407927033856L, -1561168395559655424L, -1430574524350681088L};
 
     //Value for a key not set.
-    public static final long NO_KEY = asLong("#!#_NO_KEY_#!#");
+    public static final long NO_KEY = asLongHash("#!#_NO_KEY_#!#");
 
     //Map containing user refinement parameters.
     private HashMap<Long, UrParameter> urParams = null;
@@ -133,7 +135,7 @@ public abstract class LongObject extends DbObject {
      * @param key the original key
      * @return the hashed key
      */
-    public static long asLong(String key) {
+    public static long asLongHash(String key) {
         
         long longKey = 0;
         char[] keyAsArray = key.toCharArray();

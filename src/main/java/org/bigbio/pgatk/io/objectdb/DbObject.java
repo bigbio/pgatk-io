@@ -14,7 +14,7 @@ public class DbObject extends ZooPC {
     private long id;
 
     // Flag if object is a first level object or not.
-    private boolean firstLevel = false;
+    private boolean firstLevel = true;
 
     public DbObject(){}
 

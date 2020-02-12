@@ -726,7 +726,7 @@ public class ObjectsDB {
             log.info("closing database");
         }
 
-        objectsCache.saveCache(null, clearing); // @TODO: verify that this is actullly needed (as this looks more like saving?)
+        objectsCache.saveCache(null, clearing); // @TODO: verify that this is actully needed (as this looks more like saving?)
         objectsCache.clearCache();
 
         connectionActive = false;
@@ -775,6 +775,7 @@ public class ObjectsDB {
 
             idMap.clear();
             classCounter.clear();
+
 
             Query q = pm.newQuery(DbObject.class, "firstLevel == true");
 

@@ -16,8 +16,6 @@ import java.util.*;
  * methods returning identification objects.
  *
  * @author ypriverol
- * @author Marc Vaudel
- * @author Dominik Kopczynski
  */
 public class ObjectDBPropertyStorage extends LongObject {
 
@@ -94,7 +92,8 @@ public class ObjectDBPropertyStorage extends LongObject {
      * @throws InterruptedException exception thrown if a threading error occurs
      * while interacting with the database
      */
-    public void loadObjects(Class className, WaitingHandler waitingHandler, boolean displayProgress) throws InterruptedException {
+    public void loadObjects(Class className, WaitingHandler waitingHandler,
+                            boolean displayProgress) throws InterruptedException {
         objectsDB.loadObjects(className, waitingHandler, displayProgress);
     }
 
@@ -165,7 +164,8 @@ public class ObjectDBPropertyStorage extends LongObject {
      *
      * @return list of objects
      */
-    public ArrayList<Object> retrieveObjects(Class className, WaitingHandler waitingHandler, boolean displayProgress) {
+    public ArrayList<Object> retrieveObjects(Class className, WaitingHandler waitingHandler,
+                                             boolean displayProgress) {
 
         return objectsDB.retrieveObjects(className, waitingHandler, displayProgress);
 
@@ -259,7 +259,7 @@ public class ObjectDBPropertyStorage extends LongObject {
      * @param property the peptide match
      */
     public void addSpectrumProperty(String key, SpectrumProperty property) {
-        objectsDB.insertObject(asLong(key), property);
+        objectsDB.insertObject(asLongHash(key), property);
     }
 
     /**
