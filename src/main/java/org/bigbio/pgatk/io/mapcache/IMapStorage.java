@@ -34,7 +34,7 @@ public interface IMapStorage<V> extends Serializable {
     /**
      * Retrieve a stored property for a defined item. Retruns NULL in case
      * the property has not been set.
-     * @param key
+     * @param key String key
      * @throws IndexOutOfBoundsException In case no item with this id exists.
      */
     V get(String key) throws PgatkIOException;
@@ -43,5 +43,15 @@ public interface IMapStorage<V> extends Serializable {
      * Delete all the information from the Storage
      */
     void cleanStorage() throws PgatkIOException;
+
+    /**
+     * Write all changes to disk. This function should be called
+     * after, for example, a bulk addition is done.
+     *
+     * Call this function to ensure that consumers will see newly added objects.
+     *
+     * @throws PgatkIOException In case of any i/o errors.
+     */
+    void flush() throws PgatkIOException;
 
 }

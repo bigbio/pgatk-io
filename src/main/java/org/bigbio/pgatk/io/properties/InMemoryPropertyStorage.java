@@ -110,8 +110,12 @@ public class InMemoryPropertyStorage implements IPropertyStorage{
         propertyStorage = null;
     }
 
+    @Override
+    public void flush() throws PgatkIOException {
+        // this method has no effect on the in-memory storage
+    }
 
-//    @Override
+    //    @Override
 //    public void toBinaryStorage(String filePath) throws PgatkIOException {
 //        if(!filePath.endsWith(PROPERTY_BINARY_EXT))
 //            throw new PgatkIOException("The provided extension for the property in memory file" +
