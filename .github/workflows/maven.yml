@@ -20,5 +20,12 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Define variables
+        run: echo "Tags are > ${MAVEN_OPTS}"
+        env:
+          MAVEN_OPTS: "-Xmx2G"
+
     - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      run:
+        - echo "Tags are > ${MAVEN_OPTS}"
+        - mvn -B package --file pom.xml
