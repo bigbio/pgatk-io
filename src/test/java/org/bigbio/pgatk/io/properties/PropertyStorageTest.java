@@ -238,7 +238,6 @@ public class PropertyStorageTest {
     }
 
     @Test
-    @Ignore
     public void clusteringObjectDBTest() throws IOException {
 
         long time = System.currentTimeMillis();
@@ -249,7 +248,7 @@ public class PropertyStorageTest {
                 .getAbsolutePath(), "properties-results.zpr")
         );
         Map<Long, Object> propertyBash = new HashMap<>();
-        for(int i = 0; i < (4_000_000); i++){
+        for(int i = 0; i < (10_000_000); i++){
             String key = String.valueOf(i) + "RT";
             SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
             propertyBash.put(LongObject.asLongHash(key), property);
@@ -259,10 +258,10 @@ public class PropertyStorageTest {
             }
         }
 
-        Assert.assertEquals(4_000_000, storage.getNumber(SpectrumProperty.class));
+        Assert.assertEquals(10_000_000, storage.getNumber(SpectrumProperty.class));
 
         System.out.println("ObjectDB: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
-
+        storage.flush();
         storage.close();
 
     }

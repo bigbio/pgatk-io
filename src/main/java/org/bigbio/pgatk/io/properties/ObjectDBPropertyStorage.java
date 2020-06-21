@@ -283,4 +283,7 @@ public class ObjectDBPropertyStorage extends LongObject {
         return objectsDB.isConnectionActive();
     }
 
+    public void flush() {
+        objectsDB.dumpToDB();
+    }
 }
