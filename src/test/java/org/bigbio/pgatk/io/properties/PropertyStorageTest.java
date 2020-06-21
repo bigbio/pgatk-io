@@ -19,8 +19,8 @@ import java.util.stream.IntStream;
 @Slf4j
 public class PropertyStorageTest {
 
-    int MAX_ENTRY_TEST = 10_000_000;
-    int MAX_READING_TEST = 200_000;
+    int MAX_ENTRY_TEST = 100_000;
+    int MAX_READING_TEST = 50_000;
 
     @Test
     public void inMemoryTest() {
