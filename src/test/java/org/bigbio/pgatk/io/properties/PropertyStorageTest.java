@@ -248,19 +248,19 @@ public class PropertyStorageTest {
                 .getAbsolutePath(), "properties-results.zpr")
         );
         Map<Long, Object> propertyBash = new HashMap<>();
-        for(int i = 0; i < (10_000_000); i++){
+        for(int i = 0; i < (100_000); i++){
             String key = String.valueOf(i) + "RT";
             SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
             propertyBash.put(LongObject.asLongHash(key), property);
-            if((i+1) % 10_000 == 0) {
+            if((i+1) % 1000 == 0) {
                 storage.addProperty(propertyBash);
                 propertyBash.clear();
             }
         }
 
-        Assert.assertEquals(10_000_000, storage.getNumber(SpectrumProperty.class));
+        Assert.assertEquals(100_000, storage.getNumber(SpectrumProperty.class));
 
-        System.out.println("ObjectDB: Writing 10M Properties -- " + (System.currentTimeMillis() - time) / 1000);
+        System.out.println("ObjectDB: Writing 100k Properties -- " + (System.currentTimeMillis() - time) / 1000);
         storage.flush();
         storage.close();
 
