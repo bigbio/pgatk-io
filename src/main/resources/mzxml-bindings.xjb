@@ -28,15 +28,15 @@
         <!-- the serializable uid should reflect the version number 1.0.0 -->
         <jxb:serializable uid="320"/>
         <!-- this interface will be used to ensure type safety in generified methods -->
-        <xjc:superInterface name="org.bigbio.pgatk.io.mzxml.mzxml.model.MzXMLObject"/>
+        <xjc:superInterface name="io.github.bigbio.pgatk.io.mzxml.mzxml.model.MzXMLObject"/>
         <xjc:javaType name="Long" xmlType="xsd:nonNegativeInteger"
-                      adapter="org.bigbio.pgatk.io.mzxml.mzxml.xml.util.NonNegativeIntegerAdapter"/>
+                      adapter="io.github.bigbio.pgatk.io.mzxml.mzxml.xml.util.NonNegativeIntegerAdapter"/>
         <xjc:javaType name="String" xmlType="xsd:anySimpleType"
-                      adapter="org.bigbio.pgatk.io.mzxml.mzxml.xml.util.AnySimpleTypeAdapter" />
+                      adapter="io.github.bigbio.pgatk.io.mzxml.mzxml.xml.util.AnySimpleTypeAdapter" />
     </jxb:globalBindings>
     
     <jxb:schemaBindings>
-        <jxb:package name="org.bigbio.pgatk.io.mzxml.mzxml.model"/>
+        <jxb:package name="io.github.bigbio.pgatk.io.mzxml.mzxml.model"/>
     </jxb:schemaBindings>
 
     <jxb:bindings schemaLocation="general_types_1.0.xsd" node="/xsd:schema">

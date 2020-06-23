@@ -1,5 +1,5 @@
 
-@namespace("org.bigbio.pgatk.io.avro")
+@namespace("io.github.bigbio.pgatk.io.avro")
 protocol pgatk {
 
   /** Ontology term cross reference in GFF3 style DBTAG:ID format. */

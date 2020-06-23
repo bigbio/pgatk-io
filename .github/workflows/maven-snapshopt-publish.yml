@@ -3,7 +3,7 @@
 name: Publish snapshopt Maven
 on:
   release:
-    types: [created]
+    types: [published]
 jobs:
   publish:
     runs-on: ubuntu-latest
