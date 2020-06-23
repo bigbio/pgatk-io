@@ -1,6 +1,6 @@
 # Package public in Maven Central
 
-name: Publish package to the Maven Central Repository
+name: Publish snapshopt Maven
 on:
   release:
     types: [created]
