@@ -1,0 +1,116 @@
+package io.github.bigbio.pgatk.io.pride;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * CvParam is the default implementation of {@link CvParam}.
+ *
+ * @author Yasset Perez-Riverol
+ * @version $Id$
+ */
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class CvParam {
+
+    /** CvLabel is used to name the Ontology for the Ontology Term **/
+    private String cvLabel;
+
+    /** Accession of the Ontology Term **/
+    private String accession;
+
+    /** Ontology Term Name **/
+    private String name;
+
+    /** Value of the Term. For example, the scores in CvTerm, the value of the score is in the value of the CVTerm **/
+    private String value;
+
+    /**
+     * The Default Constructor
+     */
+    public CvParam() { }
+
+    /**
+     * Create a new {@link CvParam} from original one.
+     * @param provider {@link CvParam}
+     */
+    public CvParam(CvParam provider){
+        this.accession = provider.getAccession();
+        this.name = provider.getName();
+        this.cvLabel = provider.getCvLabel();
+        this.value = provider.getValue();
+    }
+
+    /**
+     * Default constructor fof the term including all the attributes.
+     * @param cvLabel Name of the Ontology
+     * @param accession Accession of the Term
+     * @param name Name of the Term
+     * @param value Value of the Term.
+     */
+    public CvParam(String cvLabel, String accession, String name, String value) {
+        this.cvLabel = cvLabel;
+        this.accession = accession;
+        this.name = name;
+        this.value = value;
+    }
+
+    /**
+     * The minimun constructor most contains accession and name of the property.
+     * @param accession Accession of the Term
+     * @param name Name of the Term
+     */
+    public CvParam(String accession, String name) {
+        this.accession = accession;
+        this.name = name;
+    }
+
+    public String getCvLabel() {
+        return cvLabel;
+    }
+
+    public String getAccession() {
+        return accession;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    @Override
+    public String toString() {
+        return "CvParam{" +
+                "cvLabel='" + cvLabel + '\'' +
+                ", accession='" + accession + '\'' +
+                ", name='" + name + '\'' +
+                ", value='" + value + '\'' +
+                '}';
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CvParam cvParam = (CvParam) o;
+
+        if (!Objects.equals(cvLabel, cvParam.cvLabel)) return false;
+        if (!Objects.equals(accession, cvParam.accession)) return false;
+        if (!Objects.equals(name, cvParam.name)) return false;
+        return Objects.equals(value, cvParam.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cvLabel, accession, name, value);
+    }
+}

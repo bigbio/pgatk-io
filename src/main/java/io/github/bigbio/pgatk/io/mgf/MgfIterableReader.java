@@ -50,6 +50,7 @@ public class MgfIterableReader extends MzIterableChannelReader implements MzIter
     private  Ms2Query spectrum = null;
 
     public MgfIterableReader(File file, boolean ignoreWrongPeaks, boolean disableCommentSupport, boolean allowCustomTags) throws PgatkIOException {
+
         super(file);
         this.ignoreWrongPeaks = ignoreWrongPeaks;
         this.disableCommentSupport = disableCommentSupport;
