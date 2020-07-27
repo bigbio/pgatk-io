@@ -62,4 +62,12 @@ public class Tuple <K, V> implements ITuple<K,V> {
         result = 31 * result + (value != null ? value.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "Tuple{" +
+                "key=" + key +
+                ", value=" + value +
+                '}';
+    }
 }
