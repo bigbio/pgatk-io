@@ -17,8 +17,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.*;
-
 public class PrideJsonWriterTest {
 
   private File sourceFile;
@@ -64,5 +62,6 @@ public class PrideJsonWriterTest {
     System.out.println("Write multiple spectra -- " + spectra.size());
     prideJsonfile.flush();
     prideJsonfile.close();
+    outpFile.deleteOnExit();
   }
 }
