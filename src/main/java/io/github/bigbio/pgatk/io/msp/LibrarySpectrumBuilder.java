@@ -11,7 +11,7 @@ public class LibrarySpectrumBuilder {
 
   private String peptideSequence;
   private Integer charge;
-  private String proteins;
+  private List<String> proteins;
   private List<Tuple<Integer, String>> mods;
   private Double precursorMz;
   private Map<String, Double> scores;
@@ -38,7 +38,9 @@ public class LibrarySpectrumBuilder {
   }
 
   public void addProteinAccessionNumber(String value) {
-    this.proteins = value;
+    if(this.proteins == null)
+      this.proteins = new ArrayList<>();
+    this.proteins.add(value);
   }
 
   public void addMod(int nTerm, String s) {
@@ -67,5 +69,9 @@ public class LibrarySpectrumBuilder {
 
   public Map<String, Double> getScores() {
     return this.scores;
+  }
+
+  public List<String> getProteins() {
+    return this.proteins;
   }
 }
