@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public class PrideJsonReader implements MzReader {
+public class PrideJsonIndexedReader implements MzReader {
 
   File source;
   private static final ObjectMapper objectMapper;
@@ -35,12 +35,12 @@ public class PrideJsonReader implements MzReader {
   private Map<String, IndexElement> keys = new HashMap<>();
 
   /**
-   * Constructor of {@link PrideJsonReader}
+   * Constructor of {@link PrideJsonIndexedReader}
    * @param source File with the spectra
    * @param inMemory Load in memory all the spectra
    * @throws PgatkIOException
    */
-  public PrideJsonReader(File source, boolean inMemory) throws PgatkIOException {
+  public PrideJsonIndexedReader(File source, boolean inMemory) throws PgatkIOException {
     this.source = source;
     this.useCache = inMemory;
 

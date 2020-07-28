@@ -15,6 +15,7 @@ public class MspSpectrum implements Spectrum {
     private Double precursorMz;
     private Integer precursorCharge;
     private String usi;
+
     private String peptideSequence;
     private List<Tuple<Integer, String>> ptms;
     private Map<String, Double> properties;
@@ -131,5 +132,9 @@ public class MspSpectrum implements Spectrum {
         this.ptms = builder.getPtms();
         this.properties = builder.getScores();
         this.proteins = builder.getProteins();
+    }
+
+    public String getPeptideSequence() {
+        return peptideSequence;
     }
 }

@@ -173,8 +173,10 @@ public class ArchiveSpectrum implements Spectrum {
     @Override
     public Collection<? extends Param> getAdditional() {
         List<Param> attributes = new ArrayList<>();
-        attributes = properties.stream().map( x-> new io.github.bigbio.pgatk.io.common.CvParam(x.getName(),
-                x.getValue(),x.getCvLabel(),x.getAccession())).collect(Collectors.toList());
+        if(properties != null){
+            attributes = properties.stream().map( x-> new io.github.bigbio.pgatk.io.common.CvParam(x.getName(),
+                    x.getValue(),x.getCvLabel(),x.getAccession())).collect(Collectors.toList());
+        }
         return attributes;
     }
 }

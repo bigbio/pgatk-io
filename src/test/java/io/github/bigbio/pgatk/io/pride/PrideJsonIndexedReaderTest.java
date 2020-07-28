@@ -1,6 +1,5 @@
 package io.github.bigbio.pgatk.io.pride;
 
-import io.github.bigbio.pgatk.io.apl.AplIndexedReader;
 import io.github.bigbio.pgatk.io.apl.TestAplIndexedReader;
 import org.junit.Assert;
 import org.junit.Before;
@@ -9,11 +8,9 @@ import org.junit.Test;
 import java.io.File;
 import java.net.URL;
 
-import static org.junit.Assert.*;
+public class PrideJsonIndexedReaderTest {
 
-public class PrideJsonReaderTest {
-
-  private PrideJsonReader prideJsonReader;
+  private PrideJsonIndexedReader prideJsonIndexedReader;
   private File sourceFile;
 
   @Before
@@ -24,7 +21,7 @@ public class PrideJsonReaderTest {
 
     try {
       sourceFile = new File(testFile.toURI());
-      prideJsonReader = new PrideJsonReader(sourceFile, true);
+      prideJsonIndexedReader = new PrideJsonIndexedReader(sourceFile, true);
     } catch (Exception e) {
       System.out.println("Faild to load test file");
     }
@@ -33,7 +30,7 @@ public class PrideJsonReaderTest {
 
   @Test
   public void getSpectraCount() {
-    Assert.assertTrue(prideJsonReader.getSpectraCount() == 7824);
+    Assert.assertTrue(prideJsonIndexedReader.getSpectraCount() == 7824);
   }
 
   @Test
