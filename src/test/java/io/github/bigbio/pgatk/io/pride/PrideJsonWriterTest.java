@@ -59,6 +59,7 @@ public class PrideJsonWriterTest {
         0, null,null,false, null, true);
       prideJsonfile.write(archiveSpectrum);
     }
+
     System.out.println("Write multiple spectra -- " + spectra.size());
     prideJsonfile.flush();
     prideJsonfile.close();

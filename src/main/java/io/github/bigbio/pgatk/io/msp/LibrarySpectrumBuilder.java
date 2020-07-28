@@ -74,4 +74,5 @@ public class LibrarySpectrumBuilder {
   public List<String> getProteins() {
     return this.proteins;
   }
+
 }

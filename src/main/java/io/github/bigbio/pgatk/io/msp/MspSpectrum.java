@@ -17,6 +17,7 @@ public class MspSpectrum implements Spectrum {
     private String usi;
 
     private String peptideSequence;
+
     private List<Tuple<Integer, String>> ptms;
     private Map<String, Double> properties;
 
@@ -136,5 +137,9 @@ public class MspSpectrum implements Spectrum {
 
     public String getPeptideSequence() {
         return peptideSequence;
+    }
+
+    public List<Tuple<Integer, String>> getPtms() {
+        return ptms;
     }
 }
