@@ -15,6 +15,7 @@ public class MspIterableReaderTest {
 
   private File sourceFile;
   private MspIterableReader mspIterableReader;
+  private MspIterableReader prideMsp;
 
   @Before
   public void setUp() throws Exception {
@@ -26,12 +27,22 @@ public class MspIterableReaderTest {
     Assert.assertNotNull("Error loading msp test file", testFile);
     sourceFile = new File(testFile.toURI());
     mspIterableReader = new MspIterableReader(sourceFile);
+
+    testFile = getClass().getClassLoader().getResource("pride_example.msp");
+    Assert.assertNotNull("Error loading msp test file", testFile);
+    sourceFile = new File(testFile.toURI());
+    prideMsp = new MspIterableReader(sourceFile);
   }
 
   @Test
   public void hasNext() {
     while(mspIterableReader.hasNext()){
       Spectrum spectrum = mspIterableReader.next();
+      System.out.println(spectrum.toString());
+    }
+
+    while(prideMsp.hasNext()){
+      Spectrum spectrum = prideMsp.next();
       System.out.println(spectrum.toString());
     }
   }

@@ -82,7 +82,7 @@ public class MspAttributeReader {
       handled = parseProteinComment(value, builder);
     } else if(tag.equals("Parent")){
       builder.setPrecursorMz(Double.parseDouble(value.trim()));
-    } else if(tag.equals("Dotbest") || tag.equals("Probcorr")){
+    } else if(tag.equals("Dotbest") || tag.equals("Probcorr") || tag.equals("MaxRatio")){
       builder.addScores(tag, value);
     }else {
       handled = parseUnknownCommentTag(tag, value, builder);
