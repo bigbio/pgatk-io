@@ -5,6 +5,8 @@ import io.github.bigbio.pgatk.io.utils.AminoAcid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class MspAttributeReader {
@@ -25,12 +27,17 @@ public class MspAttributeReader {
   public static void parseName(String toString, LibrarySpectrumBuilder builder) throws PgatkIOException {
     String[] nameValues = toString.split("/");
     parsePeptideFromPeptidoform(nameValues[0], builder);
-    builder.setCharge(Integer.parseInt(nameValues[1]));
+    String charge = String.valueOf(nameValues[1].charAt(0));
+    builder.setCharge(Integer.parseInt(charge));
   }
 
   public static boolean parseComment(String comment,LibrarySpectrumBuilder builder) {
 
     boolean handled = false;
+
+    //Series of patches for inconsistencies in file format.
+    comment = comment.replace("Consensus Pep", "ConsensusPep")
+            .replace("Single Pep", "SinglePep");
 
     int length = comment.length();
     boolean inQuotes = false;
@@ -42,7 +49,8 @@ public class MspAttributeReader {
       if(!inQuotes && current == ' ') {
 
         try {
-          handled = handled | handle(comment.substring(last, i), builder);
+            if(comment.substring(last, i).trim().length() > 0)
+                handled = handled | handle(comment.substring(last, i), builder);
         } catch (Exception e) {
 
           throw new IllegalStateException("Comment [" + comment + "] is not a valid comment.", e);
@@ -94,19 +102,33 @@ public class MspAttributeReader {
   protected static boolean parseModsComment(String value, LibrarySpectrumBuilder builder) {
 
     String[] split = value.split("/");
+    if(split.length > 1){
+        for(int i = 1; i < split.length; i++) { //starting at 1 because split 0 is the mod count
+            String[] modSplit = split[i].split(",");
+            int index = Integer.parseInt(modSplit[0]);
+            if(index == -1)
+                builder.addMod(N_TERM, modSplit[2]);
+            else if(index == -2)
+                builder.addMod(C_TERM, modSplit[2]);
+            else
+                builder.addMod(index, modSplit[2]);
+        }
+    }else{
 
-    for(int i = 1; i < split.length; i++) { //starting at 1 because split 0 is the mod count
+        Pattern regex = Pattern.compile("\\((.*?)\\)");
+        Matcher regexMatcher = regex.matcher(value);
 
-      String[] modSplit = split[i].split(",");
-
-      int index = Integer.parseInt(modSplit[0]);
-
-      if(index == -1)
-        builder.addMod(N_TERM, modSplit[2]);
-      else if(index == -2)
-        builder.addMod(C_TERM, modSplit[2]);
-      else
-        builder.addMod(index, modSplit[2]);
+        while (regexMatcher.find()) {//Finds Matching Pattern in String
+            String oldMod = regexMatcher.group(1);
+            String[] modSplit = oldMod.split(",");
+            int index = Integer.parseInt(modSplit[0]);
+            if(index == -1)
+                builder.addMod(N_TERM, modSplit[2]);
+            else if(index == -2)
+                builder.addMod(C_TERM, modSplit[2]);
+            else
+                builder.addMod(index, modSplit[2]);
+        }
     }
 
     return false;
