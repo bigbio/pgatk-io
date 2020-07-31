@@ -92,6 +92,9 @@ public class MspAttributeReader {
       builder.setPrecursorMz(Double.parseDouble(value.trim()));
     } else if(tag.equals("Dotbest") || tag.equals("Probcorr") || tag.equals("MaxRatio")){
       builder.addScores(tag, value);
+    } else if (tag.equals("Spec") || tag.equals("ConsensusPep") || tag.equals("SinglePep")){
+        builder.addAttribute("Spec", value);
+
     }else {
       handled = parseUnknownCommentTag(tag, value, builder);
     }

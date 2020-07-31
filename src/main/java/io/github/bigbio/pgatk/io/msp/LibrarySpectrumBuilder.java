@@ -15,6 +15,7 @@ public class LibrarySpectrumBuilder {
   private List<Tuple<Integer, String>> mods;
   private Double precursorMz;
   private Map<String, Double> scores;
+  private Map<String, String> properties;
 
   public void clear() {
     peptideSequence = null;
@@ -75,4 +76,17 @@ public class LibrarySpectrumBuilder {
     return this.proteins;
   }
 
+  public void addAttribute(String spec, String value) {
+    if(this.properties == null)
+      this.properties = new HashMap<>();
+    this.properties.put(spec, value);
+  }
+
+  public List<Tuple<Integer, String>> getMods() {
+    return mods;
+  }
+
+  public Map<String, String> getProperties() {
+    return properties;
+  }
 }
