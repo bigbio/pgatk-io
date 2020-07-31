@@ -19,7 +19,7 @@ public class MspSpectrum implements Spectrum {
     private String peptideSequence;
 
     private List<Tuple<Integer, String>> ptms;
-    private Map<String, Double> properties;
+    private Map<String, String> properties;
     private Map<String, Double> scores;
 
     private List<String> proteins;
@@ -151,5 +151,9 @@ public class MspSpectrum implements Spectrum {
 
     public Map<String, Double> getScores() {
         return this.scores;
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 }

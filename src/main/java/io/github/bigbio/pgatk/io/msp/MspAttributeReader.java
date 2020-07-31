@@ -188,20 +188,5 @@ public class MspAttributeReader {
     builder.setPeptideSequence(aaChars.stream().map(String::valueOf).collect(Collectors.joining()));
   }
 
-//  private void parseMods(String substring, LibrarySpectrumBuilder builder) {
-//
-//    for(String sMod : substring.split(",\\s?")) {
-//
-//      Optional<Modification> optional = modResolver.resolve(sMod);
-//      if (optional.isPresent()) {
-//
-//        termModMap.put(modAttachment, optional.get());
-//      } else {
-//
-//        throw new PeptideParseException("Cannot resolve modification " + sMod);
-//      }
-//    }
-//  }
-
 
 }
