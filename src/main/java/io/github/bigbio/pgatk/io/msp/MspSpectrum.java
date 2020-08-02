@@ -134,6 +134,7 @@ public class MspSpectrum implements Spectrum {
         this.ptms = builder.getPtms();
         this.scores = builder.getScores();
         this.proteins = builder.getProteins();
+        this.properties = builder.getProperties();
 
     }
 
@@ -143,10 +144,6 @@ public class MspSpectrum implements Spectrum {
 
     public List<Tuple<Integer, String>> getPtms() {
         return ptms;
-    }
-
-    public void setScores(Map<String, Double> scores) {
-        this.scores = scores;
     }
 
     public Map<String, Double> getScores() {

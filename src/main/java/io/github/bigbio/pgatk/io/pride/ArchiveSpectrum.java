@@ -87,7 +87,13 @@ public class ArchiveSpectrum implements Spectrum {
 
     public ArchiveSpectrum() { }
 
-    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession, String spectrumFile, String sourceID, String spectrumTitle, Double[] masses, Double[] intensities, Integer numPeaks, Integer msLevel, Integer precursorCharge, Double precursorMz, Double retentionTime, Set<CvParam> properties, String peptideSequence, Integer missedCleavages, Collection<IdentifiedModification> modifications, List<String> annotations, Boolean isDecoy, Set<CvParam> qualityEstimationMethods, Boolean isValid) {
+    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession, String spectrumFile,
+                           String sourceID, String spectrumTitle, Double[] masses, Double[] intensities,
+                           Integer numPeaks, Integer msLevel, Integer precursorCharge, Double precursorMz,
+                           Double retentionTime, Set<CvParam> properties, String peptideSequence,
+                           Integer missedCleavages, Collection<IdentifiedModification> modifications,
+                           List<String> annotations, Boolean isDecoy,
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -164,17 +170,21 @@ public class ArchiveSpectrum implements Spectrum {
     @Override
     public Map<Double, Double> getPeakList() {
         Map<Double, Double> peaks = new HashMap<>();
-        for(int i = 0; i < masses.length; i++){
-            peaks.put(masses[i], intensities[i]);
+        if(masses != null){
+            for(int i = 0; i < masses.length; i++){
+                peaks.put(masses[i], intensities[i]);
+            }
         }
         return peaks;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<? extends Param> getAdditional() {
         List<Param> attributes = new ArrayList<>();
         if(properties != null){
-            attributes = properties.stream().map( x-> new io.github.bigbio.pgatk.io.common.CvParam(x.getName(),
+            attributes = properties.stream()
+                    .map( x-> new io.github.bigbio.pgatk.io.common.CvParam(x.getName(),
                     x.getValue(),x.getCvLabel(),x.getAccession())).collect(Collectors.toList());
         }
         return attributes;
