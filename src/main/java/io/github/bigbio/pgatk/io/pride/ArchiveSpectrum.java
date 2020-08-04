@@ -1,14 +1,10 @@
 package io.github.bigbio.pgatk.io.pride;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonRootName;
-import com.fasterxml.jackson.annotation.JsonTypeName;
+import com.fasterxml.jackson.annotation.*;
 import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
 import lombok.Builder;
 import lombok.Data;
-
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -85,6 +81,9 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("isValid")
     private Boolean isValid;
 
+    @JsonProperty("proteinAccesssions")
+    private List<String> proteinAccessions;
+
     public ArchiveSpectrum() { }
 
     public ArchiveSpectrum(String usi, String projectAccession, String assayAccession, String spectrumFile,
@@ -93,7 +92,7 @@ public class ArchiveSpectrum implements Spectrum {
                            Double retentionTime, Set<CvParam> properties, String peptideSequence,
                            Integer missedCleavages, Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
-                           Set<CvParam> qualityEstimationMethods, Boolean isValid) {
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -115,6 +114,7 @@ public class ArchiveSpectrum implements Spectrum {
         this.isDecoy = isDecoy;
         this.qualityEstimationMethods = qualityEstimationMethods;
         this.isValid = isValid;
+        this.proteinAccessions = proteinAccessions;
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -188,5 +188,9 @@ public class ArchiveSpectrum implements Spectrum {
                     x.getValue(),x.getCvLabel(),x.getAccession())).collect(Collectors.toList());
         }
         return attributes;
+    }
+
+    public List<String> getProteinAcessions() {
+        return this.proteinAccessions;
     }
 }
