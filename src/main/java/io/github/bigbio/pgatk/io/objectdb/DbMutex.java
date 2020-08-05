@@ -2,8 +2,6 @@ package io.github.bigbio.pgatk.io.objectdb;
 
 /**
  * Placeholder for the db mutex.
- *
- * @author Marc Vaudel
  */
 public class DbMutex {
 

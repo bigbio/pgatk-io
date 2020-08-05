@@ -314,7 +314,7 @@ public class ClusteringFileReader implements IClusterSourceReader {
     }
 
     @Override
-    public void close() throws PgatkIOException {
+    public void close() {
 
     }
 }

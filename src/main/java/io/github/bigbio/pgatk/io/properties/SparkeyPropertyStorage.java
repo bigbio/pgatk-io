@@ -24,7 +24,7 @@ public class SparkeyPropertyStorage<T> extends InMemoryPropertyStorage {
 
     private final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
 
-    public SparkeyPropertyStorage(File dbDirectory) throws IOException{
+    public SparkeyPropertyStorage(File dbDirectory) {
         dbFile = new File(dbDirectory, "properties-" + System.nanoTime() + ".spi");
         this.dbDirectory = dbDirectory;
     }
@@ -91,7 +91,7 @@ public class SparkeyPropertyStorage<T> extends InMemoryPropertyStorage {
     }
 
     @Override
-    public String get(String key) throws PgatkIOException {
+    public String get(String key) {
         return deserialize(get(serialize(key)));
     }
 

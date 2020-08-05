@@ -2,7 +2,6 @@ package io.github.bigbio.pgatk.io.pride;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.io.Serializable;
 import java.util.Objects;
 
 /**

@@ -95,12 +95,8 @@ public class PropertyStorageTest {
 
         time = System.currentTimeMillis();
         IntStream.range(0, MAX_READING_TEST).forEach(x -> {
-            try {
-                int key = random.nextInt(MAX_ENTRY_TEST);
-                String value = storage.get(String.valueOf(key), "RT");
-            }catch (PgatkIOException ex){
-                log.error("Error reading entry -- " + x);
-            }
+            int key = random.nextInt(MAX_ENTRY_TEST);
+            String value = storage.get(String.valueOf(key), "RT");
         });
 
         System.out.println("LevelDB: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
@@ -127,12 +123,8 @@ public class PropertyStorageTest {
 
         time = System.currentTimeMillis();
         IntStream.range(0, MAX_READING_TEST).forEach(x -> {
-            try {
-                int key = random.nextInt(MAX_ENTRY_TEST);
-                String value = storage.get(String.valueOf(key), "RT");
-            }catch (PgatkIOException ex){
-                log.error("Error reading entry -- " + x);
-            }
+            int key = random.nextInt(MAX_ENTRY_TEST);
+            String value = storage.get(String.valueOf(key), "RT");
         });
 
         System.out.println("MapDB: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
@@ -160,12 +152,8 @@ public class PropertyStorageTest {
 
         time = System.currentTimeMillis();
         IntStream.range(0, MAX_READING_TEST).forEach(x -> {
-            try {
-                int key = random.nextInt(MAX_ENTRY_TEST);
-                String value = storage.get(String.valueOf(key), "RT");
-            }catch (PgatkIOException ex){
-                log.error("Error reading entry -- " + x);
-            }
+            int key = random.nextInt(MAX_ENTRY_TEST);
+            String value = storage.get(String.valueOf(key), "RT");
         });
 
         System.out.println("Ecache: Reading 200'000 Properties -- " + (System.currentTimeMillis() - time) / 1000);
@@ -249,7 +237,7 @@ public class PropertyStorageTest {
         );
         Map<Long, Object> propertyBash = new HashMap<>();
         for(int i = 0; i < (100_000); i++){
-            String key = String.valueOf(i) + "RT";
+            String key = i + "RT";
             SpectrumProperty property = new SpectrumProperty(key, String.valueOf(i), "RT", String.valueOf(Math.random()));
             propertyBash.put(LongObject.asLongHash(key), property);
             if((i+1) % 1000 == 0) {

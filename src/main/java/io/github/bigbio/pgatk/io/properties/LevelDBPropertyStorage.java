@@ -51,14 +51,14 @@ public class LevelDBPropertyStorage<T> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public void put(String itemId, String propertyName, String propertyValue) throws PgatkIOException {
+    public void put(String itemId, String propertyName, String propertyValue) {
         propertyNames.add(propertyName);
         levelDB.put(Iq80DBFactory.bytes(getCombinedKey(itemId, propertyName)), Iq80DBFactory.bytes(propertyValue));
         levelDBSize++;
     }
 
     @Override
-    public String get(String itemId, String propertyName) throws PgatkIOException {
+    public String get(String itemId, String propertyName) {
         return Iq80DBFactory.asString(levelDB.get(Iq80DBFactory.bytes(getCombinedKey(itemId, propertyName))));
 
     }

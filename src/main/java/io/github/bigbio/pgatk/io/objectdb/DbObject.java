@@ -5,8 +5,6 @@ import org.zoodb.api.impl.ZooPC;
 /**
  * All classes that are stored in the backend need a unique identifier,
  * all further classes inherit from this class.
- *
- * @author Dominik Kopczynski
  */
 public class DbObject extends ZooPC {
 

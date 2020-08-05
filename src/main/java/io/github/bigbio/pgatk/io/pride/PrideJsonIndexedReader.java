@@ -93,7 +93,7 @@ public class PrideJsonIndexedReader implements MzReader {
   }
 
   @Override
-  public Spectrum getSpectrumById(String id) throws PgatkIOException {
+  public Spectrum getSpectrumById(String id) {
     if(useCache){
       return peakLists.get(id);
     }
@@ -101,7 +101,7 @@ public class PrideJsonIndexedReader implements MzReader {
   }
 
   @Override
-  public Spectrum getSpectrumByIndex(int index) throws PgatkIOException {
+  public Spectrum getSpectrumByIndex(int index) {
     return null;
   }
 

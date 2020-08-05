@@ -26,7 +26,7 @@ public class UnidentifiedSequencesTest {
     }
 
     @Test
-    public void testMixedCluster() throws Exception {
+    public void testMixedCluster() {
         ICluster testCluster = testClusters.get(1);
 
         // make sure it's the correct cluster
@@ -46,7 +46,7 @@ public class UnidentifiedSequencesTest {
     }
 
     @Test
-    public void testUnidentifiedCluster() throws Exception {
+    public void testUnidentifiedCluster() {
         ICluster testCluster = testClusters.get(2);
 
         Assert.assertEquals("61326dc1-6a3a-49b7-b668-5edd0dae5136", testCluster.getId());
@@ -65,7 +65,7 @@ public class UnidentifiedSequencesTest {
     }
 
     @Test
-    public void testSmallMixedCluster() throws Exception {
+    public void testSmallMixedCluster() {
         ICluster testCluster = testClusters.get(3);
 
         Assert.assertEquals("66c1ebcb-dffc-43b6-a862-3807a7d9847d", testCluster.getId());
@@ -77,7 +77,7 @@ public class UnidentifiedSequencesTest {
     }
 
     @Test
-    public void testIdentifiedCluster() throws Exception {
+    public void testIdentifiedCluster() {
         ICluster testCluster = testClusters.get(4);
 
         Assert.assertEquals("268360b6-92d5-4976-8a15-a1b1456188aa", testCluster.getId());
@@ -92,7 +92,7 @@ public class UnidentifiedSequencesTest {
     }
 
     @Test
-    public void testLargeUnidentifiedCluster() throws Exception {
+    public void testLargeUnidentifiedCluster() {
         ICluster testCluster = testClusters.get(5);
         Assert.assertEquals("45fa0c9d-a5c0-48a9-b6c3-f596b7c65da6", testCluster.getId());
 

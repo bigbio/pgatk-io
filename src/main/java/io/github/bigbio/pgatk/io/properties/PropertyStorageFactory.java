@@ -73,11 +73,7 @@ public class PropertyStorageFactory {
      * @return IPropertyStorage
      */
     public static IPropertyStorage buildDynamicMapDBStorage(File tempDirectory) throws PgatkIOException {
-        try {
-            return new MapDBPropertyStorage(tempDirectory);
-        } catch (IOException e) {
-            throw new PgatkIOException("Error building the Dynamic Property Storage --", e.getCause());
-        }
+        return new MapDBPropertyStorage(tempDirectory);
     }
 
     /**
@@ -85,11 +81,7 @@ public class PropertyStorageFactory {
      * @return IPropertyStorage
      */
     public static IPropertyStorage buildDynamicSparkKeyStorage(File tempDirectory) throws PgatkIOException {
-        try {
-            return new SparkeyPropertyStorage<>(tempDirectory);
-        } catch (IOException e) {
-            throw new PgatkIOException("Error building the Dynamic Property Storage --", e.getCause());
-        }
+        return new SparkeyPropertyStorage<>(tempDirectory);
     }
 
     /**
@@ -97,10 +89,6 @@ public class PropertyStorageFactory {
      * @return IPropertyStorage
      */
     public static IPropertyStorage buildDynamicEcacheStorage(File tempDirectory) throws PgatkIOException {
-        try {
-            return new EcachePropertyStorage(tempDirectory);
-        } catch (IOException e) {
-            throw new PgatkIOException("Error building the Ecache Property Storage --", e.getCause());
-        }
+        return new EcachePropertyStorage(tempDirectory);
     }
 }

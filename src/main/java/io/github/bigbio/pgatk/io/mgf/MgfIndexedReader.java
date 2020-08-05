@@ -982,7 +982,7 @@ public class MgfIndexedReader implements MzReader, MzIterableReader {
     }
 
     @Override
-    public void close() throws PgatkIOException {
+    public void close() {
 
     }
 

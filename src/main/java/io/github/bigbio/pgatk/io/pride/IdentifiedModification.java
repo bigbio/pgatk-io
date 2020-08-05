@@ -97,8 +97,8 @@ public class IdentifiedModification{
     public void addPosition(int proteinPosition, Set<CvParam> score) {
         List<CvParam> scoreList = new ArrayList<>(score);
         if(positionMap == null)
-            positionMap = new ArrayList<Tuple<Integer, List<CvParam>>>();
-        Tuple<Integer, List<CvParam>> scoreTuple = new Tuple<Integer, List<CvParam>>(proteinPosition, scoreList);
+            positionMap = new ArrayList<>();
+        Tuple<Integer, List<CvParam>> scoreTuple = new Tuple<>(proteinPosition, scoreList);
         positionMap.add(scoreTuple);
     }
 }

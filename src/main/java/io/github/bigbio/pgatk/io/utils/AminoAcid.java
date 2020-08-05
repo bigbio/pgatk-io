@@ -36,12 +36,12 @@ public enum AminoAcid {
 
     private final String composition;
 
-    private AminoAcid(){
+    AminoAcid(){
 
         composition = null;
     }
 
-    private AminoAcid(String comp) {
+    AminoAcid(String comp) {
 
         this.composition = comp;
     }

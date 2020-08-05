@@ -84,19 +84,30 @@ public class MspAttributeReader {
     boolean handled = false;
     String tag = split.substring(0, index);
     String value = split.substring(index + 1);
-    if(tag.equals("Mods")) {
-      handled = parseModsComment(value, builder);
-    } else if(tag.equals("Protein")) {
-      handled = parseProteinComment(value, builder);
-    } else if(tag.equals("Parent")){
-      builder.setPrecursorMz(Double.parseDouble(value.trim()));
-    } else if(tag.equals("Dotbest") || tag.equals("Probcorr") || tag.equals("MaxRatio")){
-      builder.addScores(tag, value);
-    } else if (tag.equals("Spec") || tag.equals("ConsensusPep") || tag.equals("SinglePep")){
+    switch (tag) {
+      case "Mods":
+        handled = parseModsComment(value, builder);
+        break;
+      case "Protein":
+        handled = parseProteinComment(value, builder);
+        break;
+      case "Parent":
+        builder.setPrecursorMz(Double.parseDouble(value.trim()));
+        break;
+      case "Dotbest":
+      case "Probcorr":
+      case "MaxRatio":
+        builder.addScores(tag, value);
+        break;
+      case "Spec":
+      case "ConsensusPep":
+      case "SinglePep":
         builder.addAttribute("Spec", value);
 
-    }else {
-      handled = parseUnknownCommentTag(tag, value, builder);
+        break;
+      default:
+        handled = parseUnknownCommentTag(tag, value, builder);
+        break;
     }
 
     return handled;
@@ -149,7 +160,6 @@ public class MspAttributeReader {
 
   public static void parsePeptideFromPeptidoform(String s, LibrarySpectrumBuilder builder) throws PgatkIOException {
 
-    String input = s;
     int bracketCount = 0;
     int bracketStartIndex = -1;
     int lastModIndex = -1;
@@ -168,22 +178,22 @@ public class MspAttributeReader {
         bracketCount -= 1;
         if(bracketCount == 0) {
           if(lastModIndex == aaChars.size() - 1)  //Prevent A(mod1)(mod2) from being legal
-            throw new PgatkIOException(input + " has illegal modification format");
+            throw new PgatkIOException(s + " has illegal modification format");
           System.out.println("PTM -- ( " + s.substring(bracketStartIndex + 1, i) + " )");
           lastModIndex = aaChars.size() - 1;
         }
       } else if(bracketCount == 0) {
-        throw new PgatkIOException(input + " has illegal character " + c);
+        throw new PgatkIOException(s + " has illegal character " + c);
       }
 
-      if(bracketCount < 0) throw new PgatkIOException(input + " has to many closing brackets" + i);
+      if(bracketCount < 0) throw new PgatkIOException(s + " has to many closing brackets" + i);
     }
 
     if(bracketCount != 0)
-      throw new PgatkIOException(input + " has to many opening brackets");
+      throw new PgatkIOException(s + " has to many opening brackets");
 
     if(s.isEmpty())
-      throw new PgatkIOException("The peptide '" + input + "' contains no amino acid residues");
+      throw new PgatkIOException("The peptide '" + s + "' contains no amino acid residues");
 
     builder.setPeptideSequence(aaChars.stream().map(String::valueOf).collect(Collectors.joining()));
   }

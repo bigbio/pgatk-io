@@ -12,7 +12,7 @@ The pgatk-io library is a java framework to manipulate mass spectrometry and pro
 This table summarizes the current level of support for each feature across the different file formats. See discussion
 below for details on each feature.
 
-| Feature              | MGF                | APL (Maxquant)         | mzXML               | mzML                 | PRIDE Json                |Parquet                 |
+| Feature              | MGF                | APL (Maxquant)         | mzXML               | mzML                 | PSM Json                |Parquet                 |
 | ---------------------|--------------------|------------------------|---------------------|----------------------|---------------------|------------------------|
 | Random Access        | :heavy_check_mark: | :heavy_check_mark:     | :heavy_check_mark:  | :heavy_check_mark:   | :heavy_check_mark:  |                        |
 | Fast Iterable Access | :heavy_check_mark: | :white_check_mark:     | :heavy_check_mark:  | :x:                  | :x:                 |                        |

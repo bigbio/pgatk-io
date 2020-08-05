@@ -70,7 +70,7 @@ public class InMemoryPropertyStorage implements IPropertyStorage{
      * @throws IndexOutOfBoundsException
      */
     @Override
-    public String get(String key) throws PgatkIOException {
+    public String get(String key) {
         return propertyStorage.get(key);
     }
 

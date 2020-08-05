@@ -89,11 +89,9 @@ public class ObjectDBPropertyStorage extends LongObject {
      * @param displayProgress boolean indicating whether the progress of this
      * method should be displayed on the waiting handler
      *
-     * @throws InterruptedException exception thrown if a threading error occurs
-     * while interacting with the database
      */
     public void loadObjects(Class className, WaitingHandler waitingHandler,
-                            boolean displayProgress) throws InterruptedException {
+                            boolean displayProgress) {
         objectsDB.loadObjects(className, waitingHandler, displayProgress);
     }
 
@@ -105,10 +103,8 @@ public class ObjectDBPropertyStorage extends LongObject {
      * and canceling the process
      * method should be displayed on the waiting handler
      *
-     * @throws InterruptedException exception thrown if a threading error occurs
-     * while interacting with the database
      */
-    public void loadObjects(ArrayList<Long> keyList, WaitingHandler waitingHandler) throws InterruptedException {
+    public void loadObjects(ArrayList<Long> keyList, WaitingHandler waitingHandler) {
         objectsDB.loadObjects(keyList, waitingHandler);
     }
 
@@ -280,7 +276,7 @@ public class ObjectDBPropertyStorage extends LongObject {
      * @return true if the connection to the DB is active
      */
     public boolean isConnectionActive() {
-        return objectsDB.isConnectionActive();
+        return ObjectsDB.isConnectionActive();
     }
 
     public void flush() {

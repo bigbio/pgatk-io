@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +45,7 @@ public class PrideJsonWriterTest {
       Double[] intensities = new Double[spectrum.getPeakList().size()];
       MspSpectrum mspSpectrum = (MspSpectrum) spectrum;
       int index = 0;
-      Iterator<Map.Entry<Double, Double>> it = spectrum.getPeakList().entrySet().iterator();
-      while(it.hasNext()){
-        Map.Entry<Double, Double> value = it.next();
+      for (Map.Entry<Double, Double> value : spectrum.getPeakList().entrySet()) {
         masses[index] = value.getKey();
         intensities[index] = value.getValue();
         index++;

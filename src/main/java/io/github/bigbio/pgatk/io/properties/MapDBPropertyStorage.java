@@ -18,7 +18,7 @@ public class MapDBPropertyStorage<T> extends InMemoryPropertyStorage{
     DB db;
     File dbFile;
 
-    public MapDBPropertyStorage(File directoryPath) throws IOException{
+    public MapDBPropertyStorage(File directoryPath) {
 
         log.info(" ------------- MapDB Created -------------");
         this.directoryPath = directoryPath;
@@ -48,7 +48,7 @@ public class MapDBPropertyStorage<T> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public String get(String itemId, String propertyName) throws PgatkIOException {
+    public String get(String itemId, String propertyName) {
         propertyNames.add(propertyName);
         return propertyStorage.get(getCombinedKey(itemId, propertyName));
     }
@@ -59,7 +59,7 @@ public class MapDBPropertyStorage<T> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public String get(String key) throws PgatkIOException {
+    public String get(String key) {
         return propertyStorage.get(key);
     }
 
@@ -87,7 +87,7 @@ public class MapDBPropertyStorage<T> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public void cleanStorage() throws PgatkIOException {
+    public void cleanStorage() {
         log.info("----- MapDB  ------------------------");
         dbFile.deleteOnExit();
         db = DBMaker

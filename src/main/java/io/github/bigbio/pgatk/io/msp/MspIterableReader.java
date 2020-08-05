@@ -121,7 +121,7 @@ public class MspIterableReader extends MzIterableChannelReader implements MzIter
                     if(line.contains(":")){
                         if(line.contains("Comment:")){
                             int index = line.indexOf(":");
-                            MspAttributeReader.parseComment(line.substring(index + 2, line.length()), builder);
+                            MspAttributeReader.parseComment(line.substring(index + 2), builder);
                         }
 
                     }else{

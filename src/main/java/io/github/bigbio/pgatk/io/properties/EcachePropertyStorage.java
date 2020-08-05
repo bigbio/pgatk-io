@@ -23,7 +23,7 @@ public class EcachePropertyStorage<V> extends InMemoryPropertyStorage{
     private static String PROPERTY_ALIAS = "properties-echache"; 
     private static int DEFAULT_NUM_ENTRIES = 100_000;
 
-    public EcachePropertyStorage(File dbDirectory) throws IOException {
+    public EcachePropertyStorage(File dbDirectory) {
         this.dbDirectory = dbDirectory;
 
         cacheManager = CacheManagerBuilder.newCacheManagerBuilder()
@@ -41,7 +41,7 @@ public class EcachePropertyStorage<V> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public void put(String itemId, String propertyName, String propertyValue) throws PgatkIOException {
+    public void put(String itemId, String propertyName, String propertyValue) {
         String key = getCombinedKey(itemId, propertyName);
         propertyNames.add(propertyName);
         cacheStorage.put(key, propertyValue);
@@ -49,7 +49,7 @@ public class EcachePropertyStorage<V> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public String get(String itemId, String propertyName) throws PgatkIOException {
+    public String get(String itemId, String propertyName) {
         String key = getCombinedKey(itemId, propertyName);
         return cacheStorage.get(key);
     }
@@ -60,7 +60,7 @@ public class EcachePropertyStorage<V> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public String get(String key) throws PgatkIOException {
+    public String get(String key) {
         return cacheStorage.get(key);
     }
 
@@ -80,7 +80,7 @@ public class EcachePropertyStorage<V> extends InMemoryPropertyStorage{
     }
 
     @Override
-    public void cleanStorage() throws PgatkIOException {
+    public void cleanStorage() {
         cacheStorage.clear();
         entryCounter = 0;
     }
