@@ -15,7 +15,7 @@ public class IdentifiedModification{
 
 
     private CvParam neutralLoss;
-    private List<Tuple<Integer, Set<CvParam>>> positionMap;
+    private List<Tuple<Integer, List<CvParam>>> positionMap;
     private CvParam modification;
     private Set<? extends  CvParam> attributes;
 
@@ -31,7 +31,7 @@ public class IdentifiedModification{
      * @param modification modification as {@link CvParam}
      * @param attributes Attributes
      */
-    public IdentifiedModification(CvParam neutralLoss, List<Tuple<Integer, Set<CvParam>>>
+    public IdentifiedModification(CvParam neutralLoss, List<Tuple<Integer, List<CvParam>>>
             positionMap, CvParam modification, Set<CvParam> attributes) {
         this.neutralLoss = neutralLoss;
         this.positionMap = positionMap;
@@ -43,7 +43,7 @@ public class IdentifiedModification{
         this.neutralLoss = neutralLoss;
     }
 
-    public void setPositionMap(List<Tuple<Integer, Set<CvParam>>> positionMap) {
+    public void setPositionMap(List<Tuple<Integer, List<CvParam>>> positionMap) {
         this.positionMap = positionMap;
     }
 
@@ -59,7 +59,7 @@ public class IdentifiedModification{
         return this.neutralLoss;
     }
 
-    public List<Tuple<Integer, Set<CvParam>>> getPositionMap() {
+    public List<Tuple<Integer, List<CvParam>>> getPositionMap() {
         return this.positionMap;
     }
 
@@ -95,9 +95,10 @@ public class IdentifiedModification{
     }
 
     public void addPosition(int proteinPosition, Set<CvParam> score) {
+        List<CvParam> scoreList = new ArrayList<>(score);
         if(positionMap == null)
-            positionMap = new ArrayList<Tuple<Integer, Set<CvParam>>>();
-        Tuple<Integer, Set<CvParam>> scoreTuple = new Tuple<Integer, Set<CvParam>>(proteinPosition, score);
+            positionMap = new ArrayList<Tuple<Integer, List<CvParam>>>();
+        Tuple<Integer, List<CvParam>> scoreTuple = new Tuple<Integer, List<CvParam>>(proteinPosition, scoreList);
         positionMap.add(scoreTuple);
     }
 }
