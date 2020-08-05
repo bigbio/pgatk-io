@@ -81,18 +81,23 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("isValid")
     private Boolean isValid;
 
-    @JsonProperty("proteinAccesssions")
+    @JsonProperty("proteinAccessions")
     private List<String> proteinAccessions;
+
+    @JsonProperty("geneAccessions")
+    private List<String> geneAccessions;
 
     public ArchiveSpectrum() { }
 
-    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession, String spectrumFile,
-                           String sourceID, String spectrumTitle, Double[] masses, Double[] intensities,
-                           Integer numPeaks, Integer msLevel, Integer precursorCharge, Double precursorMz,
-                           Double retentionTime, Set<CvParam> properties, String peptideSequence,
-                           Integer missedCleavages, Collection<IdentifiedModification> modifications,
+    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
+                           String spectrumFile, String sourceID, String spectrumTitle,
+                           Double[] masses, Double[] intensities, Integer numPeaks,
+                           Integer msLevel, Integer precursorCharge, Double precursorMz,
+                           Double retentionTime, Set<CvParam> properties,
+                           String peptideSequence, Integer missedCleavages,
+                           Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
-                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions) {
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions, List<String> geneAccessions) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -115,6 +120,7 @@ public class ArchiveSpectrum implements Spectrum {
         this.qualityEstimationMethods = qualityEstimationMethods;
         this.isValid = isValid;
         this.proteinAccessions = proteinAccessions;
+        this.geneAccessions = geneAccessions;
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -145,7 +151,6 @@ public class ArchiveSpectrum implements Spectrum {
     public Boolean isValid() {
         return isValid;
     }
-
 
     @Override
     public Long getIndex() {
@@ -190,7 +195,4 @@ public class ArchiveSpectrum implements Spectrum {
         return attributes;
     }
 
-    public List<String> getProteinAcessions() {
-        return this.proteinAccessions;
-    }
 }
