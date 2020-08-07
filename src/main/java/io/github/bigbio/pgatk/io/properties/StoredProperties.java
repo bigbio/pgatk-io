@@ -18,4 +18,6 @@ public class StoredProperties {
     public static final String PTMS = "PTMs";
     public static final String CHARGE = "Charge";
     public static final String RETENTION_TIME = "RT";
+    public static final String ORIGINAL_PEAKS_MZ = "org_peaks_mz";
+    public static final String ORIGINAL_PEAKS_INTENS = "org_peaks_intens";
 }
