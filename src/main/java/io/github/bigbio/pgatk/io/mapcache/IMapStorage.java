@@ -30,7 +30,7 @@ public interface IMapStorage<V> extends Serializable {
      * @param key String key
      * @param value value for the key
      */
-    void put(String key, V value);
+    void put(String key, V value) throws PgatkIOException;
 
     /**
      * Retrieve a stored property for a defined item. Retruns NULL in case
@@ -38,7 +38,7 @@ public interface IMapStorage<V> extends Serializable {
      * @param key String key
      * @throws IndexOutOfBoundsException In case no item with this id exists.
      */
-    V get(String key);
+    V get(String key) throws PgatkIOException;
 
     /**
      * Delete all the information from the Storage
