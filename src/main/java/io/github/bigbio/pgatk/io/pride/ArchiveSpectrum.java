@@ -87,6 +87,12 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("geneAccessions")
     private List<String> geneAccessions;
 
+    @JsonProperty("proteinLocalizations")
+    private List<AccessionLocalization> proteinLocalizations;
+
+    @JsonProperty("geneLocalizations")
+    private List<AccessionLocalization> geneLocalizations;
+
     public ArchiveSpectrum() { }
 
     public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
@@ -97,7 +103,9 @@ public class ArchiveSpectrum implements Spectrum {
                            String peptideSequence, Integer missedCleavages,
                            Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
-                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions, List<String> geneAccessions) {
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
+                           List<String> geneAccessions, List<AccessionLocalization>  proteinLocalizations,
+                           List<AccessionLocalization> geneLocalizations) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -121,6 +129,8 @@ public class ArchiveSpectrum implements Spectrum {
         this.isValid = isValid;
         this.proteinAccessions = proteinAccessions;
         this.geneAccessions = geneAccessions;
+        this.geneLocalizations = geneLocalizations;
+        this.proteinLocalizations = proteinLocalizations;
     }
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
