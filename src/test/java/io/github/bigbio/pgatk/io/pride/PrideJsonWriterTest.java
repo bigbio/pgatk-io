@@ -53,7 +53,7 @@ public class PrideJsonWriterTest {
 
       ArchiveSpectrum archiveSpectrum = new ArchiveSpectrum(spectrum.getIndex().toString(), null, null, null, null,
         null, masses, intensities,spectrum.getPeakList().size(), 2, spectrum.getPrecursorCharge(), spectrum.getPrecursorMZ(), null,null, mspSpectrum.getPeptideSequence(),
-        0, null,null,false, null, true, null, null, null, null);
+        0, null,null,false, null, true, null, null);
       prideJsonfile.write(archiveSpectrum);
     }
 

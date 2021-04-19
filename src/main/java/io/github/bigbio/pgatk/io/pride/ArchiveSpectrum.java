@@ -93,6 +93,12 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("geneLocalizations")
     private List<AccessionLocalization> geneLocalizations;
 
+    @JsonProperty("peptidoform")
+    String peptidoform;
+
+    @JsonProperty("peptideIntensity")
+    private Double peptideIntensity;
+
     public ArchiveSpectrum() { }
 
     public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
@@ -104,8 +110,7 @@ public class ArchiveSpectrum implements Spectrum {
                            Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
                            Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
-                           List<String> geneAccessions, List<AccessionLocalization>  proteinLocalizations,
-                           List<AccessionLocalization> geneLocalizations) {
+                           List<String> geneAccessions) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -129,9 +134,59 @@ public class ArchiveSpectrum implements Spectrum {
         this.isValid = isValid;
         this.proteinAccessions = proteinAccessions;
         this.geneAccessions = geneAccessions;
+    }
+
+    /**
+     * Constructor including the protein/gene localizations and the peptidform.
+     * @param usi
+     * @param projectAccession
+     * @param assayAccession
+     * @param spectrumFile
+     * @param sourceID
+     * @param spectrumTitle
+     * @param masses
+     * @param intensities
+     * @param numPeaks
+     * @param msLevel
+     * @param precursorCharge
+     * @param precursorMz
+     * @param retentionTime
+     * @param properties
+     * @param peptideSequence
+     * @param missedCleavages
+     * @param modifications
+     * @param annotations
+     * @param isDecoy
+     * @param qualityEstimationMethods
+     * @param isValid
+     * @param proteinAccessions
+     * @param geneAccessions
+     * @param geneLocalizations
+     * @param proteinLocalizations
+     * @param peptidoform
+     */
+    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
+                           String spectrumFile, String sourceID, String spectrumTitle,
+                           Double[] masses, Double[] intensities, Integer numPeaks,
+                           Integer msLevel, Integer precursorCharge, Double precursorMz,
+                           Double retentionTime, Set<CvParam> properties,
+                           String peptideSequence, Integer missedCleavages,
+                           Collection<IdentifiedModification> modifications,
+                           List<String> annotations, Boolean isDecoy,
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
+                           List<String> geneAccessions, List<AccessionLocalization> geneLocalizations,
+                           List<AccessionLocalization> proteinLocalizations, String peptidoform, Double peptideIntensity) {
+
+        this(usi, projectAccession, assayAccession, spectrumFile, sourceID, spectrumTitle, masses, intensities, numPeaks, msLevel, precursorCharge,
+                precursorMz, retentionTime, properties, peptideSequence, missedCleavages, modifications, annotations, isDecoy, qualityEstimationMethods, isValid, proteinAccessions,
+                geneAccessions);
+
         this.geneLocalizations = geneLocalizations;
         this.proteinLocalizations = proteinLocalizations;
+        this.peptidoform = peptidoform;
+        this.peptideIntensity = peptideIntensity;
     }
+
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<? extends String> getAdditionalAttributesStrings() {
