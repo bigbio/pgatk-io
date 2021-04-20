@@ -3,6 +3,7 @@ package io.github.bigbio.pgatk.io.pride;
 import com.fasterxml.jackson.annotation.*;
 import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
+import io.github.bigbio.pgatk.io.utils.Tuple;
 import lombok.Builder;
 import lombok.Data;
 
@@ -86,6 +87,11 @@ public class ArchiveSpectrum implements Spectrum {
 
     @JsonProperty("geneAccessions")
     private List<String> geneAccessions;
+
+
+    // Extended information reanalysis
+    @JsonProperty("samples")
+    List<Tuple<String, String>> samples;
 
     @JsonProperty("proteinLocalizations")
     private List<AccessionLocalization> proteinLocalizations;
@@ -174,7 +180,7 @@ public class ArchiveSpectrum implements Spectrum {
                            Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
                            Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
-                           List<String> geneAccessions, List<AccessionLocalization> geneLocalizations,
+                           List<String> geneAccessions, List<Tuple<String, String>> samples, List<AccessionLocalization> geneLocalizations,
                            List<AccessionLocalization> proteinLocalizations, String peptidoform, Double peptideIntensity) {
 
         this(usi, projectAccession, assayAccession, spectrumFile, sourceID, spectrumTitle, masses, intensities, numPeaks, msLevel, precursorCharge,
@@ -185,6 +191,7 @@ public class ArchiveSpectrum implements Spectrum {
         this.proteinLocalizations = proteinLocalizations;
         this.peptidoform = peptidoform;
         this.peptideIntensity = peptideIntensity;
+        this.samples = samples;
     }
 
 
