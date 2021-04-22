@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
 @JsonRootName("ArchiveSpectrum")
 @JsonTypeName("ArchiveSpectrum")
 @Data
-@Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ArchiveSpectrum implements Spectrum {
 
@@ -88,7 +87,6 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("geneAccessions")
     private List<String> geneAccessions;
 
-
     // Extended information reanalysis
     @JsonProperty("samples")
     List<Tuple<String, String>> samples;
@@ -97,7 +95,7 @@ public class ArchiveSpectrum implements Spectrum {
     private List<AccessionLocalization> proteinLocalizations;
 
     @JsonProperty("geneLocalizations")
-    private List<AccessionLocalization> geneLocalizations;
+    private Set<GeneCoordinates> geneLocalizations;
 
     @JsonProperty("peptidoform")
     String peptidoform;
@@ -180,7 +178,7 @@ public class ArchiveSpectrum implements Spectrum {
                            Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
                            Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
-                           List<String> geneAccessions, List<Tuple<String, String>> samples, List<AccessionLocalization> geneLocalizations,
+                           List<String> geneAccessions, List<Tuple<String, String>> samples, Set<GeneCoordinates> geneLocalizations,
                            List<AccessionLocalization> proteinLocalizations, String peptidoform, Double peptideIntensity) {
 
         this(usi, projectAccession, assayAccession, spectrumFile, sourceID, spectrumTitle, masses, intensities, numPeaks, msLevel, precursorCharge,
