@@ -14,6 +14,7 @@ import java.util.*;
 
 public class PrideJsonIterableReader implements MzIterableReader {
 
+    private final Class classMapper;
     File source;
     private static final ObjectMapper objectMapper;
     private BufferedRandomAccessFile braf;
@@ -29,8 +30,9 @@ public class PrideJsonIterableReader implements MzIterableReader {
      * @param source File with the spectra
      * @throws PgatkIOException
      */
-    public PrideJsonIterableReader(File source) throws PgatkIOException {
+    public PrideJsonIterableReader(File source, Class classMapper) throws PgatkIOException {
         this.source = source;
+        this.classMapper = classMapper;
         try {
             braf = new BufferedRandomAccessFile(this.source.getAbsolutePath(),
                     "r", 1024 * 100);
@@ -55,7 +57,7 @@ public class PrideJsonIterableReader implements MzIterableReader {
     @Override
     public Spectrum next() throws NoSuchElementException {
         try {
-            return objectMapper.readValue(line, ArchiveSpectrum.class);
+            return (Spectrum) objectMapper.readValue(line, classMapper);
         } catch (JsonProcessingException e) {
             throw new NoSuchElementException(e.getMessage());
         }

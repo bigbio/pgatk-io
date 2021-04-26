@@ -21,7 +21,7 @@ public class PrideJsonIterableReaderTest {
 
         try {
             sourceFile = new File(testFile.toURI());
-            prideJsonIterableReader = new PrideJsonIterableReader(sourceFile);
+            prideJsonIterableReader = new PrideJsonIterableReader(sourceFile, ArchiveSpectrum.class);
         } catch (Exception e) {
             System.out.println("Faild to load test file");
         }

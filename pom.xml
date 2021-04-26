@@ -57,6 +57,14 @@
         </dependency>
 
         <dependency>
+            <groupId>io.github.bigbio.pgatk</groupId>
+            <artifactId>pgatk-utilities</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
+
+
+
+        <dependency>
             <groupId>org.zeroturnaround</groupId>
             <artifactId>zt-zip</artifactId>
             <version>${org.zeroturnaround.version}</version>

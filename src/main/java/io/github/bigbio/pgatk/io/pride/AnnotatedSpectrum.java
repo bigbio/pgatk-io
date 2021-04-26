@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
 import io.github.bigbio.pgatk.io.utils.Tuple;
+import io.github.bigbio.pgatk.utilities.spectra.SpectraUtilities;
 import lombok.Data;
 
 import java.util.*;
@@ -115,17 +116,9 @@ public class AnnotatedSpectrum implements Spectrum {
     @JsonProperty("modifications")
     private List<IdentifiedModification> modifications;
 
-    /**
-     * Spectrum masses, a list of doubles where each value correspond to a peak mass value.
-     */
-    @JsonProperty("masses")
-    private List<Double> masses;
 
-    /**
-     * Spectrum intensities, a list of doubles where each value correspond to a peak intensity value.
-     */
-    @JsonProperty("intensities")
-    private List<Double> intensities;
+    @JsonProperty("binaryPeaks")
+    private BinaryPeaks binaryPeaks;
 
     /**
      * Spectrum retention time.
@@ -193,7 +186,7 @@ public class AnnotatedSpectrum implements Spectrum {
                              double precursorMz, Integer precursorCharge, List<IdentifiedModification> modifications,
                              List<Double> masses, List<Double> intensities, Double retentionTime, Integer msLevel,
                              Integer missedCleavages, Set<CvParam> qualityScores, List<Tuple<String, String>>
-                                     msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
+                             msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
         this.usi = usi;
         this.pepSequence = pepSequence;
         this.peptidoform = peptidoform;
@@ -208,8 +201,6 @@ public class AnnotatedSpectrum implements Spectrum {
         this.precursorMz = precursorMz;
         this.precursorCharge = precursorCharge;
         this.modifications = modifications;
-        this.masses = masses;
-        this.intensities = intensities;
         this.retentionTime = retentionTime;
         this.msLevel = msLevel;
         this.missedCleavages = missedCleavages;
@@ -218,6 +209,7 @@ public class AnnotatedSpectrum implements Spectrum {
         this.pxAccession = pxAccession;
         this.isDecoy = isDecoy;
         this.peptideIntensity = peptideIntensity;
+        this.binaryPeaks = new BinaryPeaks(masses, intensities);
     }
 
     @Override
@@ -241,9 +233,12 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Map<Double, Double> getPeakList() {
         Map<Double, Double> peaks = new HashMap<>();
-        if(masses != null){
+        if(binaryPeaks != null){
+            List<Double> masses = SpectraUtilities.decodeBinary(binaryPeaks.getBinaryMasses());
+            List<Double> intensities = SpectraUtilities.decodeBinary(binaryPeaks.getBinaryIntensities());
             for(int i = 0; i < masses.size(); i++){
                 peaks.put(masses.get(i), intensities.get(i));
             }
