@@ -3,6 +3,7 @@ package io.github.bigbio.pgatk.io.pride;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.paranamer.ParanamerModule;
 import io.github.bigbio.pgatk.io.common.PgatkIOException;
+import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -40,8 +41,8 @@ public class PrideJsonWriter {
    * @param spectra List of {@link ArchiveSpectrum}
    * @throws PgatkIOException
    */
-  public void writeList(List<ArchiveSpectrum> spectra) throws PgatkIOException {
-    for(ArchiveSpectrum spectrum: spectra){
+  public void writeList(List<Spectrum> spectra) throws PgatkIOException {
+    for(Spectrum spectrum: spectra){
       write(spectrum);
     }
   }
@@ -51,7 +52,7 @@ public class PrideJsonWriter {
    * @param spectrum {@link ArchiveSpectrum}
    * @throws PgatkIOException
    */
-  public void write(ArchiveSpectrum spectrum) throws PgatkIOException {
+  public void write(Spectrum spectrum) throws PgatkIOException {
     try {
         String s = objectMapper.writeValueAsString(spectrum);
         archiveSpectrumBufferedWriter.write(s);

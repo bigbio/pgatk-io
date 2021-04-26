@@ -24,10 +24,10 @@ public class PrideJsonIndexedReader implements MzReader {
   private List<IndexElement> index = new ArrayList<>();
 
   /**  Index in the file to {@link ArchiveSpectrum} */
-  private HashMap<Integer, ArchiveSpectrum> indexSpectra = new HashMap<>();
+  private HashMap<Integer, Spectrum> indexSpectra = new HashMap<>();
 
   /** Usi to {@link ArchiveSpectrum} */
-  private HashMap<String, ArchiveSpectrum> peakLists = new HashMap<>();
+  private HashMap<String, Spectrum> peakLists = new HashMap<>();
 
   /** Indicates whether the cache should be used */
   private boolean useCache = false;

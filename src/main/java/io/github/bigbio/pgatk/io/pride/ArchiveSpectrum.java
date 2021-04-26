@@ -3,8 +3,6 @@ package io.github.bigbio.pgatk.io.pride;
 import com.fasterxml.jackson.annotation.*;
 import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
-import io.github.bigbio.pgatk.io.utils.Tuple;
-import lombok.Builder;
 import lombok.Data;
 
 import java.util.*;
@@ -87,22 +85,6 @@ public class ArchiveSpectrum implements Spectrum {
     @JsonProperty("geneAccessions")
     private List<String> geneAccessions;
 
-    // Extended information reanalysis
-    @JsonProperty("samples")
-    List<Tuple<String, String>> samples;
-
-    @JsonProperty("proteinLocalizations")
-    private List<AccessionLocalization> proteinLocalizations;
-
-    @JsonProperty("geneLocalizations")
-    private Set<GeneCoordinates> geneLocalizations;
-
-    @JsonProperty("peptidoform")
-    String peptidoform;
-
-    @JsonProperty("peptideIntensity")
-    private Double peptideIntensity;
-
     public ArchiveSpectrum() { }
 
     public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
@@ -113,8 +95,7 @@ public class ArchiveSpectrum implements Spectrum {
                            String peptideSequence, Integer missedCleavages,
                            Collection<IdentifiedModification> modifications,
                            List<String> annotations, Boolean isDecoy,
-                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
-                           List<String> geneAccessions) {
+                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions, List<String> geneAccessions) {
         this.usi = usi;
         this.projectAccession = projectAccession;
         this.assayAccession = assayAccession;
@@ -139,59 +120,6 @@ public class ArchiveSpectrum implements Spectrum {
         this.proteinAccessions = proteinAccessions;
         this.geneAccessions = geneAccessions;
     }
-
-    /**
-     * Constructor including the protein/gene localizations and the peptidform.
-     * @param usi
-     * @param projectAccession
-     * @param assayAccession
-     * @param spectrumFile
-     * @param sourceID
-     * @param spectrumTitle
-     * @param masses
-     * @param intensities
-     * @param numPeaks
-     * @param msLevel
-     * @param precursorCharge
-     * @param precursorMz
-     * @param retentionTime
-     * @param properties
-     * @param peptideSequence
-     * @param missedCleavages
-     * @param modifications
-     * @param annotations
-     * @param isDecoy
-     * @param qualityEstimationMethods
-     * @param isValid
-     * @param proteinAccessions
-     * @param geneAccessions
-     * @param geneLocalizations
-     * @param proteinLocalizations
-     * @param peptidoform
-     */
-    public ArchiveSpectrum(String usi, String projectAccession, String assayAccession,
-                           String spectrumFile, String sourceID, String spectrumTitle,
-                           Double[] masses, Double[] intensities, Integer numPeaks,
-                           Integer msLevel, Integer precursorCharge, Double precursorMz,
-                           Double retentionTime, Set<CvParam> properties,
-                           String peptideSequence, Integer missedCleavages,
-                           Collection<IdentifiedModification> modifications,
-                           List<String> annotations, Boolean isDecoy,
-                           Set<CvParam> qualityEstimationMethods, Boolean isValid, List<String> proteinAccessions,
-                           List<String> geneAccessions, List<Tuple<String, String>> samples, Set<GeneCoordinates> geneLocalizations,
-                           List<AccessionLocalization> proteinLocalizations, String peptidoform, Double peptideIntensity) {
-
-        this(usi, projectAccession, assayAccession, spectrumFile, sourceID, spectrumTitle, masses, intensities, numPeaks, msLevel, precursorCharge,
-                precursorMz, retentionTime, properties, peptideSequence, missedCleavages, modifications, annotations, isDecoy, qualityEstimationMethods, isValid, proteinAccessions,
-                geneAccessions);
-
-        this.geneLocalizations = geneLocalizations;
-        this.proteinLocalizations = proteinLocalizations;
-        this.peptidoform = peptidoform;
-        this.peptideIntensity = peptideIntensity;
-        this.samples = samples;
-    }
-
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<? extends String> getAdditionalAttributesStrings() {
