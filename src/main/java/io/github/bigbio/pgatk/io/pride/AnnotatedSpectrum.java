@@ -67,6 +67,10 @@ public class AnnotatedSpectrum implements Spectrum {
     @JsonProperty("geneLocalizations")
     private Set<GeneCoordinates> geneLocalizations;
 
+
+    @JsonProperty("sampleAccession")
+    String sampleAccession;
+
     /**
      * The organism where the peptide has been found/identified. In PRIDE some peptides are associated to more than one
      * species, a unique species/organism should be selected.
@@ -89,7 +93,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *  - variant
      */
     @JsonProperty("biologicalAnnotations")
-    Set<String> biologicalAnnotations;
+    List<Tuple<String, String>> biologicalAnnotations;
 
     // Information about the Mass spectrometry (Spectrum)
 
@@ -156,7 +160,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * - Label-free
      */
     @JsonProperty("msAnnotations")
-    Set<CvParam> msAnnotations;
+    private List<Tuple<String, String>> msAnnotations;
 
     /**
      * A list of ProteomeXchange projects that has been used to generate the following peptide.
@@ -182,39 +186,14 @@ public class AnnotatedSpectrum implements Spectrum {
     public AnnotatedSpectrum() {
     }
 
-    /**
-     * Constructor with all parameters.
-     * @param usi
-     * @param pepSequence
-     * @param peptidoform
-     * @param proteinAccessions
-     * @param geneAccessions
-     * @param proteinLocalizations
-     * @param geneLocalizations
-     * @param organism
-     * @param sample
-     * @param biologicalAnnotations
-     * @param precursorMz
-     * @param precursorCharge
-     * @param modifications
-     * @param masses
-     * @param intensities
-     * @param retentionTime
-     * @param msLevel
-     * @param missedCleavages
-     * @param qualityScores
-     * @param msAnnotations
-     * @param pxAccession
-     * @param isDecoy
-     * @param peptideIntensity
-     */
-    public AnnotatedSpectrum(String usi, String pepSequence, String peptidoform, Set<String> proteinAccessions, Set<String> geneAccessions,
-                             Set<AccessionLocalization> proteinLocalizations, Set<GeneCoordinates> geneLocalizations,
-                             String organism, List<Tuple<String, String>> sample, Set<String> biologicalAnnotations,
-                             double precursorMz, int precursorCharge, List<IdentifiedModification> modifications,
-                             List<Double> masses, List<Double> intensities, Double retentionTime, int msLevel, Integer missedCleavages,
-                             Set<CvParam> qualityScores, Set<CvParam> msAnnotations, String pxAccession,
-                             Boolean isDecoy, Double peptideIntensity) {
+    public AnnotatedSpectrum(String usi, String pepSequence, String peptidoform, Set<String> proteinAccessions,
+                             Set<String> geneAccessions, Set<AccessionLocalization> proteinLocalizations,
+                             Set<GeneCoordinates> geneLocalizations, String sampleAccession, String organism,
+                             List<Tuple<String, String>> sample, List<Tuple<String, String>> biologicalAnnotations,
+                             double precursorMz, Integer precursorCharge, List<IdentifiedModification> modifications,
+                             List<Double> masses, List<Double> intensities, Double retentionTime, Integer msLevel,
+                             Integer missedCleavages, Set<CvParam> qualityScores, List<Tuple<String, String>>
+                                     msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
         this.usi = usi;
         this.pepSequence = pepSequence;
         this.peptidoform = peptidoform;
@@ -222,6 +201,7 @@ public class AnnotatedSpectrum implements Spectrum {
         this.geneAccessions = geneAccessions;
         this.proteinLocalizations = proteinLocalizations;
         this.geneLocalizations = geneLocalizations;
+        this.sampleAccession = sampleAccession;
         this.organism = organism;
         this.sample = sample;
         this.biologicalAnnotations = biologicalAnnotations;
