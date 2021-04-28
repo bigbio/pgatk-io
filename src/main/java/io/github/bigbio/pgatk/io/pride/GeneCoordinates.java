@@ -2,6 +2,8 @@ package io.github.bigbio.pgatk.io.pride;
 
 import lombok.Builder;
 import lombok.Data;
+
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -19,7 +21,25 @@ public class GeneCoordinates {
   private String geneName;
   private String geneType;
 
-  private Set<ExonInfo> exonInfoList;
+  private List<ExonInfo> exonInfoList;
+
+  public GeneCoordinates() {
+  }
+
+  public GeneCoordinates(int start, int end, boolean transcriptUnique, boolean geneUnique,
+                         String chromosome, String transcriptAccession, String geneAccession,
+                         String geneName, String geneType, List<ExonInfo> exonInfoList) {
+    this.start = start;
+    this.end = end;
+    this.transcriptUnique = transcriptUnique;
+    this.geneUnique = geneUnique;
+    this.chromosome = chromosome;
+    this.transcriptAccession = transcriptAccession;
+    this.geneAccession = geneAccession;
+    this.geneName = geneName;
+    this.geneType = geneType;
+    this.exonInfoList = exonInfoList;
+  }
 
   @Override
   public boolean equals(Object o) {

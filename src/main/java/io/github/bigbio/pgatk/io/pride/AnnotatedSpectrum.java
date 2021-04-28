@@ -6,17 +6,21 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
-import io.github.bigbio.pgatk.io.utils.Tuple;
 import io.github.bigbio.pgatk.utilities.spectra.SpectraUtilities;
 import lombok.Data;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @JsonRootName("AnnotatedSpectrum")
 @JsonTypeName("AnnotatedSpectrum")
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
+/**
+ * The {@link AnnotatedSpectrum} is a key value compatible with parquet and other column store systems to store PeptideSpectrum
+ * Matches. The Collections properties of the Spectrum are annotated as Lists.
+ *
+ * @author ypriverol
+ */
 public class AnnotatedSpectrum implements Spectrum {
 
     /**
@@ -41,16 +45,16 @@ public class AnnotatedSpectrum implements Spectrum {
     // Sample information
 
     /**
-     * Protein accessions. A {@link Set} of protein accessions from Uniprot, ENSEMBL, or other major databases.
+     * Protein accessions. A {@link List} of protein accessions from Uniprot, ENSEMBL, or other major databases.
      */
     @JsonProperty("proteinAccessions")
-    private Set<String> proteinAccessions;
+    private List<String> proteinAccessions;
 
     /**
      * Gene related accessions, including: Transcript, Exon Accessions from multiple databases.
      */
     @JsonProperty("geneAccessions")
-    private Set<String> geneAccessions;
+    private List<String> geneAccessions;
 
     /**
      * Protein localization including:
@@ -59,14 +63,14 @@ public class AnnotatedSpectrum implements Spectrum {
      *  - end: end in the sequence (start + length (peptideSequence))
      */
     @JsonProperty("proteinLocalizations")
-    private Set<AccessionLocalization> proteinLocalizations;
+    private List<AccessionLocalization> proteinLocalizations;
 
     /**
-     * Gene Coordinates are more complex than Protein localizations, it contains, Transcript position, Gene
-     * positions and exon information.
+     * Gene Coordinates are more complex than Protein localizations, it contains, Transcript
+     * position, Gene positions and exon information.
      */
     @JsonProperty("geneLocalizations")
-    private Set<GeneCoordinates> geneLocalizations;
+    private List<GeneCoordinates> geneLocalizations;
 
 
     @JsonProperty("sampleAccession")
@@ -80,12 +84,13 @@ public class AnnotatedSpectrum implements Spectrum {
     private String organism;
 
     /**
-     * Sample information from SDRF, the sample information a a list of key value pairs from samples, for example:
+     * Sample information from SDRF, the sample information a a list of key value pairs from samples,
+     * for example:
      *  - organism:homo sapiens
      *  - organism part: brain
      */
     @JsonProperty("sample")
-    private List<Tuple<String, String>> sample;
+    private List<ParquetTuple> sample;
 
     /**
      * Additional biological annotations for the peptide as keywords, for example:
@@ -94,7 +99,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *  - variant
      */
     @JsonProperty("biologicalAnnotations")
-    List<Tuple<String, String>> biologicalAnnotations;
+    List<ParquetTuple> biologicalAnnotations;
 
     // Information about the Mass spectrometry (Spectrum)
 
@@ -114,7 +119,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * Structure of Post-translational modifications as position+name-modification+score of the quality of PTM.
      */
     @JsonProperty("modifications")
-    private List<IdentifiedModification> modifications;
+    private List<ParquetModification> modifications;
 
 
     @JsonProperty("binaryPeaks")
@@ -144,7 +149,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *
      */
     @JsonProperty("qualityScores")
-    private Set<CvParam> qualityScores;
+    private List<ParquetTuple> qualityScores;
 
     /**
      * A list of String values that to characterize the MS information, example:
@@ -153,7 +158,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * - Label-free
      */
     @JsonProperty("msAnnotations")
-    private List<Tuple<String, String>> msAnnotations;
+    private List<ParquetTuple> msAnnotations;
 
     /**
      * A list of ProteomeXchange projects that has been used to generate the following peptide.
@@ -173,27 +178,18 @@ public class AnnotatedSpectrum implements Spectrum {
     @JsonProperty("peptideIntensity")
     private Double peptideIntensity;
 
-    /**
-     * Default constructor
-     */
+
     public AnnotatedSpectrum() {
     }
 
-    public AnnotatedSpectrum(String usi, String pepSequence, String peptidoform, Set<String> proteinAccessions,
-                             Set<String> geneAccessions, Set<AccessionLocalization> proteinLocalizations,
-                             Set<GeneCoordinates> geneLocalizations, String sampleAccession, String organism,
-                             List<Tuple<String, String>> sample, List<Tuple<String, String>> biologicalAnnotations,
-                             double precursorMz, Integer precursorCharge, List<IdentifiedModification> modifications,
-                             List<Double> masses, List<Double> intensities, Double retentionTime, Integer msLevel,
-                             Integer missedCleavages, Set<CvParam> qualityScores, List<Tuple<String, String>>
-                             msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
+    public AnnotatedSpectrum(String usi, String pepSequence, String peptidoform, List<String> proteinAccessions, List<String> geneAccessions, List<AccessionLocalization> proteinLocalizations,
+                             List<GeneCoordinates> geneLocalizations, String sampleAccession, String organism, List<ParquetTuple> sample, List<ParquetTuple> biologicalAnnotations,
+                             double precursorMz, Integer precursorCharge, List<ParquetModification> modifications, List<Double> masses,
+                             List<Double> intensities,  Double retentionTime, Integer msLevel, Integer missedCleavages, List<ParquetTuple> qualityScores,
+                             List<ParquetTuple> msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
         this.usi = usi;
         this.pepSequence = pepSequence;
         this.peptidoform = peptidoform;
-        this.proteinAccessions = proteinAccessions;
-        this.geneAccessions = geneAccessions;
-        this.proteinLocalizations = proteinLocalizations;
-        this.geneLocalizations = geneLocalizations;
         this.sampleAccession = sampleAccession;
         this.organism = organism;
         this.sample = sample;
@@ -209,10 +205,18 @@ public class AnnotatedSpectrum implements Spectrum {
         this.pxAccession = pxAccession;
         this.isDecoy = isDecoy;
         this.peptideIntensity = peptideIntensity;
+        this.proteinAccessions = (proteinAccessions != null)?new ArrayList<>(new HashSet<>(proteinAccessions)):null;
+        this.geneAccessions = (geneAccessions != null)?new ArrayList<>(new HashSet<>(geneAccessions)):null;
         this.binaryPeaks = new BinaryPeaks(masses, intensities);
+        this.proteinLocalizations = proteinLocalizations;
+        this.geneLocalizations = geneLocalizations;
     }
 
     @Override
+    /**
+     * This function is needed in the {@link Spectrum} interface but
+     * is not implemented in this class.
+     */
     public Long getIndex() {
         return null;
     }
@@ -223,17 +227,29 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
     @Override
-    public Double getPrecursorMZ() {
-        return this.precursorMz;
+    public Integer getPrecursorCharge() {
+        return precursorCharge;
     }
 
     @Override
+    public Double getPrecursorMZ() {
+        return precursorMz;
+    }
+
+    @Override
+    /**
+     * This method is mandatory for {@link Spectrum} but is not implemented by {@link AnnotatedSpectrum}
+     */
     public Double getPrecursorIntensity() {
         return null;
     }
 
     @Override
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    /**
+     * Peaks are stored as bytes in Parquet using the {@link BinaryPeaks}. These peaks are converted to a Map using this
+     * function.
+     */
     public Map<Double, Double> getPeakList() {
         Map<Double, Double> peaks = new HashMap<>();
         if(binaryPeaks != null){
@@ -247,13 +263,13 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
     @Override
+    public Integer getMsLevel() {
+        return msLevel;
+    }
+
+    @Override
     public Collection<? extends Param> getAdditional() {
         List<Param> attributes = new ArrayList<>();
-        if(qualityScores != null){
-            attributes = qualityScores.stream()
-                    .map( x-> new io.github.bigbio.pgatk.io.common.CvParam(x.getName(),
-                            x.getValue(),x.getCvLabel(),x.getAccession())).collect(Collectors.toList());
-        }
         return attributes;
     }
 
@@ -263,8 +279,26 @@ public class AnnotatedSpectrum implements Spectrum {
                 "usi='" + usi + '\'' +
                 ", pepSequence='" + pepSequence + '\'' +
                 ", peptidoform='" + peptidoform + '\'' +
+                ", proteinAccessions=" + proteinAccessions +
+                ", geneAccessions=" + geneAccessions +
+                ", proteinLocalizations=" + proteinLocalizations +
+                ", geneLocalizations=" + geneLocalizations +
+                ", sampleAccession='" + sampleAccession + '\'' +
                 ", organism='" + organism + '\'' +
                 ", sample=" + sample +
+                ", biologicalAnnotations=" + biologicalAnnotations +
+                ", precursorMz=" + precursorMz +
+                ", precursorCharge=" + precursorCharge +
+                ", modifications=" + modifications +
+                ", binaryPeaks=" + binaryPeaks +
+                ", retentionTime=" + retentionTime +
+                ", msLevel=" + msLevel +
+                ", missedCleavages=" + missedCleavages +
+                ", qualityScores=" + qualityScores +
+                ", msAnnotations=" + msAnnotations +
+                ", pxAccession='" + pxAccession + '\'' +
+                ", isDecoy=" + isDecoy +
+                ", peptideIntensity=" + peptideIntensity +
                 '}';
     }
 }

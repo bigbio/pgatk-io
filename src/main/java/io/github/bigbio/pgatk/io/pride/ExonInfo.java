@@ -5,12 +5,27 @@ import lombok.Data;
 
 @Data
 @Builder
+/**
+ * {@link ExonInfo} is provided by the tool PepGenome, which maps peptides to genome coordinates
+ *
+ * @author ypriverol
+ */
 public class ExonInfo{
 
     private int exonCount;
     private int exonLengths;
     private int exonStarts;
     private String exonAccession;
+
+    public ExonInfo() {
+    }
+
+    public ExonInfo(int exonCount, int exonLengths, int exonStarts, String exonAccession) {
+        this.exonCount = exonCount;
+        this.exonLengths = exonLengths;
+        this.exonStarts = exonStarts;
+        this.exonAccession = exonAccession;
+    }
 
     @Override
     public boolean equals(Object o) {
