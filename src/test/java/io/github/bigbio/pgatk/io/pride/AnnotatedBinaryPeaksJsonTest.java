@@ -1,6 +1,10 @@
 package io.github.bigbio.pgatk.io.pride;
 
 import io.github.bigbio.pgatk.io.common.PgatkIOException;
+import org.apache.parquet.filter2.predicate.FilterApi;
+import org.apache.parquet.filter2.predicate.FilterPredicate;
+import static org.apache.parquet.filter2.predicate.FilterApi.eq;
+import org.apache.parquet.io.api.Binary;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,9 +15,10 @@ import java.util.*;
 public class AnnotatedBinaryPeaksJsonTest {
 
   AnnotatedSpectrum spec;
+  File outpFile;
 
   @Before
-  public void setup(){
+  public void setup() throws PgatkIOException, IOException {
 
     List<Double> masses = Arrays.asList(2.3,3.4,4.5);
     List<Double> intensities = Arrays.asList(100.7,100.8,100.9);
@@ -63,18 +68,34 @@ public class AnnotatedBinaryPeaksJsonTest {
       Collections.EMPTY_LIST, "sample1", "human", samples, biologicalAnnotations, 1234.123456789, 2,
       modifications, masses, intensities, 123.46543, 2, 0, qualityScores,
       msAnnotations, "PXD1", false, 123456783452.1234455677);
+
+    outpFile = new File("binarySpectrum");
+    PrideParquetWriter prideJsonfile = new PrideParquetWriter(outpFile);
+    prideJsonfile.write(spec);
+    prideJsonfile.close();
   }
 
   @Test
   public void binaryTest() throws PgatkIOException, IOException {
 
-    File outpFile = new File("binarySpectrum");
-    PrideParquetWriter prideJsonfile = new PrideParquetWriter(outpFile);
-    prideJsonfile.write(spec);
-    prideJsonfile.close();
-
     outpFile = new File("binarySpectrum");
     PrideParquetReader reader = new PrideParquetReader(outpFile);
+    while((spec = reader.read()) != null){
+      System.out.println(spec.toString());
+      System.out.println(spec.getPeakList().toString());
+    }
+
+    reader.close();
+    outpFile.deleteOnExit();
+  }
+
+  @Test
+  public void binaryFilterTest() throws PgatkIOException, IOException {
+
+    FilterPredicate predicate = eq(FilterApi.binaryColumn("usi"), Binary.fromString("USI1"));
+
+    outpFile = new File("binarySpectrum");
+    PrideParquetReader reader = new PrideParquetReader(outpFile, predicate);
     while((spec = reader.read()) != null){
       System.out.println(spec.toString());
       System.out.println(spec.getPeakList().toString());
