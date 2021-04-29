@@ -1,10 +1,6 @@
 package io.github.bigbio.pgatk.io.pride;
 
 import io.github.bigbio.pgatk.io.common.PgatkIOException;
-import org.apache.parquet.filter2.predicate.FilterApi;
-import org.apache.parquet.filter2.predicate.FilterPredicate;
-import static org.apache.parquet.filter2.predicate.FilterApi.eq;
-import org.apache.parquet.io.api.Binary;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,11 +18,6 @@ public class AnnotatedBinaryPeaksJsonTest {
 
     List<Double> masses = Arrays.asList(2.3,3.4,4.5);
     List<Double> intensities = Arrays.asList(100.7,100.8,100.9);
-
-//    spec = new AnnotatedSpectrum("USI1", "KKKKR", "[Acetyl]-KKKKR",
-//      (Set<String>) Collections.singleton("Protein1"), null, null, null, "Sample1", "human", Collections.EMPTY_LIST,
-//      Collections.EMPTY_LIST, 12345.67, 2, Collections.EMPTY_LIST,masses, intensities, 23.5, 2, 1, Collections.EMPTY_SET,
-//      Collections.EMPTY_LIST, "PXD2303030", true, 1234567.890345);
 
     List<ParquetTuple> samples = new ArrayList<>();
     samples.add(ParquetTuple
@@ -69,33 +60,18 @@ public class AnnotatedBinaryPeaksJsonTest {
       modifications, masses, intensities, 123.46543, 2, 0, qualityScores,
       msAnnotations, "PXD1", false, 123456783452.1234455677);
 
-    outpFile = new File("binarySpectrum");
-    PrideParquetWriter prideJsonfile = new PrideParquetWriter(outpFile);
-    prideJsonfile.write(spec);
-    prideJsonfile.close();
-  }
-
-  @Test
-  public void binaryTest() throws PgatkIOException, IOException {
-
-    outpFile = new File("binarySpectrum");
-    PrideParquetReader reader = new PrideParquetReader(outpFile);
-    while((spec = reader.read()) != null){
-      System.out.println(spec.toString());
-      System.out.println(spec.getPeakList().toString());
-    }
-
-    reader.close();
-    outpFile.deleteOnExit();
+    outpFile = new File("binarySpectrum.avro");
+    PrideAvroWriter avroWriter = new PrideAvroWriter(outpFile);
+    avroWriter.write(spec);
+    avroWriter.close();
   }
 
   @Test
   public void binaryFilterTest() throws PgatkIOException, IOException {
 
-    FilterPredicate predicate = eq(FilterApi.binaryColumn("usi"), Binary.fromString("USI1"));
 
-    outpFile = new File("binarySpectrum");
-    PrideParquetReader reader = new PrideParquetReader(outpFile, predicate);
+    outpFile = new File("binarySpectrum.avro");
+    PrideAvroReader reader = new PrideAvroReader(outpFile);
     while((spec = reader.read()) != null){
       System.out.println(spec.toString());
       System.out.println(spec.getPeakList().toString());

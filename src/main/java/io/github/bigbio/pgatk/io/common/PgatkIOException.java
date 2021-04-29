@@ -3,7 +3,7 @@ package io.github.bigbio.pgatk.io.common;
 @SuppressWarnings("serial")
 public class PgatkIOException extends Exception {
 
-	public PgatkIOException() {
+	public PgatkIOException(String format, Exception e) {
 		super();
 	}
 
