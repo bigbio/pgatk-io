@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Builder
@@ -20,6 +21,7 @@ public class GeneCoordinates {
   private String geneAccession;
   private String geneName;
   private String geneType;
+  private String strand;
 
   private List<ExonInfo> exonInfoList;
 
@@ -28,7 +30,7 @@ public class GeneCoordinates {
 
   public GeneCoordinates(int start, int end, boolean transcriptUnique, boolean geneUnique,
                          String chromosome, String transcriptAccession, String geneAccession,
-                         String geneName, String geneType, List<ExonInfo> exonInfoList) {
+                         String geneName, String geneType, String strand, List<ExonInfo> exonInfoList) {
     this.start = start;
     this.end = end;
     this.transcriptUnique = transcriptUnique;
@@ -38,6 +40,7 @@ public class GeneCoordinates {
     this.geneAccession = geneAccession;
     this.geneName = geneName;
     this.geneType = geneType;
+    this.strand = strand;
     this.exonInfoList = exonInfoList;
   }
 
@@ -50,10 +53,10 @@ public class GeneCoordinates {
 
     if (start != that.start) return false;
     if (end != that.end) return false;
-    if (chromosome != null ? !chromosome.equals(that.chromosome) : that.chromosome != null) return false;
-    if (transcriptAccession != null ? !transcriptAccession.equals(that.transcriptAccession) : that.transcriptAccession != null)
+    if (!Objects.equals(chromosome, that.chromosome)) return false;
+    if (!Objects.equals(transcriptAccession, that.transcriptAccession))
       return false;
-    return geneAccession != null ? geneAccession.equals(that.geneAccession) : that.geneAccession == null;
+    return Objects.equals(geneAccession, that.geneAccession);
   }
 
   @Override

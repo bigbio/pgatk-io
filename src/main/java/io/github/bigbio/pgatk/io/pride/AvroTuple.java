@@ -5,15 +5,15 @@ import lombok.Data;
 
 @Data
 @Builder
-public class ParquetTuple {
+public class AvroTuple {
 
   String key;
   String value;
 
-  public ParquetTuple() {
+  public AvroTuple() {
   }
 
-  public ParquetTuple(String key, String value) {
+  public AvroTuple(String key, String value) {
     this.key = key;
     this.value = value;
   }

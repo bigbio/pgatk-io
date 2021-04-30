@@ -1,8 +1,8 @@
 package io.github.bigbio.pgatk.io.pride;
 
-import io.github.bigbio.pgatk.io.utils.Tuple;
 import lombok.Builder;
 import lombok.Data;
+import org.apache.avro.reflect.Nullable;
 
 import java.util.List;
 
@@ -13,22 +13,24 @@ import java.util.List;
  * represent by:
  *
  * - modification: modification name from UNIMOD.
+ * - accession: Accession of the modification
  * - positionMap: A map with the position and corresponding scores for that position.
-
  */
-public class ParquetModification {
+public class AvroModification {
 
-  private List<ParquetTuple> properties;
+  private List<AvroTerm> properties;
   private String modification;
+  @Nullable
+  private String accession;
   private Integer position;
 
-  public ParquetModification() {
+  public AvroModification() {
   }
 
-  public ParquetModification(List<ParquetTuple> properties, String modification, Integer position) {
+  public AvroModification(List<AvroTerm> properties, String modification, String accession, Integer position) {
     this.properties = properties;
     this.modification = modification;
+    this.accession = accession;
     this.position = position;
   }
-
 }

@@ -19,34 +19,36 @@ public class AnnotatedBinaryPeaksJsonTest {
     List<Double> masses = Arrays.asList(2.3,3.4,4.5);
     List<Double> intensities = Arrays.asList(100.7,100.8,100.9);
 
-    List<ParquetTuple> samples = new ArrayList<>();
-    samples.add(ParquetTuple
+    List<AvroTuple> samples = new ArrayList<>();
+    samples.add(AvroTuple
       .builder().key("organism")
       .value("human")
       .build()
     );
-    List<ParquetTuple> biologicalAnnotations = new ArrayList<>();
-    biologicalAnnotations.add(ParquetTuple
+    List<AvroTuple> biologicalAnnotations = new ArrayList<>();
+    biologicalAnnotations.add(AvroTuple
       .builder().key("unique peptide")
       .value("true")
       .build()
     );
-    List<ParquetTuple> qualityScores = new ArrayList<>();
-    qualityScores.add(ParquetTuple
-      .builder().key("PEP Score")
-      .value("3.4567")
+    List<AvroTerm> qualityScores = new ArrayList<>();
+    qualityScores.add(AvroTerm.builder().name("PEP Score")
+      .accession("MS:234").value("3.4567")
       .build()
     );
-    List<ParquetTuple> msAnnotations = new ArrayList<>();
-    msAnnotations.add(ParquetTuple
+    List<AvroTuple> msAnnotations = new ArrayList<>();
+    msAnnotations.add(AvroTuple
       .builder().key("instrument")
       .value("Orbitrap")
       .build()
     );
-    List<ParquetModification> modifications = new ArrayList<>();
-    List<ParquetTuple> scores = new ArrayList<>();
-    scores.add(new ParquetTuple("FLP","234.56778"));
-    modifications.add(ParquetModification
+    List<AvroModification> modifications = new ArrayList<>();
+    List<AvroTerm> scores = new ArrayList<>();
+    scores.add(AvroTerm.builder().name("FLP")
+      .accession("MS:111")
+      .value("234.56778")
+      .build());
+    modifications.add(AvroModification
       .builder()
       .modification("Oxidation")
       .position(1)
@@ -72,7 +74,8 @@ public class AnnotatedBinaryPeaksJsonTest {
 
     outpFile = new File("binarySpectrum.avro");
     PrideAvroReader reader = new PrideAvroReader(outpFile);
-    while((spec = reader.read()) != null){
+    while(reader.hasNext()){
+      spec = reader.next();
       System.out.println(spec.toString());
       System.out.println(spec.getPeakList().toString());
     }

@@ -8,6 +8,7 @@ import io.github.bigbio.pgatk.io.common.Param;
 import io.github.bigbio.pgatk.io.common.spectra.Spectrum;
 import io.github.bigbio.pgatk.utilities.spectra.SpectraUtilities;
 import lombok.Data;
+import org.apache.avro.reflect.Nullable;
 
 import java.util.*;
 
@@ -74,6 +75,7 @@ public class AnnotatedSpectrum implements Spectrum {
 
 
     @JsonProperty("sampleAccession")
+    @Nullable
     String sampleAccession;
 
     /**
@@ -81,6 +83,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * species, a unique species/organism should be selected.
      */
     @JsonProperty("organism")
+    @Nullable
     private String organism;
 
     /**
@@ -90,7 +93,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *  - organism part: brain
      */
     @JsonProperty("sample")
-    private List<ParquetTuple> sample;
+    private List<AvroTuple> sample;
 
     /**
      * Additional biological annotations for the peptide as keywords, for example:
@@ -99,7 +102,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *  - variant
      */
     @JsonProperty("biologicalAnnotations")
-    List<ParquetTuple> biologicalAnnotations;
+    List<AvroTuple> biologicalAnnotations;
 
     // Information about the Mass spectrometry (Spectrum)
 
@@ -119,7 +122,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * Structure of Post-translational modifications as position+name-modification+score of the quality of PTM.
      */
     @JsonProperty("modifications")
-    private List<ParquetModification> modifications;
+    private List<AvroModification> modifications;
 
 
     @JsonProperty("binaryPeaks")
@@ -149,7 +152,7 @@ public class AnnotatedSpectrum implements Spectrum {
      *
      */
     @JsonProperty("qualityScores")
-    private List<ParquetTuple> qualityScores;
+    private List<AvroTerm> qualityScores;
 
     /**
      * A list of String values that to characterize the MS information, example:
@@ -158,7 +161,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * - Label-free
      */
     @JsonProperty("msAnnotations")
-    private List<ParquetTuple> msAnnotations;
+    private List<AvroTuple> msAnnotations;
 
     /**
      * A list of ProteomeXchange projects that has been used to generate the following peptide.
@@ -183,10 +186,10 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
     public AnnotatedSpectrum(String usi, String pepSequence, String peptidoform, List<String> proteinAccessions, List<String> geneAccessions, List<AccessionLocalization> proteinLocalizations,
-                             List<GeneCoordinates> geneLocalizations, String sampleAccession, String organism, List<ParquetTuple> sample, List<ParquetTuple> biologicalAnnotations,
-                             double precursorMz, Integer precursorCharge, List<ParquetModification> modifications, List<Double> masses,
-                             List<Double> intensities,  Double retentionTime, Integer msLevel, Integer missedCleavages, List<ParquetTuple> qualityScores,
-                             List<ParquetTuple> msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
+                             List<GeneCoordinates> geneLocalizations, String sampleAccession, String organism, List<AvroTuple> sample, List<AvroTuple> biologicalAnnotations,
+                             double precursorMz, Integer precursorCharge, List<AvroModification> modifications, List<Double> masses,
+                             List<Double> intensities, Double retentionTime, Integer msLevel, Integer missedCleavages, List<AvroTerm> qualityScores,
+                             List<AvroTuple> msAnnotations, String pxAccession, Boolean isDecoy, Double peptideIntensity) {
         this.usi = usi;
         this.pepSequence = pepSequence;
         this.peptidoform = peptidoform;
@@ -262,6 +265,8 @@ public class AnnotatedSpectrum implements Spectrum {
         return peaks;
     }
 
+
+
     @Override
     public Integer getMsLevel() {
         return msLevel;
@@ -300,5 +305,20 @@ public class AnnotatedSpectrum implements Spectrum {
                 ", isDecoy=" + isDecoy +
                 ", peptideIntensity=" + peptideIntensity +
                 '}';
+    }
+
+    public List<Double> getMasses() {
+        List<Double> masses = new ArrayList<>();
+        if(binaryPeaks != null)
+            masses = SpectraUtilities.decodeBinary(binaryPeaks.getBinaryMasses());
+        return masses;
+    }
+
+
+    public List<Double> getIntensities() {
+        List<Double> intensities = new ArrayList<>();
+        if(binaryPeaks != null)
+            intensities = SpectraUtilities.decodeBinary(binaryPeaks.getBinaryIntensities());
+        return intensities;
     }
 }

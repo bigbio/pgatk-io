@@ -22,24 +22,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Write a list of {@link AnnotatedSpectrum} into Avro format.
+ *
+ * https://stackoverflow.com/questions/36022358/kafka-avro-consumer-with-decoder-issues
+ *
+ * @author ypriverol
+ */
 public class PrideAvroWriter {
 
   private final Schema schema;
-  private final OutputStream os;
-  DatumWriter<AnnotatedSpectrum> writer;
-  Path source;
-  BinaryEncoder binEncoder;
+  DataFileWriter<AnnotatedSpectrum> writer;
+  File source;
 
   public PrideAvroWriter(File source) throws PgatkIOException {
 
     try {
-      this.source = Paths.get(source.getAbsolutePath());
+      this.source = source;
       this.schema = ReflectData.get().getSchema(AnnotatedSpectrum.class);
-      writer = new ReflectDatumWriter<AnnotatedSpectrum>(schema);
-
-      this.os = Files.newOutputStream(this.source, CREATE, WRITE, TRUNCATE_EXISTING);
-      SnappyOutputStream out = new SnappyOutputStream(os);
-      binEncoder = EncoderFactory.get().binaryEncoder(out, null);
+      DatumWriter<AnnotatedSpectrum> datum = new ReflectDatumWriter<>(schema);
+      writer = new DataFileWriter<>(datum);
+      writer.setCodec(CodecFactory.snappyCodec());
+      writer.create(this.schema, this.source);
+      writer.setFlushOnEveryBlock(true);
 
     } catch (IOException e) {
       throw new PgatkIOException(String.format("Error writing the file %s", source),e );
@@ -48,7 +53,7 @@ public class PrideAvroWriter {
 
   public void write(AnnotatedSpectrum spec) throws PgatkIOException {
     try {
-      writer.write(spec, binEncoder);
+      writer.append(spec);
     } catch (IOException e) {
       throw new PgatkIOException(String.format("Error writing spectrum file %s", source),e );
     }
@@ -56,8 +61,8 @@ public class PrideAvroWriter {
 
   public void close() throws PgatkIOException {
     try {
-      binEncoder.flush();
-      os.close();
+      writer.flush();
+      writer.close();
     } catch (IOException e) {
       throw new PgatkIOException("Error when flush the data into a file",e);
     }
