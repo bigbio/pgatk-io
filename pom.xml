@@ -1,302 +1,315 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<groupId>io.github.bigbio.pgatk</groupId>
-	<artifactId>pgatk-io</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
-	<name>pgatk-io</name>
+  <groupId>io.github.bigbio.pgatk</groupId>
+  <artifactId>pgatk-io</artifactId>
+  <version>1.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>pgatk-io</name>
 
-    <description>The pgatk io is a library to handle proteogeomics file formats</description>
-	<url>https://github.com/bigbio/pgatk-io</url>
-
-
-	<developers>
-		<developer>
-			<id>jgriss</id>
-			<name>Johannes Griss</name>
-			<email>jgriss@ebi.ac.uk</email>
-			<organization>Proteomics Services Team - EBI</organization>
-			<organizationUrl>http://www.ebi.ac.uk/proteomics</organizationUrl>
-			<timezone>0</timezone>
-		</developer>
-        <developer>
-            <id>yperez</id>
-            <name>Yasset Perez-Riverol</name>
-            <email>ypriverol@gmail.com</email>
-            <timezone>0</timezone>
-        </developer>
-    </developers>
-
-	<properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <java.version>1.8</java.version>
-        <uk.ac.ebi.jmzml-jmzml.version>1.7.11</uk.ac.ebi.jmzml-jmzml.version>
-        <lombock.version>1.18.2</lombock.version>
-        <slf4j.version>1.7.25</slf4j.version>
-        <logback.version>1.2.3</logback.version>
-        <avro.version>1.9.0</avro.version>
-        <spark.version>2.4.3</spark.version>
-        <scala.version>2.12.0</scala.version>
-        <org.zeroturnaround.version>1.13</org.zeroturnaround.version>
-        <ehcache.version>3.8.1</ehcache.version>
-        <zoodb.version>0.5.2</zoodb.version>
-        <chroniclemap.version>3.17.1</chroniclemap.version>
-        <leveldb.version>0.10</leveldb.version>
-        <junit.version>4.13.1</junit.version>
-        <mockito-core.version>1.10.19</mockito-core.version>
-        <hamcrest.version>1.3</hamcrest.version>
-        <jackson.version>2.11.1</jackson.version>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>uk.ac.ebi.jmzml</groupId>
-            <artifactId>jmzml</artifactId>
-            <version>${uk.ac.ebi.jmzml-jmzml.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.github.bigbio.pgatk</groupId>
-            <artifactId>pgatk-utilities</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.avro</groupId>
-            <artifactId>avro</artifactId>
-            <version>1.10.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.zeroturnaround</groupId>
-            <artifactId>zt-zip</artifactId>
-            <version>${org.zeroturnaround.version}</version>
-            <type>jar</type>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombock.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>${slf4j.version}</version>
-        </dependency>
+  <description>The pgatk io is a library to handle proteogeomics file formats</description>
+  <url>https://github.com/bigbio/pgatk-io</url>
 
 
-        <!-- In memory property storage -->
-        <dependency>
-            <groupId>net.openhft</groupId>
-            <artifactId>chronicle-map</artifactId>
-            <version>${chroniclemap.version}</version>
-        </dependency>
+  <developers>
+    <developer>
+      <id>jgriss</id>
+      <name>Johannes Griss</name>
+      <email>jgriss@ebi.ac.uk</email>
+      <organization>Proteomics Services Team - EBI</organization>
+      <organizationUrl>http://www.ebi.ac.uk/proteomics</organizationUrl>
+      <timezone>0</timezone>
+    </developer>
+    <developer>
+      <id>yperez</id>
+      <name>Yasset Perez-Riverol</name>
+      <email>ypriverol@gmail.com</email>
+      <timezone>0</timezone>
+    </developer>
+  </developers>
 
-        <!-- https://mvnrepository.com/artifact/org.iq80.leveldb/leveldb -->
-        <dependency>
-            <groupId>org.iq80.leveldb</groupId>
-            <artifactId>leveldb</artifactId>
-            <version>${leveldb.version}</version>
-        </dependency>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <java.version>1.8</java.version>
+    <uk.ac.ebi.jmzml-jmzml.version>1.7.11</uk.ac.ebi.jmzml-jmzml.version>
+    <lombock.version>1.18.2</lombock.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <logback.version>1.2.3</logback.version>
+    <avro.version>1.9.0</avro.version>
+    <spark.version>2.4.3</spark.version>
+    <scala.version>2.12.0</scala.version>
+    <org.zeroturnaround.version>1.13</org.zeroturnaround.version>
+    <ehcache.version>3.8.1</ehcache.version>
+    <zoodb.version>0.5.2</zoodb.version>
+    <chroniclemap.version>3.17.1</chroniclemap.version>
+    <leveldb.version>0.10</leveldb.version>
+    <junit.version>4.13.1</junit.version>
+    <mockito-core.version>1.10.19</mockito-core.version>
+    <hamcrest.version>1.3</hamcrest.version>
+    <jackson.version>2.11.1</jackson.version>
+  </properties>
 
-        <dependency>
-            <groupId>org.mapdb</groupId>
-            <artifactId>mapdb</artifactId>
-            <version>3.0.8</version>
-        </dependency>
+  <dependencies>
+    <dependency>
+      <groupId>uk.ac.ebi.jmzml</groupId>
+      <artifactId>jmzml</artifactId>
+      <version>${uk.ac.ebi.jmzml-jmzml.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.spotify.sparkey</groupId>
-            <artifactId>sparkey</artifactId>
-            <version>3.0.1</version>
-        </dependency>
+    <dependency>
+      <groupId>io.github.bigbio.pgatk</groupId>
+      <artifactId>pgatk-utilities</artifactId>
+      <version>1.0.1-SNAPSHOT</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>${ehcache.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.apache.avro</groupId>
+      <artifactId>avro</artifactId>
+      <version>1.10.2</version>
+    </dependency>
 
-        <dependency>
-            <groupId>org.zoodb</groupId>
-            <artifactId>zoodb</artifactId>
-            <version>${zoodb.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.zeroturnaround</groupId>
+      <artifactId>zt-zip</artifactId>
+      <version>${org.zeroturnaround.version}</version>
+      <type>jar</type>
+    </dependency>
 
-        <!-- junit dependencies -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-library</artifactId>
-            <version>${hamcrest.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest-core</artifactId>
-            <version>${hamcrest.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>${mockito-core.version}</version>
-        </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombock.version}</version>
+    </dependency>
 
-        <!-- Dependecies for jaxb-->
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-impl</artifactId>
-            <version>2.3.2</version>
-        </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>jcl-over-slf4j</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
 
-        <dependency>
-            <groupId>com.sun.xml.bind</groupId>
-            <artifactId>jaxb-core</artifactId>
-            <version>2.3.0.1</version>
-        </dependency>
 
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-annotations</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.module</groupId>
-            <artifactId>jackson-module-paranamer</artifactId>
-            <version>${jackson.version}</version>
-        </dependency>
+    <!-- In memory property storage -->
+    <dependency>
+      <groupId>net.openhft</groupId>
+      <artifactId>chronicle-map</artifactId>
+      <version>${chroniclemap.version}</version>
+    </dependency>
 
-    </dependencies>
+    <!-- https://mvnrepository.com/artifact/org.iq80.leveldb/leveldb -->
+    <dependency>
+      <groupId>org.iq80.leveldb</groupId>
+      <artifactId>leveldb</artifactId>
+      <version>${leveldb.version}</version>
+    </dependency>
 
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <remoteTagging>true</remoteTagging>
-                    <goals>deploy</goals>
-                </configuration>
-            </plugin>
+    <dependency>
+      <groupId>org.mapdb</groupId>
+      <artifactId>mapdb</artifactId>
+      <version>3.0.8</version>
+    </dependency>
 
-        </plugins>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.5.1</version>
-                    <configuration>
-                        <source>${java.version}</source>
-                        <target>${java.version}</target>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>3.0.0</version>
-                    <executions>
-                        <execution>
-                            <id>attach-source</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>2.10.3</version>
-                    <executions>
-                        <execution>
-                            <id>attach-javadocs</id>
-                            <goals>
-                                <goal>jar</goal>
-                            </goals>
-                            <!-- Prevent that nasty error from Java 8 DocLint new feature -->
-                            <configuration>
-                                <additionalparam>-Xdoclint:none</additionalparam>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </pluginManagement>
-    </build>
+    <dependency>
+      <groupId>com.spotify.sparkey</groupId>
+      <artifactId>sparkey</artifactId>
+      <version>3.0.1</version>
+    </dependency>
 
-    <repositories>
-        <repository>
-            <id>nexus-ebi-release-repo</id>
-            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
-        </repository>
-        <repository>
-            <id>nexus-ebi-snapshot-repo</id>
-            <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
-        </repository>
-        <repository>
-            <id>sonatype-release</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <repository>
-            <id>sonatype-snapshopt</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </repository>
-        <repository>
-            <!-- This repo is required for cpdetector (required by jmzidml->pride-xml-handler->xxindex->cpdetector) and related libraries -->
-            <!-- This is supplied here because of an HTTP 301 Permanent Redirect on the old URL that xxindex supplies,
-            which breaks fresh builds. -->
-            <id>sammoa-group</id>
-            <url>https://nexus.nuiton.org/nexus/content/groups/sammoa-group/</url>
-        </repository>
-    </repositories>
+    <dependency>
+      <groupId>org.ehcache</groupId>
+      <artifactId>ehcache</artifactId>
+      <version>${ehcache.version}</version>
+    </dependency>
 
-    <distributionManagement>
-        <repository>
-            <id>sonatype-release</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
-        <snapshotRepository>
-            <id>sonatype-snapshopt</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <dependency>
+      <groupId>org.zoodb</groupId>
+      <artifactId>zoodb</artifactId>
+      <version>${zoodb.version}</version>
+    </dependency>
 
-    <scm>
-        <connection>scm:git:https://github.com/bigbio/pgatk-io.git</connection>
-        <developerConnection>scm:git:https://github.com/bigbio/pgatk-io.git</developerConnection>
-        <url>https://github.com/bigbio/pgatk-io.git</url>
-        <tag>HEAD</tag>
-    </scm>
+    <!-- junit dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junit.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-library</artifactId>
+      <version>${hamcrest.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <version>${hamcrest.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito-core.version}</version>
+    </dependency>
+
+    <!-- Dependecies for jaxb-->
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+      <version>2.3.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-core</artifactId>
+      <version>2.3.0.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-annotations</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.module</groupId>
+      <artifactId>jackson-module-paranamer</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>2.5.3</version>
+        <configuration>
+          <remoteTagging>true</remoteTagging>
+          <goals>deploy</goals>
+        </configuration>
+      </plugin>
+
+    </plugins>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.5.1</version>
+          <configuration>
+            <source>${java.version}</source>
+            <target>${java.version}</target>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.0.0</version>
+          <executions>
+            <execution>
+              <id>attach-source</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.1.1</version>
+          <executions>
+            <execution>
+              <id>generate-javadocs</id>
+              <phase>generate-sources</phase>
+              <goals>
+                <goal>javadoc</goal>
+              </goals>
+              <configuration>
+                <doclint>all,-missing</doclint>
+                <reportOutputDirectory>${basedir}/docs</reportOutputDirectory>
+                <doclint>none</doclint>
+              </configuration>
+            </execution>
+            <execution>
+              <id>attach-javadocs</id>
+              <goals>
+                <goal>jar</goal>
+              </goals>
+              <!-- Prevent that nasty error from Java 8 DocLint new feature -->
+              <configuration>
+                <doclint>all,-missing</doclint>
+              </configuration>
+            </execution>
+          </executions>
+
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+
+  <repositories>
+    <repository>
+      <id>nexus-ebi-release-repo</id>
+      <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-repo/</url>
+    </repository>
+    <repository>
+      <id>nexus-ebi-snapshot-repo</id>
+      <url>http://www.ebi.ac.uk/Tools/maven/repos/content/groups/ebi-snapshots/</url>
+    </repository>
+    <repository>
+      <id>sonatype-release</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <repository>
+      <id>sonatype-snapshopt</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </repository>
+    <repository>
+      <!-- This repo is required for cpdetector (required by jmzidml->pride-xml-handler->xxindex->cpdetector) and related libraries -->
+      <!-- This is supplied here because of an HTTP 301 Permanent Redirect on the old URL that xxindex supplies,
+      which breaks fresh builds. -->
+      <id>sammoa-group</id>
+      <url>https://nexus.nuiton.org/nexus/content/groups/sammoa-group/</url>
+    </repository>
+  </repositories>
+
+  <distributionManagement>
+    <repository>
+      <id>sonatype-release</id>
+      <name>Central Repository OSSRH</name>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+    <snapshotRepository>
+      <id>sonatype-snapshopt</id>
+      <name>Central Repository OSSRH</name>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:https://github.com/bigbio/pgatk-io.git</connection>
+    <developerConnection>scm:git:https://github.com/bigbio/pgatk-io.git</developerConnection>
+    <url>https://github.com/bigbio/pgatk-io.git</url>
+    <tag>HEAD</tag>
+  </scm>
 
 </project>
