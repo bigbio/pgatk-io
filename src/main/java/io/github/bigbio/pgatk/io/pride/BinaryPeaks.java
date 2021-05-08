@@ -1,5 +1,7 @@
 package io.github.bigbio.pgatk.io.pride;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.github.bigbio.pgatk.utilities.spectra.SpectraUtilities;
 import lombok.Builder;
 import lombok.Data;
@@ -15,9 +17,13 @@ import java.util.List;
  *
  * @author ypriverol
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class BinaryPeaks {
 
+  @JsonProperty("binaryMasses")
   private byte[] binaryMasses;
+
+  @JsonProperty("binaryIntensities")
   private byte[] binaryIntensities;
 
   public BinaryPeaks() {

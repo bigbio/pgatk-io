@@ -220,6 +220,7 @@ public class AnnotatedSpectrum implements Spectrum {
      * This function is needed in the {@link Spectrum} interface but
      * is not implemented in this class.
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Long getIndex() {
         return null;
     }
@@ -230,11 +231,13 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Integer getPrecursorCharge() {
         return precursorCharge;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Double getPrecursorMZ() {
         return precursorMz;
     }
@@ -243,6 +246,7 @@ public class AnnotatedSpectrum implements Spectrum {
     /**
      * This method is mandatory for {@link Spectrum} but is not implemented by {@link AnnotatedSpectrum}
      */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Double getPrecursorIntensity() {
         return null;
     }
@@ -265,14 +269,13 @@ public class AnnotatedSpectrum implements Spectrum {
         return peaks;
     }
 
-
-
     @Override
     public Integer getMsLevel() {
         return msLevel;
     }
 
     @Override
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public Collection<? extends Param> getAdditional() {
         List<Param> attributes = new ArrayList<>();
         return attributes;
@@ -307,6 +310,7 @@ public class AnnotatedSpectrum implements Spectrum {
                 '}';
     }
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public List<Double> getMasses() {
         List<Double> masses = new ArrayList<>();
         if(binaryPeaks != null)
@@ -315,6 +319,7 @@ public class AnnotatedSpectrum implements Spectrum {
     }
 
 
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     public List<Double> getIntensities() {
         List<Double> intensities = new ArrayList<>();
         if(binaryPeaks != null)

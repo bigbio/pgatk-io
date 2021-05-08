@@ -1,5 +1,7 @@
 package io.github.bigbio.pgatk.io.pride;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -11,15 +13,19 @@ import lombok.Data;
  *
  * @author ypriverol
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class AccessionLocalization {
 
   // accession of the protein or gene
+  @JsonProperty("accession")
   String accession;
 
   // start position
+  @JsonProperty("start")
   long start;
 
   // end position
+  @JsonProperty("end")
   long end;
 
   public AccessionLocalization() {

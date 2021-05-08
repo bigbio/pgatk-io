@@ -1,5 +1,7 @@
 package io.github.bigbio.pgatk.io.pride;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,11 +12,19 @@ import lombok.Data;
  *
  * @author ypriverol
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ExonInfo{
 
+    @JsonProperty("exonCount")
     private int exonCount;
+
+    @JsonProperty("exonLengths")
     private int exonLengths;
+
+    @JsonProperty("exonStarts")
     private int exonStarts;
+
+    @JsonProperty("exonAccession")
     private String exonAccession;
 
     public ExonInfo() {

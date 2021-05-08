@@ -1,5 +1,7 @@
 package io.github.bigbio.pgatk.io.pride;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,20 +11,40 @@ import java.util.Set;
 
 @Builder
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GeneCoordinates {
 
+  @JsonProperty("start")
   private int start;
+
+  @JsonProperty("end")
   private int end;
+
+  @JsonProperty("transcriptUnique")
   private boolean transcriptUnique;
+
+  @JsonProperty("geneUnique")
   private boolean geneUnique;
+
+  @JsonProperty("chromosome")
   private String chromosome;
+
+  @JsonProperty("transcriptAccession")
   private String transcriptAccession;
 
+  @JsonProperty("geneAccession")
   private String geneAccession;
+
+  @JsonProperty("geneName")
   private String geneName;
+
+  @JsonProperty("geneType")
   private String geneType;
+
+  @JsonProperty("strand")
   private String strand;
 
+  @JsonProperty("exonInfoList")
   private List<ExonInfo> exonInfoList;
 
   public GeneCoordinates() {
