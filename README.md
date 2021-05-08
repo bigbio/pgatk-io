@@ -12,7 +12,7 @@ The pgatk-io library is a java framework to manipulate mass spectrometry and pro
 This table summarizes the current level of support for each feature across the different file formats. See discussion
 below for details on each feature.
 
-| Feature              | MGF                | APL (Maxquant)         | mzXML               | mzML                 | Pep Json            |Pep Avro                |
+| Feature              | MGF                | APL (Maxquant)         | mzXML               | mzML                 | PRIDE Json          |Pep Avro                |
 | ---------------------|--------------------|------------------------|---------------------|----------------------|---------------------|------------------------|
 | Random Access        | :heavy_check_mark: | :heavy_check_mark:     | :heavy_check_mark:  | :heavy_check_mark:   | :heavy_check_mark:  |                        |
 | Fast Iterable Access | :heavy_check_mark: | :white_check_mark:     | :heavy_check_mark:  | :x:                  | :x:                 | :heavy_check_mark:     |
@@ -24,7 +24,8 @@ below for details on each feature.
 - MGF - http://www.matrixscience.com/help/data_file_help.html
 - mzXML - http://tools.proteomecenter.org/wiki/index.php?title=Formats:mzXML#:~:text=mzXML%20is%20an%20open%20data,foundation%20of%20our%20proteomic%20pipelines
 - mzML - https://www.psidev.info/mzML
--
+- ArchiveSpectrum (PRIDE Json) - http://bigbio.xyz/pgatk-io/io/github/bigbio/pgatk/io/pride/ArchiveSpectrum.html
+- AnnotatedSpectrum (Pep Avro) - http://bigbio.xyz/pgatk-io/io/github/bigbio/pgatk/io/pride/AnnotatedSpectrum.html
 
 # License
 
